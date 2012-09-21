@@ -1,0 +1,14 @@
+--------------------------------------
+Collecting Data
+--------------------------------------
+
+
+--------------------------------------
+Sync(h)ing audio and ultra sound video 
+--------------------------------------
+
+1. From the command line, navigate to the directory that contains the bag file (containg audio) and the ultrasound video file
+2. Make sure the synch.py script is in the same folder*
+3. From the commmand line type:
+		python synch.py <bagfilename>.bag <ultrasoundvideo>.dv
+4. Get coffee while script processes...
