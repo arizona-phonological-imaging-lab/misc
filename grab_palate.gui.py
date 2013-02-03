@@ -1,17 +1,21 @@
 #!/usr/bin/python
 
 
-#######################################
+#########################################################
 # Simple audio/video capture demo
 # created by Gustave Hahn-Powell for 
 # the Apil Ultraspeech project at
 # the University of Arizona
 #
 # You can do better!
-#
+# 
+# To run the script you'll need: 
+#    PortAudio, opencv, Qt, cv
+#    pyaudio, pyside
+# Everything else is from the python standard library
 # Contact me at gushahnpowell@gmail.com
 #
-######################################
+########################################################
 
 import sys, cv, pyaudio, wave, time
 from PySide.QtCore import *
