@@ -47,10 +47,13 @@ def get_sound(bagfile):
     p = subprocess.Popen(cmd)
     p.wait()
     
-def synchronize(bagfile, dvfile):
-    print_log(bagfile)
-    get_sound(bagfile)
-    extract_images(dvfile)
+def synchronize(bagfile, dvfile, offset=0):
+    if not os.path.isfile('logfile.csv'):
+        print_log(bagfile)
+    if not os.path.isfile('bagsound_16k_mono.wav'):
+        get_sound(bagfile)
+    if not os.path.isdir('images'):
+        extract_images(dvfile)
     f = open('logfile.csv','r').readlines()
     
     #use the first logfile entry as time zero
@@ -73,11 +76,12 @@ def synchronize(bagfile, dvfile):
     nsecs = int(chunks[2]) * 10**-n
     ultrasound_start = secs+nsecs - zerotime
     
-    #find the starting point for the audio 
-    start_sample = int(sr * ultrasound_start)
-    
-    #find the ending point for the audio 
+    #find the starting and ending points for the audio 
     ultrasound_sr = 29.97
+    if offset != 0:
+        offset_time = offset * (1./ultrasound_sr)
+        ultrasound_start -= offset_time    
+    start_sample = int(sr * ultrasound_start)
     jpgs = os.listdir('images')
     n_frames = len(jpgs)
     total_time = n_frames * (1./ultrasound_sr)
@@ -95,7 +99,9 @@ def synchronize(bagfile, dvfile):
     p.wait()
     
 if __name__ == "__main__":
-    #first arg is bag file, second is dv file
-    synchronize(sys.argv[1], sys.argv[2])
-
+    #first arg is bag file, second is dv file, third is offset ultrasound frames
+    if len(sys.argv) == 4:
+        synchronize(sys.argv[1], sys.argv[2], int(sys.argv[3]))
+    else:
+        synchronize(sys.argv[1], sys.argv[2])
     
