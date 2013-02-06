@@ -25,6 +25,7 @@ import threading
 from threading import Thread
 
 Finished = False
+camera_index = 0  #can set to -1 if only one device
 
 def CapturePalate():
 	"""
@@ -33,12 +34,19 @@ def CapturePalate():
 	in order to better monitor when to capture the image
 	"""
 	#grab a frame
-	cv.NamedWindow("badass window", cv.CV_WINDOW_AUTOSIZE)
-	camera_index = 0
+	cv.NamedWindow("Palate Shot", cv.CV_WINDOW_AUTOSIZE)
+	global camera_index
 	capture = cv.CaptureFromCAM(camera_index)
-	frame = cv.QueryFrame(capture)
-	cv.SaveImage("palate.jpg", frame)
-	print  ("Palate image captured!")
+	while True:
+		frame = cv.QueryFrame(capture)
+		cv.ShowImage("Palate Shot", frame)
+		k = cv.WaitKey(10) #milliseconds
+		if k == 0x20: #Space bar
+			print 'Space bar pressed. Captured Palate!'
+			frame = cv.QueryFrame(capture)
+			cv.SaveImage("palate.jpg", frame)
+			break
+	cv.DestroyWindow("Palate Shot")
  
 def AudioStream():
 	"""
@@ -67,7 +75,7 @@ def AudioStream():
 		try:
 			data = stream.read(CHUNK)
 		except IOError:
-			print 'warning: dropped frame'
+			print 'warning: dropped audio'
 		audio_frames.append(data)
 	stream.stop_stream()
 	stream.close()
@@ -93,7 +101,7 @@ def VideoStream():
 	#display live video
 	cv.NamedWindow("Badass video window", cv.CV_WINDOW_AUTOSIZE)
 	#peripheral devices begin at > 0
-	camera_index = 0 #can set to -1 if only one device
+	global camera_index
 	capture = cv.CaptureFromCAM(camera_index)
 	frame = cv.QueryFrame(capture)
 	writer = cv.CreateVideoWriter("Stream.avi", 0, 20, cv.GetSize(frame), 1) #"filename", codec,fps, frame_size, is_color=true
