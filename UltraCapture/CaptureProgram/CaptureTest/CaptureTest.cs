@@ -69,7 +69,6 @@ namespace CaptureTest
 		private System.Windows.Forms.MenuItem mnuChannel;
 		private System.Windows.Forms.MenuItem menuItem3;
         private System.Windows.Forms.MenuItem mnuInputType;
-        private Button palate;
         private IContainer components;
 
         private DateTime date1 = new DateTime(0);
@@ -195,7 +194,6 @@ namespace CaptureTest
             this.menuRunPostProcess = new System.Windows.Forms.MenuItem();
             this.panelVideo = new System.Windows.Forms.Panel();
             this.btnCue = new System.Windows.Forms.Button();
-            this.palate = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.txt_recordingID = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
@@ -203,9 +201,9 @@ namespace CaptureTest
             // txtFilename
             // 
             this.txtFilename.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtFilename.Location = new System.Drawing.Point(136, 390);
+            this.txtFilename.Location = new System.Drawing.Point(139, 390);
             this.txtFilename.Name = "txtFilename";
-            this.txtFilename.Size = new System.Drawing.Size(171, 20);
+            this.txtFilename.Size = new System.Drawing.Size(124, 20);
             this.txtFilename.TabIndex = 0;
             this.txtFilename.Text = "video.avi";
             // 
@@ -225,7 +223,7 @@ namespace CaptureTest
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(80, 24);
             this.btnStart.TabIndex = 2;
-            this.btnStart.Text = "Rec Start";
+            this.btnStart.Text = "Record";
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // btnStop
@@ -235,7 +233,7 @@ namespace CaptureTest
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(80, 24);
             this.btnStop.TabIndex = 3;
-            this.btnStop.Text = "Rec Stop";
+            this.btnStop.Text = "Stop";
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
             // btnExit
@@ -445,23 +443,12 @@ namespace CaptureTest
             // btnCue
             // 
             this.btnCue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCue.Location = new System.Drawing.Point(72, 422);
+            this.btnCue.Location = new System.Drawing.Point(36, 422);
             this.btnCue.Name = "btnCue";
             this.btnCue.Size = new System.Drawing.Size(80, 24);
             this.btnCue.TabIndex = 8;
             this.btnCue.Text = "Preview";
             this.btnCue.Click += new System.EventHandler(this.btnCue_Click);
-            // 
-            // palate
-            // 
-            this.palate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.palate.Location = new System.Drawing.Point(16, 422);
-            this.palate.Name = "palate";
-            this.palate.Size = new System.Drawing.Size(46, 21);
-            this.palate.TabIndex = 9;
-            this.palate.Text = "Palate";
-            this.palate.UseVisualStyleBackColor = true;
-            this.palate.Click += new System.EventHandler(this.palate_Click);
             // 
             // label2
             // 
@@ -475,7 +462,7 @@ namespace CaptureTest
             // txt_recordingID
             // 
             this.txt_recordingID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_recordingID.Location = new System.Drawing.Point(396, 387);
+            this.txt_recordingID.Location = new System.Drawing.Point(393, 387);
             this.txt_recordingID.Name = "txt_recordingID";
             this.txt_recordingID.Size = new System.Drawing.Size(103, 20);
             this.txt_recordingID.TabIndex = 10;
@@ -487,7 +474,6 @@ namespace CaptureTest
             this.ClientSize = new System.Drawing.Size(504, 455);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txt_recordingID);
-            this.Controls.Add(this.palate);
             this.Controls.Add(this.btnCue);
             this.Controls.Add(this.panelVideo);
             this.Controls.Add(this.btnExit);
@@ -544,31 +530,6 @@ namespace CaptureTest
             {
                 MessageBox.Show("Unable to enable/disable preview. Please submit a bug report.\n\n" + ex.Message + "\n\n" + ex.ToString());
             }
-
-			//try
-			//{
-                // 2013-02-11 __ZSC__
-                // not quite right
-                // seems like you have to click it twice to preview
-                //this.btnCue.Click += new System.EventHandler(this.mnuPreview_Click);
-                
-                //if ( capture == null )
-                //    throw new ApplicationException( "Please select a video and/or audio device." );
-                //if ( !capture.Cued )
-                //    capture.Filename = txtFilename.Text;
-                //capture.Cue();
-                //btnCue.Enabled = false;
-                //MessageBox.Show( "Ready to capture.\n\nUse Cue() before Start() to " +
-                //    "do all the preparation work that needs to be done to start a " +
-                //    "capture. Now, when you click Start the capture will begin faster " +
-                //    "than if you had just clicked Start. Using Cue() is completely " +
-                //    "optional. The downside to using Cue() is the preview is disabled until " +
-                //    "the capture begins." );
-			//}
-			//catch (Exception ex)
-			//{
-				//MessageBox.Show( ex.Message + "\n\n" + ex.ToString() );
-			//}
 		}
 
 		private void btnStart_Click(object sender, System.EventArgs e)
@@ -1315,17 +1276,17 @@ namespace CaptureTest
 
         // 2013-02-05 __ZSC__
         // added palate button and screen capture functionality
-        private void palate_Click(object sender, EventArgs e)
-        {
-            // date and desktop folder path for saving stuff
-            //String date_today = DateTime.Now.ToString("yyyy-MM-dd");
-            //String dtopfolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        //private void palate_Click(object sender, EventArgs e)
+        //{
+        //    // date and desktop folder path for saving stuff
+        //    //String date_today = DateTime.Now.ToString("yyyy-MM-dd");
+        //    //String dtopfolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
-            ScreenCapture sc = new ScreenCapture();
-            // capture this window, and save it
-            //MessageBox.Show(new_path);
-            sc.CaptureWindowToFile(this.Handle, new_path + "\\palate_" + date_today + ".jpg", ImageFormat.Jpeg);
-        }
+        //    ScreenCapture sc = new ScreenCapture();
+        //    // capture this window, and save it
+        //    //MessageBox.Show(new_path);
+        //    sc.CaptureWindowToFile(this.Handle, new_path + "\\palate_" + date_today + ".jpg", ImageFormat.Jpeg);
+        //}
 
         private void CaptureTest_Load(object sender, EventArgs e)
         {
@@ -1358,7 +1319,7 @@ namespace CaptureTest
                 startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 startInfo.FileName = "cmd.exe";
                 // extracts video frames and audio file
-                startInfo.Arguments = "/C ffmpeg -i " + video_name + " -r 30000/1001 -qscale 0 -f image2 " + frame_folder + @"\" + subjectID + "%07d.png -acodec copy -ac 1 " + frame_folder + @"\" + subjectID + ".wav";
+                startInfo.Arguments = "/C ffmpeg -i " + video_name + " -r 30000/1001 -qscale 0 -f image2 " + frame_folder + @"\" + subjectID + "%07d.png -acodec pcm_s16le -ac 1 " + frame_folder + @"\" + subjectID + ".wav";
                 process.StartInfo = startInfo;
                 process.Start();
 
@@ -1372,6 +1333,5 @@ namespace CaptureTest
                 MessageBox.Show("Please STOP recording before Post-Processing");
             }
         }
-
 	}
 }
