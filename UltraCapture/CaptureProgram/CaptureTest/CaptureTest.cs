@@ -83,7 +83,7 @@ namespace CaptureTest
 		{
             // 2013-02-20 __ZC__
             //Process myProc;
-            myProc = Process.Start(dtopfolder+@"\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x86\Debug\FaceTrackingBasics.exe");
+            myProc = Process.Start(dtopfolder + @"\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\bin\x64\Release\FaceTrackingBasics.exe");
 
             //
             // Required for Windows Form Designer support
@@ -124,10 +124,16 @@ namespace CaptureTest
 			// Start with the first video/audio devices
 			// Don't do this in the Release build in case the
 			// first devices cause problems.
-			#if DEBUG
+			
+            // ======================================================
+            // Commented 4-4-2013 -- We want first device initialized
+            //#if DEBUG
+            // ======================================================
 			capture = new Capture( filters.VideoInputDevices[0], filters.AudioInputDevices[0] ); 
 			capture.CaptureComplete += new EventHandler( OnCaptureComplete );
-			#endif
+			// ======================================================
+            //#endif
+            // ======================================================
 
 			// Update the main menu
 			// Much of the interesting work of this sample occurs here
@@ -1319,7 +1325,7 @@ namespace CaptureTest
                 startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 startInfo.FileName = "cmd.exe";
                 // extracts video frames and audio file
-                startInfo.Arguments = "/C ffmpeg -i " + video_name + " -r 30000/1001 -qscale 0 -f image2 " + frame_folder + @"\" + subjectID + "%07d.png -acodec pcm_s16le -ac 1 " + frame_folder + @"\" + subjectID + ".wav";
+                startInfo.Arguments = "/C ffmpeg -i " + video_name + " -r 30000/1001 -qscale 0 -f image2 " + frame_folder + @"\" + subjectID + "_%07d.png -acodec copy " + frame_folder + @"\" + subjectID + ".wav";
                 process.StartInfo = startInfo;
                 process.Start();
 

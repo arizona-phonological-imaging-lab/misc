@@ -4,11 +4,208 @@
         <name>DirectX.Capture</name>
     </assembly>
     <members>
-        <member name="T:DirectX.Capture.DirectShowPropertyPage">
+        <member name="T:DirectX.Capture.AudioSource">
             <summary>
-             Property pages for a DirectShow filter (e.g. hardware device). These
-             property pages do not support persisting their settings. 
+             Represents a physical connector or source on an 
+             audio device. This class is used on filters that
+             support the IAMAudioInputMixer interface such as 
+             source cards.
             </summary>
+        </member>
+        <member name="T:DirectX.Capture.Source">
+            <summary>
+             Represents a physical connector or source on an audio/video device.
+            </summary>
+        </member>
+        <member name="M:DirectX.Capture.Source.ToString">
+            <summary> Obtains the String representation of this instance. </summary>
+        </member>
+        <member name="M:DirectX.Capture.Source.Finalize">
+            <summary> Release unmanaged resources. </summary>
+        </member>
+        <member name="M:DirectX.Capture.Source.Dispose">
+            <summary> Release unmanaged resources. </summary>
+        </member>
+        <member name="P:DirectX.Capture.Source.Name">
+            <summary> The name of the source. Read-only. </summary>
+        </member>
+        <member name="P:DirectX.Capture.Source.Enabled">
+            <summary> Is this source enabled. </summary>
+        </member>
+        <member name="M:DirectX.Capture.AudioSource.#ctor(DShowNET.IPin)">
+            <summary> Constructor. This class cannot be created directly. </summary>
+        </member>
+        <member name="M:DirectX.Capture.AudioSource.getName(DShowNET.IPin)">
+            <summary> Retrieve the friendly name of a connectorType. </summary>
+        </member>
+        <member name="M:DirectX.Capture.AudioSource.Dispose">
+            <summary> Release unmanaged resources. </summary>
+        </member>
+        <member name="P:DirectX.Capture.AudioSource.Enabled">
+            <summary> Enable or disable this source. For audio sources it is 
+            usually possible to enable several sources. When setting Enabled=true,
+            set Enabled=false on all other audio sources. </summary>
+        </member>
+        <member name="T:DirectX.Capture.VideoCapabilities">
+            <summary>
+             Capabilities of the video device such as 
+             min/max frame size and frame rate.
+            </summary>
+        </member>
+        <member name="F:DirectX.Capture.VideoCapabilities.InputSize">
+            <summary> Native size of the incoming video signal. This is the largest signal the filter can digitize with every pixel remaining unique. Read-only. </summary>
+        </member>
+        <member name="F:DirectX.Capture.VideoCapabilities.MinFrameSize">
+            <summary> Minimum supported frame size. Read-only. </summary>
+        </member>
+        <member name="F:DirectX.Capture.VideoCapabilities.MaxFrameSize">
+            <summary> Maximum supported frame size. Read-only. </summary>
+        </member>
+        <member name="F:DirectX.Capture.VideoCapabilities.FrameSizeGranularityX">
+            <summary> Granularity of the output width. This value specifies the increments that are valid between MinFrameSize and MaxFrameSize. Read-only. </summary>
+        </member>
+        <member name="F:DirectX.Capture.VideoCapabilities.FrameSizeGranularityY">
+            <summary> Granularity of the output height. This value specifies the increments that are valid between MinFrameSize and MaxFrameSize. Read-only. </summary>
+        </member>
+        <member name="F:DirectX.Capture.VideoCapabilities.MinFrameRate">
+            <summary> Minimum supported frame rate. Read-only. </summary>
+        </member>
+        <member name="F:DirectX.Capture.VideoCapabilities.MaxFrameRate">
+            <summary> Maximum supported frame rate. Read-only. </summary>
+        </member>
+        <member name="M:DirectX.Capture.VideoCapabilities.#ctor(DShowNET.IAMStreamConfig)">
+            <summary> Retrieve capabilities of a video device </summary>
+        </member>
+        <member name="T:DirectX.Capture.Filter">
+            <summary>
+             Represents a DirectShow filter (e.g. video capture device, 
+             compression codec).
+            </summary>
+            <remarks>
+             To save a chosen filer for later recall
+             save the MonikerString property on the filter: 
+             <code><div style="background-color:whitesmoke;">
+              string savedMonikerString = myFilter.MonikerString;
+             </div></code>
+             
+             To recall the filter create a new Filter class and pass the 
+             string to the constructor: 
+             <code><div style="background-color:whitesmoke;">
+              Filter mySelectedFilter = new Filter( savedMonikerString );
+             </div></code>
+            </remarks>
+        </member>
+        <member name="F:DirectX.Capture.Filter.Name">
+            <summary> Human-readable name of the filter </summary>
+        </member>
+        <member name="F:DirectX.Capture.Filter.MonikerString">
+            <summary> Unique string referencing this filter. This string can be used to recreate this filter. </summary>
+        </member>
+        <member name="M:DirectX.Capture.Filter.#ctor(System.String)">
+            <summary> Create a new filter from its moniker string. </summary>
+        </member>
+        <member name="M:DirectX.Capture.Filter.#ctor(System.Runtime.InteropServices.UCOMIMoniker)">
+            <summary> Create a new filter from its moniker </summary>
+        </member>
+        <member name="M:DirectX.Capture.Filter.getMonikerString(System.Runtime.InteropServices.UCOMIMoniker)">
+            <summary> Retrieve the a moniker's display name (i.e. it's unique string) </summary>
+        </member>
+        <member name="M:DirectX.Capture.Filter.getName(System.Runtime.InteropServices.UCOMIMoniker)">
+            <summary> Retrieve the human-readable name of the filter </summary>
+        </member>
+        <member name="M:DirectX.Capture.Filter.getName(System.String)">
+            <summary> Get a moniker's human-readable name based on a moniker string. </summary>
+        </member>
+        <member name="M:DirectX.Capture.Filter.getAnyMoniker">
+            <summary>
+             This method gets a UCOMIMoniker object.
+            
+             HACK: The only way to create a UCOMIMoniker from a moniker 
+             string is to use UCOMIMoniker.ParseDisplayName(). So I 
+             need ANY UCOMIMoniker object so that I can call 
+             ParseDisplayName(). Does anyone have a better solution?
+            
+             This assumes there is at least one video compressor filter
+             installed on the system.
+            </summary>
+        </member>
+        <member name="M:DirectX.Capture.Filter.CompareTo(System.Object)">
+            <summary>
+             Compares the current instance with another object of 
+             the same type.
+            </summary>
+        </member>
+        <member name="T:DirectX.Capture.TunerInputType">
+            <summary>
+             Specify the frequency of the TV tuner.
+            </summary>
+        </member>
+        <member name="F:DirectX.Capture.TunerInputType.Cable">
+            <summary> Cable frequency </summary>
+        </member>
+        <member name="F:DirectX.Capture.TunerInputType.Antenna">
+            <summary> Antenna frequency </summary>
+        </member>
+        <member name="T:DirectX.Capture.Tuner">
+            <summary>
+             Control and query a hardware TV Tuner.
+            </summary>
+        </member>
+        <member name="M:DirectX.Capture.Tuner.#ctor(DShowNET.IAMTVTuner)">
+            <summary> Initialize this object with a DirectShow tuner </summary>
+        </member>
+        <member name="P:DirectX.Capture.Tuner.Channel">
+            <summary>
+             Get or set the TV Tuner channel.
+            </summary>
+        </member>
+        <member name="P:DirectX.Capture.Tuner.InputType">
+            <summary>
+             Get or set the tuner frequency (cable or antenna).
+            </summary>
+        </member>
+        <member name="P:DirectX.Capture.Tuner.SignalPresent">
+            <summary>
+             Indicates whether a signal is present on the current channel.
+             If the signal strength cannot be determined, a NotSupportedException
+             is thrown.
+            </summary>
+        </member>
+        <member name="T:DirectX.Capture.PropertyPageCollection">
+            <summary>
+             A collection of available PropertyPages in a DirectShow
+             filter graph. It is up to the driver manufacturer to implement
+             a property pages on their drivers. The list of supported 
+             property pages will vary from driver to driver.
+            </summary>
+        </member>
+        <member name="M:DirectX.Capture.PropertyPageCollection.#ctor">
+            <summary> Initialize collection with no property pages. </summary>
+        </member>
+        <member name="M:DirectX.Capture.PropertyPageCollection.#ctor(DShowNET.ICaptureGraphBuilder2,DShowNET.IBaseFilter,DShowNET.IBaseFilter,DShowNET.IBaseFilter,DShowNET.IBaseFilter,DirectX.Capture.SourceCollection,DirectX.Capture.SourceCollection)">
+            <summary> Initialize collection with property pages from existing graph. </summary>
+        </member>
+        <member name="M:DirectX.Capture.PropertyPageCollection.Finalize">
+            <summary> Destructor. Release unmanaged resources. </summary>
+        </member>
+        <member name="M:DirectX.Capture.PropertyPageCollection.Clear">
+            <summary> Empty the collection. </summary>
+        </member>
+        <member name="M:DirectX.Capture.PropertyPageCollection.Dispose">
+            <summary> Release unmanaged resources </summary>
+        </member>
+        <member name="M:DirectX.Capture.PropertyPageCollection.addFromGraph(DShowNET.ICaptureGraphBuilder2,DShowNET.IBaseFilter,DShowNET.IBaseFilter,DShowNET.IBaseFilter,DShowNET.IBaseFilter,DirectX.Capture.SourceCollection,DirectX.Capture.SourceCollection)">
+            <summary> Populate the collection by looking for commonly implemented property pages. </summary>
+        </member>
+        <member name="M:DirectX.Capture.PropertyPageCollection.addIfSupported(System.Object,System.String)">
+            <summary> 
+             Returns the object as an ISpecificPropertyPage
+             if the object supports the ISpecificPropertyPage
+             interface and has at least one property page.
+            </summary>
+        </member>
+        <member name="P:DirectX.Capture.PropertyPageCollection.Item(System.Int32)">
+            <summary> Get the filter at the specified index. </summary>
         </member>
         <member name="T:DirectX.Capture.PropertyPage">
             <summary>
@@ -60,20 +257,82 @@
             </para>
             </remarks>
         </member>
-        <member name="F:DirectX.Capture.DirectShowPropertyPage.specifyPropertyPages">
-            <summary> COM ISpecifyPropertyPages interface </summary>
-        </member>
-        <member name="M:DirectX.Capture.DirectShowPropertyPage.#ctor(System.String,DShowNET.ISpecifyPropertyPages)">
-            <summary> Constructor </summary>
-        </member>
-        <member name="M:DirectX.Capture.DirectShowPropertyPage.Show(System.Windows.Forms.Control)">
-            <summary> 
-             Show the property page. Some property pages cannot be displayed 
-             while previewing and/or capturing. 
+        <member name="T:DirectX.Capture.CrossbarSource">
+            <summary>
+             Represents a physical connector or source on an 
+             audio/video device. This class is used on filters that
+             support the IAMCrossbar interface such as TV Tuners.
             </summary>
         </member>
-        <member name="M:DirectX.Capture.DirectShowPropertyPage.Dispose">
-            <summary> Release unmanaged resources </summary>
+        <member name="M:DirectX.Capture.CrossbarSource.#ctor(DShowNET.IAMCrossbar,System.Int32,System.Int32,DShowNET.PhysicalConnectorType)">
+            <summary> Constructor. This class cannot be created directly. </summary>
+        </member>
+        <member name="M:DirectX.Capture.CrossbarSource.getName(DShowNET.PhysicalConnectorType)">
+            <summary> Retrieve the friendly name of a connectorType. </summary>
+        </member>
+        <member name="M:DirectX.Capture.CrossbarSource.Dispose">
+            <summary> Release unmanaged resources. </summary>
+        </member>
+        <member name="P:DirectX.Capture.CrossbarSource.Enabled">
+            <summary> Enabled or disable this source. </summary>
+        </member>
+        <member name="T:DirectX.Capture.FilterCollection">
+            <summary>
+             A collection of Filter objects (DirectShow filters).
+             This is used by the <see cref="T:DirectX.Capture.Capture"/> class to provide
+             lists of capture devices and compression filters. This class
+             cannot be created directly.
+            </summary>
+        </member>
+        <member name="M:DirectX.Capture.FilterCollection.#ctor(System.Guid)">
+            <summary> Populate the collection with a list of filters from a particular category. </summary>
+        </member>
+        <member name="M:DirectX.Capture.FilterCollection.getFilters(System.Guid)">
+            <summary> Populate the InnerList with a list of filters from a particular category </summary>
+        </member>
+        <member name="P:DirectX.Capture.FilterCollection.Item(System.Int32)">
+            <summary> Get the filter at the specified index. </summary>
+        </member>
+        <member name="T:DirectX.Capture.AudioCapabilities">
+            <summary>
+             Capabilities of the audio device such as 
+             min/max sampling rate and number of channels available.
+            </summary>
+        </member>
+        <member name="F:DirectX.Capture.AudioCapabilities.MinimumChannels">
+            <summary> Minimum number of audio channels. </summary>
+        </member>
+        <member name="F:DirectX.Capture.AudioCapabilities.MaximumChannels">
+            <summary> Maximum number of audio channels. </summary>
+        </member>
+        <member name="F:DirectX.Capture.AudioCapabilities.ChannelsGranularity">
+            <summary> Granularity of the channels. For example, channels 2 through 4, in steps of 2. </summary>
+        </member>
+        <member name="F:DirectX.Capture.AudioCapabilities.MinimumSampleSize">
+            <summary> Minimum number of bits per sample. </summary>
+        </member>
+        <member name="F:DirectX.Capture.AudioCapabilities.MaximumSampleSize">
+            <summary> Maximum number of bits per sample. </summary>
+        </member>
+        <member name="F:DirectX.Capture.AudioCapabilities.SampleSizeGranularity">
+            <summary> Granularity of the bits per sample. For example, 8 bits per sample through 32 bits per sample, in steps of 8. </summary>
+        </member>
+        <member name="F:DirectX.Capture.AudioCapabilities.MinimumSamplingRate">
+            <summary> Minimum sample frequency. </summary>
+        </member>
+        <member name="F:DirectX.Capture.AudioCapabilities.MaximumSamplingRate">
+            <summary> Maximum sample frequency. </summary>
+        </member>
+        <member name="F:DirectX.Capture.AudioCapabilities.SamplingRateGranularity">
+            <summary> Granularity of the frequency. For example, 11025 Hz to 44100 Hz, in steps of 11025 Hz. </summary>
+        </member>
+        <member name="M:DirectX.Capture.AudioCapabilities.#ctor(DShowNET.IAMStreamConfig)">
+            <summary> Retrieve capabilities of an audio device </summary>
+        </member>
+        <member name="T:DirectX.Capture.DeviceInUseException">
+            <summary>
+             Exception thrown when the device cannot be rendered or started.
+            </summary>
         </member>
         <member name="T:DirectX.Capture.Filters">
             <summary>
@@ -105,6 +364,64 @@
         </member>
         <member name="F:DirectX.Capture.Filters.AudioCompressors">
             <summary> Collection of available audio compressors. </summary>
+        </member>
+        <member name="T:DirectX.Capture.VfwCompressorPropertyPage">
+            <summary>
+             The property page to configure a Video for Windows compliant
+             compression codec. Most compressors support this property page
+             rather than a DirectShow property page. Also, most compressors
+             do not support the IAMVideoCompression interface so this
+             property page is the only method to configure a compressor. 
+            </summary>
+        </member>
+        <member name="F:DirectX.Capture.VfwCompressorPropertyPage.vfwCompressDialogs">
+            <summary> Video for Windows compression dialog interface </summary>
+        </member>
+        <member name="M:DirectX.Capture.VfwCompressorPropertyPage.#ctor(System.String,DShowNET.IAMVfwCompressDialogs)">
+            <summary> Constructor </summary>
+        </member>
+        <member name="M:DirectX.Capture.VfwCompressorPropertyPage.Show(System.Windows.Forms.Control)">
+            <summary> 
+             Show the property page. Some property pages cannot be displayed 
+             while previewing and/or capturing. 
+            </summary>
+        </member>
+        <member name="P:DirectX.Capture.VfwCompressorPropertyPage.State">
+            <summary> 
+             Get or set the state of the property page. This is used to save
+             and restore the user's choices without redisplaying the property page.
+             This property will be null if unable to retrieve the property page's
+             state.
+            </summary>
+            <remarks>
+             After showing this property page, read and store the value of 
+             this property. At a later time, the user's choices can be 
+             reloaded by setting this property with the value stored earlier. 
+             Note that some property pages, after setting this property, 
+             will not reflect the new state. However, the filter will use the
+             new settings.
+            </remarks>
+        </member>
+        <member name="T:DirectX.Capture.DirectShowPropertyPage">
+            <summary>
+             Property pages for a DirectShow filter (e.g. hardware device). These
+             property pages do not support persisting their settings. 
+            </summary>
+        </member>
+        <member name="F:DirectX.Capture.DirectShowPropertyPage.specifyPropertyPages">
+            <summary> COM ISpecifyPropertyPages interface </summary>
+        </member>
+        <member name="M:DirectX.Capture.DirectShowPropertyPage.#ctor(System.String,DShowNET.ISpecifyPropertyPages)">
+            <summary> Constructor </summary>
+        </member>
+        <member name="M:DirectX.Capture.DirectShowPropertyPage.Show(System.Windows.Forms.Control)">
+            <summary> 
+             Show the property page. Some property pages cannot be displayed 
+             while previewing and/or capturing. 
+            </summary>
+        </member>
+        <member name="M:DirectX.Capture.DirectShowPropertyPage.Dispose">
+            <summary> Release unmanaged resources </summary>
         </member>
         <member name="T:DirectX.Capture.Capture">
              <summary>
@@ -836,81 +1153,6 @@
         <member name="T:DirectX.Capture.Capture.GraphState">
             <summary> Possible states of the interal filter graph </summary>
         </member>
-        <member name="T:DirectX.Capture.CrossbarSource">
-            <summary>
-             Represents a physical connector or source on an 
-             audio/video device. This class is used on filters that
-             support the IAMCrossbar interface such as TV Tuners.
-            </summary>
-        </member>
-        <member name="T:DirectX.Capture.Source">
-            <summary>
-             Represents a physical connector or source on an audio/video device.
-            </summary>
-        </member>
-        <member name="M:DirectX.Capture.Source.ToString">
-            <summary> Obtains the String representation of this instance. </summary>
-        </member>
-        <member name="M:DirectX.Capture.Source.Finalize">
-            <summary> Release unmanaged resources. </summary>
-        </member>
-        <member name="M:DirectX.Capture.Source.Dispose">
-            <summary> Release unmanaged resources. </summary>
-        </member>
-        <member name="P:DirectX.Capture.Source.Name">
-            <summary> The name of the source. Read-only. </summary>
-        </member>
-        <member name="P:DirectX.Capture.Source.Enabled">
-            <summary> Is this source enabled. </summary>
-        </member>
-        <member name="M:DirectX.Capture.CrossbarSource.#ctor(DShowNET.IAMCrossbar,System.Int32,System.Int32,DShowNET.PhysicalConnectorType)">
-            <summary> Constructor. This class cannot be created directly. </summary>
-        </member>
-        <member name="M:DirectX.Capture.CrossbarSource.getName(DShowNET.PhysicalConnectorType)">
-            <summary> Retrieve the friendly name of a connectorType. </summary>
-        </member>
-        <member name="M:DirectX.Capture.CrossbarSource.Dispose">
-            <summary> Release unmanaged resources. </summary>
-        </member>
-        <member name="P:DirectX.Capture.CrossbarSource.Enabled">
-            <summary> Enabled or disable this source. </summary>
-        </member>
-        <member name="T:DirectX.Capture.AudioCapabilities">
-            <summary>
-             Capabilities of the audio device such as 
-             min/max sampling rate and number of channels available.
-            </summary>
-        </member>
-        <member name="F:DirectX.Capture.AudioCapabilities.MinimumChannels">
-            <summary> Minimum number of audio channels. </summary>
-        </member>
-        <member name="F:DirectX.Capture.AudioCapabilities.MaximumChannels">
-            <summary> Maximum number of audio channels. </summary>
-        </member>
-        <member name="F:DirectX.Capture.AudioCapabilities.ChannelsGranularity">
-            <summary> Granularity of the channels. For example, channels 2 through 4, in steps of 2. </summary>
-        </member>
-        <member name="F:DirectX.Capture.AudioCapabilities.MinimumSampleSize">
-            <summary> Minimum number of bits per sample. </summary>
-        </member>
-        <member name="F:DirectX.Capture.AudioCapabilities.MaximumSampleSize">
-            <summary> Maximum number of bits per sample. </summary>
-        </member>
-        <member name="F:DirectX.Capture.AudioCapabilities.SampleSizeGranularity">
-            <summary> Granularity of the bits per sample. For example, 8 bits per sample through 32 bits per sample, in steps of 8. </summary>
-        </member>
-        <member name="F:DirectX.Capture.AudioCapabilities.MinimumSamplingRate">
-            <summary> Minimum sample frequency. </summary>
-        </member>
-        <member name="F:DirectX.Capture.AudioCapabilities.MaximumSamplingRate">
-            <summary> Maximum sample frequency. </summary>
-        </member>
-        <member name="F:DirectX.Capture.AudioCapabilities.SamplingRateGranularity">
-            <summary> Granularity of the frequency. For example, 11025 Hz to 44100 Hz, in steps of 11025 Hz. </summary>
-        </member>
-        <member name="M:DirectX.Capture.AudioCapabilities.#ctor(DShowNET.IAMStreamConfig)">
-            <summary> Retrieve capabilities of an audio device </summary>
-        </member>
         <member name="T:DirectX.Capture.SourceCollection">
             <summary>
              A collection of sources (or physical connectors) on an 
@@ -965,248 +1207,6 @@
              This is marked internal so that the Capture class can control
              how and when the source is changed.
             </summary>
-        </member>
-        <member name="T:DirectX.Capture.PropertyPageCollection">
-            <summary>
-             A collection of available PropertyPages in a DirectShow
-             filter graph. It is up to the driver manufacturer to implement
-             a property pages on their drivers. The list of supported 
-             property pages will vary from driver to driver.
-            </summary>
-        </member>
-        <member name="M:DirectX.Capture.PropertyPageCollection.#ctor">
-            <summary> Initialize collection with no property pages. </summary>
-        </member>
-        <member name="M:DirectX.Capture.PropertyPageCollection.#ctor(DShowNET.ICaptureGraphBuilder2,DShowNET.IBaseFilter,DShowNET.IBaseFilter,DShowNET.IBaseFilter,DShowNET.IBaseFilter,DirectX.Capture.SourceCollection,DirectX.Capture.SourceCollection)">
-            <summary> Initialize collection with property pages from existing graph. </summary>
-        </member>
-        <member name="M:DirectX.Capture.PropertyPageCollection.Finalize">
-            <summary> Destructor. Release unmanaged resources. </summary>
-        </member>
-        <member name="M:DirectX.Capture.PropertyPageCollection.Clear">
-            <summary> Empty the collection. </summary>
-        </member>
-        <member name="M:DirectX.Capture.PropertyPageCollection.Dispose">
-            <summary> Release unmanaged resources </summary>
-        </member>
-        <member name="M:DirectX.Capture.PropertyPageCollection.addFromGraph(DShowNET.ICaptureGraphBuilder2,DShowNET.IBaseFilter,DShowNET.IBaseFilter,DShowNET.IBaseFilter,DShowNET.IBaseFilter,DirectX.Capture.SourceCollection,DirectX.Capture.SourceCollection)">
-            <summary> Populate the collection by looking for commonly implemented property pages. </summary>
-        </member>
-        <member name="M:DirectX.Capture.PropertyPageCollection.addIfSupported(System.Object,System.String)">
-            <summary> 
-             Returns the object as an ISpecificPropertyPage
-             if the object supports the ISpecificPropertyPage
-             interface and has at least one property page.
-            </summary>
-        </member>
-        <member name="P:DirectX.Capture.PropertyPageCollection.Item(System.Int32)">
-            <summary> Get the filter at the specified index. </summary>
-        </member>
-        <member name="T:DirectX.Capture.VfwCompressorPropertyPage">
-            <summary>
-             The property page to configure a Video for Windows compliant
-             compression codec. Most compressors support this property page
-             rather than a DirectShow property page. Also, most compressors
-             do not support the IAMVideoCompression interface so this
-             property page is the only method to configure a compressor. 
-            </summary>
-        </member>
-        <member name="F:DirectX.Capture.VfwCompressorPropertyPage.vfwCompressDialogs">
-            <summary> Video for Windows compression dialog interface </summary>
-        </member>
-        <member name="M:DirectX.Capture.VfwCompressorPropertyPage.#ctor(System.String,DShowNET.IAMVfwCompressDialogs)">
-            <summary> Constructor </summary>
-        </member>
-        <member name="M:DirectX.Capture.VfwCompressorPropertyPage.Show(System.Windows.Forms.Control)">
-            <summary> 
-             Show the property page. Some property pages cannot be displayed 
-             while previewing and/or capturing. 
-            </summary>
-        </member>
-        <member name="P:DirectX.Capture.VfwCompressorPropertyPage.State">
-            <summary> 
-             Get or set the state of the property page. This is used to save
-             and restore the user's choices without redisplaying the property page.
-             This property will be null if unable to retrieve the property page's
-             state.
-            </summary>
-            <remarks>
-             After showing this property page, read and store the value of 
-             this property. At a later time, the user's choices can be 
-             reloaded by setting this property with the value stored earlier. 
-             Note that some property pages, after setting this property, 
-             will not reflect the new state. However, the filter will use the
-             new settings.
-            </remarks>
-        </member>
-        <member name="T:DirectX.Capture.DeviceInUseException">
-            <summary>
-             Exception thrown when the device cannot be rendered or started.
-            </summary>
-        </member>
-        <member name="T:DirectX.Capture.TunerInputType">
-            <summary>
-             Specify the frequency of the TV tuner.
-            </summary>
-        </member>
-        <member name="F:DirectX.Capture.TunerInputType.Cable">
-            <summary> Cable frequency </summary>
-        </member>
-        <member name="F:DirectX.Capture.TunerInputType.Antenna">
-            <summary> Antenna frequency </summary>
-        </member>
-        <member name="T:DirectX.Capture.Tuner">
-            <summary>
-             Control and query a hardware TV Tuner.
-            </summary>
-        </member>
-        <member name="M:DirectX.Capture.Tuner.#ctor(DShowNET.IAMTVTuner)">
-            <summary> Initialize this object with a DirectShow tuner </summary>
-        </member>
-        <member name="P:DirectX.Capture.Tuner.Channel">
-            <summary>
-             Get or set the TV Tuner channel.
-            </summary>
-        </member>
-        <member name="P:DirectX.Capture.Tuner.InputType">
-            <summary>
-             Get or set the tuner frequency (cable or antenna).
-            </summary>
-        </member>
-        <member name="P:DirectX.Capture.Tuner.SignalPresent">
-            <summary>
-             Indicates whether a signal is present on the current channel.
-             If the signal strength cannot be determined, a NotSupportedException
-             is thrown.
-            </summary>
-        </member>
-        <member name="T:DirectX.Capture.Filter">
-            <summary>
-             Represents a DirectShow filter (e.g. video capture device, 
-             compression codec).
-            </summary>
-            <remarks>
-             To save a chosen filer for later recall
-             save the MonikerString property on the filter: 
-             <code><div style="background-color:whitesmoke;">
-              string savedMonikerString = myFilter.MonikerString;
-             </div></code>
-             
-             To recall the filter create a new Filter class and pass the 
-             string to the constructor: 
-             <code><div style="background-color:whitesmoke;">
-              Filter mySelectedFilter = new Filter( savedMonikerString );
-             </div></code>
-            </remarks>
-        </member>
-        <member name="F:DirectX.Capture.Filter.Name">
-            <summary> Human-readable name of the filter </summary>
-        </member>
-        <member name="F:DirectX.Capture.Filter.MonikerString">
-            <summary> Unique string referencing this filter. This string can be used to recreate this filter. </summary>
-        </member>
-        <member name="M:DirectX.Capture.Filter.#ctor(System.String)">
-            <summary> Create a new filter from its moniker string. </summary>
-        </member>
-        <member name="M:DirectX.Capture.Filter.#ctor(System.Runtime.InteropServices.UCOMIMoniker)">
-            <summary> Create a new filter from its moniker </summary>
-        </member>
-        <member name="M:DirectX.Capture.Filter.getMonikerString(System.Runtime.InteropServices.UCOMIMoniker)">
-            <summary> Retrieve the a moniker's display name (i.e. it's unique string) </summary>
-        </member>
-        <member name="M:DirectX.Capture.Filter.getName(System.Runtime.InteropServices.UCOMIMoniker)">
-            <summary> Retrieve the human-readable name of the filter </summary>
-        </member>
-        <member name="M:DirectX.Capture.Filter.getName(System.String)">
-            <summary> Get a moniker's human-readable name based on a moniker string. </summary>
-        </member>
-        <member name="M:DirectX.Capture.Filter.getAnyMoniker">
-            <summary>
-             This method gets a UCOMIMoniker object.
-            
-             HACK: The only way to create a UCOMIMoniker from a moniker 
-             string is to use UCOMIMoniker.ParseDisplayName(). So I 
-             need ANY UCOMIMoniker object so that I can call 
-             ParseDisplayName(). Does anyone have a better solution?
-            
-             This assumes there is at least one video compressor filter
-             installed on the system.
-            </summary>
-        </member>
-        <member name="M:DirectX.Capture.Filter.CompareTo(System.Object)">
-            <summary>
-             Compares the current instance with another object of 
-             the same type.
-            </summary>
-        </member>
-        <member name="T:DirectX.Capture.FilterCollection">
-            <summary>
-             A collection of Filter objects (DirectShow filters).
-             This is used by the <see cref="T:DirectX.Capture.Capture"/> class to provide
-             lists of capture devices and compression filters. This class
-             cannot be created directly.
-            </summary>
-        </member>
-        <member name="M:DirectX.Capture.FilterCollection.#ctor(System.Guid)">
-            <summary> Populate the collection with a list of filters from a particular category. </summary>
-        </member>
-        <member name="M:DirectX.Capture.FilterCollection.getFilters(System.Guid)">
-            <summary> Populate the InnerList with a list of filters from a particular category </summary>
-        </member>
-        <member name="P:DirectX.Capture.FilterCollection.Item(System.Int32)">
-            <summary> Get the filter at the specified index. </summary>
-        </member>
-        <member name="T:DirectX.Capture.AudioSource">
-            <summary>
-             Represents a physical connector or source on an 
-             audio device. This class is used on filters that
-             support the IAMAudioInputMixer interface such as 
-             source cards.
-            </summary>
-        </member>
-        <member name="M:DirectX.Capture.AudioSource.#ctor(DShowNET.IPin)">
-            <summary> Constructor. This class cannot be created directly. </summary>
-        </member>
-        <member name="M:DirectX.Capture.AudioSource.getName(DShowNET.IPin)">
-            <summary> Retrieve the friendly name of a connectorType. </summary>
-        </member>
-        <member name="M:DirectX.Capture.AudioSource.Dispose">
-            <summary> Release unmanaged resources. </summary>
-        </member>
-        <member name="P:DirectX.Capture.AudioSource.Enabled">
-            <summary> Enable or disable this source. For audio sources it is 
-            usually possible to enable several sources. When setting Enabled=true,
-            set Enabled=false on all other audio sources. </summary>
-        </member>
-        <member name="T:DirectX.Capture.VideoCapabilities">
-            <summary>
-             Capabilities of the video device such as 
-             min/max frame size and frame rate.
-            </summary>
-        </member>
-        <member name="F:DirectX.Capture.VideoCapabilities.InputSize">
-            <summary> Native size of the incoming video signal. This is the largest signal the filter can digitize with every pixel remaining unique. Read-only. </summary>
-        </member>
-        <member name="F:DirectX.Capture.VideoCapabilities.MinFrameSize">
-            <summary> Minimum supported frame size. Read-only. </summary>
-        </member>
-        <member name="F:DirectX.Capture.VideoCapabilities.MaxFrameSize">
-            <summary> Maximum supported frame size. Read-only. </summary>
-        </member>
-        <member name="F:DirectX.Capture.VideoCapabilities.FrameSizeGranularityX">
-            <summary> Granularity of the output width. This value specifies the increments that are valid between MinFrameSize and MaxFrameSize. Read-only. </summary>
-        </member>
-        <member name="F:DirectX.Capture.VideoCapabilities.FrameSizeGranularityY">
-            <summary> Granularity of the output height. This value specifies the increments that are valid between MinFrameSize and MaxFrameSize. Read-only. </summary>
-        </member>
-        <member name="F:DirectX.Capture.VideoCapabilities.MinFrameRate">
-            <summary> Minimum supported frame rate. Read-only. </summary>
-        </member>
-        <member name="F:DirectX.Capture.VideoCapabilities.MaxFrameRate">
-            <summary> Maximum supported frame rate. Read-only. </summary>
-        </member>
-        <member name="M:DirectX.Capture.VideoCapabilities.#ctor(DShowNET.IAMStreamConfig)">
-            <summary> Retrieve capabilities of a video device </summary>
         </member>
     </members>
 </doc>

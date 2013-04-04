@@ -3,3 +3,8 @@ C:\Users\Zooty\Downloads\DirectXCapture_demo\DirectX.Capture\bin\Release\DirectX
 C:\Users\Zooty\Downloads\DirectXCapture_demo\DirectX.Capture\bin\Release\DShowNET.dll
 C:\Users\Zooty\Downloads\DirectXCapture_demo\DirectX.Capture\obj\Release\ResolveAssemblyReference.cache
 C:\Users\Zooty\Downloads\DirectXCapture_demo\DirectX.Capture\obj\Release\DirectX.Capture.dll
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\CaptureProgram\DirectX.Capture\bin\Release\DirectX.Capture.dll
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\CaptureProgram\DirectX.Capture\bin\Release\DirectX.Capture.xml
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\CaptureProgram\DirectX.Capture\bin\Release\DShowNET.dll
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\CaptureProgram\DirectX.Capture\obj\Release\ResolveAssemblyReference.cache
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\CaptureProgram\DirectX.Capture\obj\Release\DirectX.Capture.dll

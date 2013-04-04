@@ -33,3 +33,10 @@ C:\Users\Zooty\Desktop\dev\UltrasoundCaptureDemo\DirectX.Capture\bin\Debug\DShow
 C:\Users\Zooty\Desktop\dev\UltrasoundCaptureDemo\DirectX.Capture\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\Zooty\Desktop\dev\UltrasoundCaptureDemo\DirectX.Capture\obj\Debug\DirectX.Capture.dll
 C:\Users\Zooty\Desktop\dev\UltrasoundCaptureDemo\DirectX.Capture\obj\Debug\DirectX.Capture.pdb
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\CaptureProgram\DirectX.Capture\bin\Debug\DirectX.Capture.dll
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\CaptureProgram\DirectX.Capture\bin\Debug\DirectX.Capture.pdb
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\CaptureProgram\DirectX.Capture\bin\Debug\DShowNET.dll
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\CaptureProgram\DirectX.Capture\bin\Debug\DShowNET.pdb
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\CaptureProgram\DirectX.Capture\obj\Debug\ResolveAssemblyReference.cache
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\CaptureProgram\DirectX.Capture\obj\Debug\DirectX.Capture.dll
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\CaptureProgram\DirectX.Capture\obj\Debug\DirectX.Capture.pdb
