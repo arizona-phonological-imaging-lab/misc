@@ -1,0 +1,5 @@
+C:\Users\Zooty\Downloads\DirectXCapture_demo\DirectX.Capture\bin\Release\DirectX.Capture.dll
+C:\Users\Zooty\Downloads\DirectXCapture_demo\DirectX.Capture\bin\Release\DirectX.Capture.xml
+C:\Users\Zooty\Downloads\DirectXCapture_demo\DirectX.Capture\bin\Release\DShowNET.dll
+C:\Users\Zooty\Downloads\DirectXCapture_demo\DirectX.Capture\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Zooty\Downloads\DirectXCapture_demo\DirectX.Capture\obj\Release\DirectX.Capture.dll

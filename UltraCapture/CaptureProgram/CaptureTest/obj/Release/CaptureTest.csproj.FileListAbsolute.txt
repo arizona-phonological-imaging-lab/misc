@@ -1,0 +1,9 @@
+C:\Users\Zooty\Downloads\DirectXCapture_demo\CaptureTest\bin\Release\CaptureTest.exe
+C:\Users\Zooty\Downloads\DirectXCapture_demo\CaptureTest\bin\Release\DirectX.Capture.dll
+C:\Users\Zooty\Downloads\DirectXCapture_demo\CaptureTest\bin\Release\DShowNET.dll
+C:\Users\Zooty\Downloads\DirectXCapture_demo\CaptureTest\bin\Release\DirectX.Capture.xml
+C:\Users\Zooty\Downloads\DirectXCapture_demo\CaptureTest\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Zooty\Downloads\DirectXCapture_demo\CaptureTest\obj\Release\CaptureTest.CaptureTest.resources
+C:\Users\Zooty\Downloads\DirectXCapture_demo\CaptureTest\obj\Release\GenerateResource.read.1.tlog
+C:\Users\Zooty\Downloads\DirectXCapture_demo\CaptureTest\obj\Release\GenerateResource.write.1.tlog
+C:\Users\Zooty\Downloads\DirectXCapture_demo\CaptureTest\obj\Release\CaptureTest.exe
