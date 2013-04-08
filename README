@@ -1,14 +1,2 @@
---------------------------------------
-Collecting Data
---------------------------------------
+Added stimuli display script, "stimuli.py".  Reads a newline delimited stimuli file (.txt) from current directory, creates a user-specified number of randomized repetitions, and writes a csv output file with [repetition #, stimulus, time].
 
-
---------------------------------------
-Sync(h)ing audio and ultra sound video 
---------------------------------------
-
-1. From the command line, navigate to the directory that contains the bag file (containg audio) and the ultrasound video file
-2. Make sure the synch.py script is in the same folder*
-3. From the commmand line type:
-		python synch.py <bagfilename>.bag <ultrasoundvideo>.dv
-4. Get coffee while script processes...
