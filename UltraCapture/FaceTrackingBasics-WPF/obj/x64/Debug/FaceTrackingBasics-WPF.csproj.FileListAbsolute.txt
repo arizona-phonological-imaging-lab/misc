@@ -1,0 +1,76 @@
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\FaceTrackingBasics.exe.config
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\FaceTrackData.dll
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\FaceTrackLib.dll
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\FaceTrackingBasics.exe
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\FaceTrackingBasics.pdb
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\Microsoft.Kinect.Toolkit.dll
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\Microsoft.Kinect.Toolkit.FaceTracking.dll
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\Microsoft.Kinect.Toolkit.FaceTracking.pdb
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\Microsoft.Kinect.Toolkit.pdb
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\ResolveAssemblyReference.cache
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingViewer.baml
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingViewer.g.cs
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\MainWindow.g.cs
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\App.g.cs
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingBasics_MarkupCompile.cache
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingBasics_MarkupCompile.lref
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\MainWindow.baml
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingBasics.g.resources
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingBasics.Properties.Resources.resources
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\GenerateResource.read.1.tlog
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\GenerateResource.write.1.tlog
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingBasics.exe
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingBasics.pdb
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\DirectX.Capture.dll
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\DShowNET.dll
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\DirectX.Capture.pdb
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\DShowNET.pdb
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\FaceTrackingBasics.exe.config
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\FaceTrackData.dll
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\FaceTrackLib.dll
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\FaceTrackingBasics.exe
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\FaceTrackingBasics.pdb
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\Microsoft.Kinect.Toolkit.dll
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\Microsoft.Kinect.Toolkit.FaceTracking.dll
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\Microsoft.Kinect.Toolkit.FaceTracking.pdb
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\bin\x64\Debug\Microsoft.Kinect.Toolkit.pdb
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\ResolveAssemblyReference.cache
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingViewer.baml
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingViewer.g.cs
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\MainWindow.g.cs
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\App.g.cs
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingBasics_MarkupCompile.cache
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingBasics_MarkupCompile.lref
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\MainWindow.baml
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingBasics.g.resources
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingBasics.Properties.Resources.resources
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\GenerateResource.read.1.tlog
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\GenerateResource.write.1.tlog
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingBasics.exe
+C:\Users\Zooty\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingBasics.pdb
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\bin\x64\Debug\FaceTrackingBasics.exe.config
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingBasics.exe
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingBasics.pdb
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\bin\x64\Debug\FaceTrackData.dll
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\bin\x64\Debug\FaceTrackLib.dll
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\bin\x64\Debug\FaceTrackingBasics.exe
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\bin\x64\Debug\FaceTrackingBasics.pdb
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\bin\x64\Debug\Microsoft.Kinect.Toolkit.dll
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\bin\x64\Debug\Microsoft.Kinect.Toolkit.FaceTracking.dll
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\bin\x64\Debug\Microsoft.Kinect.Toolkit.FaceTracking.pdb
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\bin\x64\Debug\Microsoft.Kinect.Toolkit.pdb
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\obj\x64\Debug\ResolveAssemblyReference.cache
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingViewer.baml
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingViewer.g.cs
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\obj\x64\Debug\MainWindow.g.cs
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\obj\x64\Debug\App.g.cs
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\obj\x64\Debug\GeneratedInternalTypeHelper.g.cs
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingBasics_MarkupCompile.cache
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingBasics_MarkupCompile.lref
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\obj\x64\Debug\MainWindow.baml
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingBasics.g.resources
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\obj\x64\Debug\FaceTrackingBasics.Properties.Resources.resources
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\obj\x64\Debug\GenerateResource.read.1.tlog
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\obj\x64\Debug\GenerateResource.write.1.tlog

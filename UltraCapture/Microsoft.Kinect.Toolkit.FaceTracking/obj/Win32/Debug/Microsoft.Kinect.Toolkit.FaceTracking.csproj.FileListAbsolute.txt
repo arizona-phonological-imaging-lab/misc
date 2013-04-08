@@ -1,0 +1,21 @@
+C:\Users\Rolando\Documents\Microsoft.Kinect.Toolkit.FaceTracking\bin\x86\Debug\FaceTrackData.dll
+C:\Users\Rolando\Documents\Microsoft.Kinect.Toolkit.FaceTracking\bin\x86\Debug\FaceTrackLib.dll
+C:\Users\Rolando\Documents\Microsoft.Kinect.Toolkit.FaceTracking\bin\x86\Debug\Microsoft.Kinect.Toolkit.FaceTracking.dll
+C:\Users\Rolando\Documents\Microsoft.Kinect.Toolkit.FaceTracking\bin\x86\Debug\Microsoft.Kinect.Toolkit.FaceTracking.pdb
+C:\Users\Rolando\Documents\Microsoft.Kinect.Toolkit.FaceTracking\obj\Win32\Debug\ResolveAssemblyReference.cache
+C:\Users\Rolando\Documents\Microsoft.Kinect.Toolkit.FaceTracking\obj\Win32\Debug\Microsoft.Kinect.Toolkit.FaceTracking.dll
+C:\Users\Rolando\Documents\Microsoft.Kinect.Toolkit.FaceTracking\obj\Win32\Debug\Microsoft.Kinect.Toolkit.FaceTracking.pdb
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\bin\x86\Debug\FaceTrackData.dll
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\bin\x86\Debug\FaceTrackLib.dll
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\bin\x86\Debug\Microsoft.Kinect.Toolkit.FaceTracking.dll
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\bin\x86\Debug\Microsoft.Kinect.Toolkit.FaceTracking.pdb
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\obj\Win32\Debug\ResolveAssemblyReference.cache
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\obj\Win32\Debug\Microsoft.Kinect.Toolkit.FaceTracking.dll
+C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\obj\Win32\Debug\Microsoft.Kinect.Toolkit.FaceTracking.pdb
+D:\Users\APIL-Capture\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\bin\x86\Debug\FaceTrackData.dll
+D:\Users\APIL-Capture\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\bin\x86\Debug\FaceTrackLib.dll
+D:\Users\APIL-Capture\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\bin\x86\Debug\Microsoft.Kinect.Toolkit.FaceTracking.dll
+D:\Users\APIL-Capture\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\bin\x86\Debug\Microsoft.Kinect.Toolkit.FaceTracking.pdb
+D:\Users\APIL-Capture\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\obj\Win32\Debug\ResolveAssemblyReference.cache
+D:\Users\APIL-Capture\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\obj\Win32\Debug\Microsoft.Kinect.Toolkit.FaceTracking.dll
+D:\Users\APIL-Capture\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\obj\Win32\Debug\Microsoft.Kinect.Toolkit.FaceTracking.pdb
