@@ -189,8 +189,8 @@ namespace Microsoft.Kinect.Toolkit.FaceTracking
         /// </summary>
         public void Dispose()
         {
-
-            System.IO.File.WriteAllText(@"D:\Users\APIL-Capture\Desktop\coords.txt", coordinates);
+            string dtopfolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            System.IO.File.WriteAllText(dtopfolder+@"\coords.txt", coordinates);
 
             this.InternalDispose();
             GC.SuppressFinalize(this);

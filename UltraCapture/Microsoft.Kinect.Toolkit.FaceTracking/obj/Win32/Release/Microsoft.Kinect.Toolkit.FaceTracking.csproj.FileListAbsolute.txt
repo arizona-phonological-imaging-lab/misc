@@ -1,0 +1,7 @@
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\Microsoft.Kinect.Toolkit.FaceTracking\bin\x86\Release\FaceTrackData.dll
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\Microsoft.Kinect.Toolkit.FaceTracking\bin\x86\Release\FaceTrackLib.dll
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\Microsoft.Kinect.Toolkit.FaceTracking\bin\x86\Release\Microsoft.Kinect.Toolkit.FaceTracking.dll
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\Microsoft.Kinect.Toolkit.FaceTracking\bin\x86\Release\Microsoft.Kinect.Toolkit.FaceTracking.pdb
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\Microsoft.Kinect.Toolkit.FaceTracking\obj\Win32\Release\ResolveAssemblyReference.cache
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\Microsoft.Kinect.Toolkit.FaceTracking\obj\Win32\Release\Microsoft.Kinect.Toolkit.FaceTracking.dll
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\Microsoft.Kinect.Toolkit.FaceTracking\obj\Win32\Release\Microsoft.Kinect.Toolkit.FaceTracking.pdb

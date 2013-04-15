@@ -511,7 +511,7 @@ namespace CaptureTest
 		{
 			if ( capture != null )
 				capture.Stop();
-			Application.Exit(); 
+			Application.Exit();
 		}
 
 		private void btnCue_Click(object sender, System.EventArgs e)
@@ -607,7 +607,9 @@ namespace CaptureTest
 					throw new ApplicationException( "Please select a video and/or audio device." );
                 if ( btnStart.BackColor == Color.Red )
                 {
-                    myProc.Kill();
+                    myProc.CloseMainWindow();
+                    // Changed from Kill() to CloseMainWindow() so that coords.txt is generated
+                    //myProc.Kill();
                     btnStart.BackColor = Color.Gray;
                     date1 = DateTime.Now;
                     startEndtimes += "Before stop time:     " + date1.ToString("yyyyyyyyMMddHHmmssfff") + "\r\n";
@@ -1312,7 +1314,7 @@ namespace CaptureTest
                 if (capture == null)
                     throw new ApplicationException("Please record something before Post-Processing.");
                 // create output folder for frames
-                string frame_folder = new_path + @"\" + "frames_and_audio";
+                string frame_folder = new_path + @"\" + "frames";
                 if (!(System.IO.Directory.Exists(frame_folder)))
                 {
                     System.IO.Directory.CreateDirectory(frame_folder);

@@ -19,3 +19,10 @@ D:\Users\APIL-Capture\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF
 D:\Users\APIL-Capture\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\obj\Win32\Debug\ResolveAssemblyReference.cache
 D:\Users\APIL-Capture\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\obj\Win32\Debug\Microsoft.Kinect.Toolkit.FaceTracking.dll
 D:\Users\APIL-Capture\Desktop\dev\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\obj\Win32\Debug\Microsoft.Kinect.Toolkit.FaceTracking.pdb
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\Microsoft.Kinect.Toolkit.FaceTracking\obj\Win32\Debug\ResolveAssemblyReference.cache
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\Microsoft.Kinect.Toolkit.FaceTracking\bin\x86\Debug\FaceTrackData.dll
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\Microsoft.Kinect.Toolkit.FaceTracking\bin\x86\Debug\FaceTrackLib.dll
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\Microsoft.Kinect.Toolkit.FaceTracking\bin\x86\Debug\Microsoft.Kinect.Toolkit.FaceTracking.dll
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\Microsoft.Kinect.Toolkit.FaceTracking\bin\x86\Debug\Microsoft.Kinect.Toolkit.FaceTracking.pdb
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\Microsoft.Kinect.Toolkit.FaceTracking\obj\Win32\Debug\Microsoft.Kinect.Toolkit.FaceTracking.dll
+D:\Users\APIL-Capture\Desktop\dev\GitHub\Ultraspeech\UltraCapture\Microsoft.Kinect.Toolkit.FaceTracking\obj\Win32\Debug\Microsoft.Kinect.Toolkit.FaceTracking.pdb
