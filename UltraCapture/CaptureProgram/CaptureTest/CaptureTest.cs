@@ -1326,6 +1326,21 @@ namespace CaptureTest
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 startInfo.FileName = "cmd.exe";
+                // moves the coords.txt from desktop to subjectID folder
+                string coords_file = "coords.txt";
+
+                string sourceFile = System.IO.Path.Combine(dtopfolder, coords_file);
+                string destFile = System.IO.Path.Combine(new_path, coords_file);
+
+                if (System.IO.File.Exists(sourceFile))
+                {
+                    System.IO.File.Move(sourceFile, destFile);
+                }
+                else
+                {
+                    MessageBox.Show("No coords.txt file found, bro.");
+                }
+
                 // extracts video frames and audio file
                 startInfo.Arguments = "/C ffmpeg -i " + video_name + " -r 30000/1001 -qscale 0 -f image2 " + frame_folder + @"\" + subjectID + "_%07d.png -acodec copy " + frame_folder + @"\" + subjectID + ".wav";
                 process.StartInfo = startInfo;
