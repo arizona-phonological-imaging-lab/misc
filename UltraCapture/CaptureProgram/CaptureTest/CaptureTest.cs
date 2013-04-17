@@ -1338,11 +1338,11 @@ namespace CaptureTest
                 }
                 else
                 {
-                    MessageBox.Show("No coords.txt file found, bro.");
+                    MessageBox.Show("Unable to move coords.txt file.\nFile Not Found!");
                 }
 
                 // extracts video frames and audio file
-                startInfo.Arguments = "/C ffmpeg -i " + video_name + " -r 30000/1001 -qscale 0 -f image2 " + frame_folder + @"\" + subjectID + "_%07d.png -acodec copy " + frame_folder + @"\" + subjectID + ".wav";
+                startInfo.Arguments = "/C ffmpeg -i " + video_name + " -r 30000/1001 -qscale 0 -f image2 " + frame_folder + @"\frame-%07d.png -acodec copy " + new_path + @"\" + subjectID + ".wav";
                 process.StartInfo = startInfo;
                 process.Start();
 
