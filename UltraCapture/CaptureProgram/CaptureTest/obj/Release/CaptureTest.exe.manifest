@@ -4,7 +4,7 @@
   <description asmv2:iconFile="App.ico" xmlns="urn:schemas-microsoft-com:asm.v1" />
   <application />
   <entryPoint>
-    <assemblyIdentity name="CaptureTest" version="1.0.4855.28797" language="neutral" processorArchitecture="msil" />
+    <assemblyIdentity name="CaptureTest" version="1.0.4862.22582" language="neutral" processorArchitecture="msil" />
     <commandLine file="CaptureTest.exe" parameters="" />
   </entryPoint>
   <trustInfo>
@@ -43,26 +43,26 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="CaptureTest.exe" size="40960">
-      <assemblyIdentity name="CaptureTest" version="1.0.4855.28797" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="CaptureTest.exe" size="45056">
+      <assemblyIdentity name="CaptureTest" version="1.0.4862.22582" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>mXtfPMj/ftAUXE7L3siNcK4QR6w=</dsig:DigestValue>
+        <dsig:DigestValue>101Sf+7yivLmVgOFiC1hXr7MpRY=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DirectX.Capture.dll" size="45056">
-      <assemblyIdentity name="DirectX.Capture" version="1.0.4855.28797" language="neutral" processorArchitecture="msil" />
+      <assemblyIdentity name="DirectX.Capture" version="1.0.4862.22581" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>WIc/wu/k0rGpJ3BCOtXa/Vh3oSU=</dsig:DigestValue>
+        <dsig:DigestValue>golVGCrBR8xfwDBzgpnJNlhHN+o=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -74,7 +74,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>zKQputuvqSsKEtbJ4TuMm/4DXJc=</dsig:DigestValue>
+        <dsig:DigestValue>izYilmE5QHvafW/7Q7Flb4O8SSY=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

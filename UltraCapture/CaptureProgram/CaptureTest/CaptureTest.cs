@@ -83,6 +83,7 @@ namespace CaptureTest
 		{
             // 2013-02-20 __ZC__
             //Process myProc;
+            // 4-22-2013 removing process for Face Tracking?? problem with Laptop running the secondary process
             myProc = Process.Start(dtopfolder + @"\dev\GitHub\Ultraspeech\UltraCapture\FaceTrackingBasics-WPF\bin\x64\Release\FaceTrackingBasics.exe");
 
             //
@@ -607,6 +608,7 @@ namespace CaptureTest
 					throw new ApplicationException( "Please select a video and/or audio device." );
                 if ( btnStart.BackColor == Color.Red )
                 {
+                    // 4-22-2013 removing process for Face Tracking?? doesn't work on Laptop
                     myProc.CloseMainWindow();
                     // Changed from Kill() to CloseMainWindow() so that coords.txt is generated
                     //myProc.Kill();
@@ -1339,6 +1341,21 @@ namespace CaptureTest
                 else
                 {
                     MessageBox.Show("Unable to move coords.txt file.\nFile Not Found!");
+                }
+
+                // moves the stimulus file from stim folder to subjectID folder
+                string stim_file = "stimulus_response.csv";
+
+                string stimSource = System.IO.Path.Combine(dtopfolder, "Stimulus Display", stim_file);
+                string stimDest = System.IO.Path.Combine(new_path, stim_file);
+
+                if (System.IO.File.Exists(stimSource))
+                {
+                    System.IO.File.Move(stimSource, stimDest);
+                }
+                else
+                {
+                    MessageBox.Show("Unable to move stimulus file.\nFile Not Found!");
                 }
 
                 // extracts video frames and audio file
