@@ -7,9 +7,9 @@ from datetime import datetime
 import os, platform, csv, time, codecs
 
 #set default font size
-f_size = 130
+f_size = 90
 #wraplength default
-w_l = 1000
+w_l = 1100
 #concluding message
 conclusion = "This concludes the experiment.  Thank you for your participation."
 basedir = os.getcwd()
@@ -33,14 +33,34 @@ def parameters():
         print
         selection = raw_input("Specify a stimuli source: ")
     stim_source = possible[selection]
-    return stim_source
+    #solicit a carrier phrase
+    print
+    selection = raw_input("Use a carrier phrase? (y/n) ")
+    carrier = False
+    if selection == "y":
+        print
+        print "Carrier phrase example: 'I like to eat {0}.'"
+        carrier = raw_input("Specify a carrier phrase: ")
+        print
+        while '{0}' not in carrier:
+        	print "Improper format."
+        	print
+        	print "Carrier phrase example: 'I like to eat {0}.'"
+        	carrier = raw_input("Please specify a carrier phrase: ")
+        	print
+    return stim_source, carrier
  
 #get stimuli source
-stim_source = parameters()
+stim_source, carrier = parameters()
 
 f = codecs.open(str(stim_source), 'r', 'utf-8')
 lines = f.readlines()
 stuff = [s.encode('utf-8').rstrip() for s in lines]
+csv_file = 'stimulus_response.csv'
+if os.path.exists(csv_file):
+	#change csv file name to time last modified
+	new_name = str(int(os.path.getctime(csv_file))) + csv_file
+	os.rename(csv_file, new_name)
 c = open('stimulus_response.csv', 'w')
 stim = csv.writer(c)
 
@@ -104,6 +124,8 @@ def key(event):
 		current = stimuli[i]
 		response_time = datetime.now()
 		stim.writerow([current_set, current, response_time])
+		if carrier:
+			current = carrier.format(current)
 		stimulus.set(current)
 	except: 
 		StopIteration
@@ -123,7 +145,7 @@ def fin(event):
 stim.writerow(["SET", "STIMULUS", "TIME"])
 master = Tk()
 stimulus = StringVar()
-s = Label(master, height=40, width=50, text="Prepare for palate capture...", wraplength= w_l, font=("Helvetica", f_size), background='green')
+s = Label(master, height=40, width=50, text="Please wait for instructions...", wraplength= w_l, font=("Helvetica", f_size), background='green')
 w = Label(master, height=40, width=50, textvariable=stimulus, wraplength= w_l, font=("Helvetica", f_size))
 finish = Label(master, height=40, width=50, text=conclusion, wraplength= w_l, font=("Helvetica", 80, "bold italic"), background='LightBlue')
 s.pack()
