@@ -4,10 +4,10 @@
 from Tkinter import *
 from random import shuffle
 from datetime import datetime
-import os, platform, csv, time, codecs
+import os, platform, csv, time, codecs, shutil
 
 #set default font size
-f_size = 90
+f_size = 70
 #wraplength default
 w_l = 1100
 #concluding message
@@ -50,17 +50,22 @@ def parameters():
         	print
     return stim_source, carrier
  
-#get stimuli source
+#get unicode-friendly stimuli source
 stim_source, carrier = parameters()
 
 f = codecs.open(str(stim_source), 'r', 'utf-8')
 lines = f.readlines()
 stuff = [s.encode('utf-8').rstrip() for s in lines]
 csv_file = 'stimulus_response.csv'
-if os.path.exists(csv_file):
-	#change csv file name to time last modified
-	new_name = str(int(os.path.getctime(csv_file))) + csv_file
-	os.rename(csv_file, new_name)
+
+#preserve and move csv file if someone forgot to move it...
+def on_fail():
+	if os.path.exists(csv_file):
+		#change csv file name to time last modified
+		new_name = str(int(os.path.getctime(csv_file))) + csv_file
+		os.rename(csv_file, new_name)
+
+on_fail()
 c = open('stimulus_response.csv', 'w')
 stim = csv.writer(c)
 
@@ -164,3 +169,16 @@ stim.writerow(['--', 'START', response_time])
 
 
 w.mainloop()
+
+#move csv file to subject folder...
+c.close()
+all_subdirs = [d for d in os.listdir('.') if os.path.isdir(d)]
+latest_subdir = max(all_subdirs, key=os.path.getmtime)
+
+src = os.path.abspath('stimulus_response.csv')
+dst = os.path.abspath(latest_subdir)
+try: shutil.move(src, dst)
+except: 
+	print "Couldn't move csv file.  The file already exists in the newest directory."
+	on_fail()
+
