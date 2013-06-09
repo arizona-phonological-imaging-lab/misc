@@ -4,58 +4,72 @@
 from Tkinter import *
 from random import shuffle
 from datetime import datetime
-import os, platform, csv, time, codecs, shutil
+import tkFileDialog, tkMessageBox
+import os, platform, csv, time, codecs, shutil 
 
+
+#default tkinter stuff
+master = Tk()
+master.geometry("800x600")
+h_val, w_val = 40, 50
+master.withdraw()
 #set default font size
 f_size = 70
 #wraplength default
 w_l = 1100
 #concluding message
 conclusion = "This concludes the experiment.  Thank you for your participation."
-basedir = os.getcwd()
-stuff = os.listdir(basedir)
-#create a dictionary of available texts in current directory
-possible = dict((os.path.splitext(f)[0], f) for f in stuff if os.path.splitext(f)[1] == '.txt')
+#variables
+carrier_phrase = None
+reps = 1
 
 def parameters():
-    """
-    Select stimuli set
-    """
-    #select source text
-    print "Available Stimuli files: ", 
-    for key in possible: print key,
-    print
-    selection = raw_input("Specify a stimuli source: ")
-    while selection not in possible:
-        print "Specified stimuli source not recognized."
-        print "Options are: ",
-        for key in possible: print key,
-        print
-        selection = raw_input("Specify a stimuli source: ")
-    stim_source = possible[selection]
-    #solicit a carrier phrase
-    print
-    selection = raw_input("Use a carrier phrase? (y/n) ")
-    carrier = False
-    if selection == "y":
-        print
-        print "Carrier phrase example: 'I like to eat {0}.'"
-        carrier = raw_input("Specify a carrier phrase: ")
-        print
-        while '{0}' not in carrier:
-        	print "Improper format."
-        	print
-        	print "Carrier phrase example: 'I like to eat {0}.'"
-        	carrier = raw_input("Please specify a carrier phrase: ")
-        	print
-    return stim_source, carrier
- 
+	"""
+	Select stimuli set
+	"""
+	#select source text
+	f_name = None
+	while not f_name:
+		#initialdir="/",
+		f_name = tkFileDialog.askopenfilename(title='Stimuli Source Selection', filetypes=[("Text files", ".txt")])
+	#solicit a carrier phrase
+	carrier = tkMessageBox.askyesno(title="Carrier Phrase", icon="question", message="Use a carrier phrase?")
+	if carrier:
+		#carrier_phrase = None
+		def validate_cp_message():
+			global carrier_phrase
+			#cp = carrier_disp.get().strip()
+			test_carrier = carrier_disp.get()
+			if '{0}' not in test_carrier: 
+				carrier_disp.delete(0, END)
+				carrier_disp.insert(0, "EX: 'I like to eat {0} on Thursdays.'")
+			else:
+				carrier_phrase = test_carrier
+				cp_root.quit()
+				cp_root.destroy()
+
+		cp_root = Tk()
+		cp_root.wm_title("Carrier Phrase")
+		carrier_disp = Entry(cp_root, width=50, bd=2)
+		cp_label = Label(cp_root, text="Carrier Phrase:")
+		#cp_label.pack(side = LEFT)
+		button = Button(cp_root, text='Submit', command=validate_cp_message)
+		#button.pack()
+		#carrier_disp.pack()
+		cp_label.grid(row=0, column=0)
+		carrier_disp.grid(row=0, column=1)
+		button.grid(row=0, column=2)
+		carrier_disp.insert(0, "EX: 'I like to eat {0} on Thursdays.'")
+
+		carrier_disp.mainloop()
+	return f_name
+
 #get unicode-friendly stimuli source
-stim_source, carrier = parameters()
+stim_source = parameters()
 
 f = codecs.open(str(stim_source), 'r', 'utf-8')
 lines = f.readlines()
-stuff = [s.encode('utf-8').rstrip() for s in lines]
+unicode_lines = [s.encode('utf-8').rstrip() for s in lines]
 csv_file = 'stimulus_response.csv'
 
 #preserve and move csv file if someone forgot to move it...
@@ -64,12 +78,13 @@ def on_fail():
 		#change csv file name to time last modified
 		new_name = str(int(os.path.getctime(csv_file))) + csv_file
 		os.rename(csv_file, new_name)
+		return new_name
 
-on_fail()
+_ = on_fail()
 c = open('stimulus_response.csv', 'w')
 stim = csv.writer(c)
 
-set_length = len(stuff)
+set_length = len(unicode_lines)
 
 def randomize(stuff, reps=2):
 	"""
@@ -97,18 +112,43 @@ def randomize(stuff, reps=2):
 
 
 #Get the number of desired repetitions
-reps = raw_input("Specify the number of repetitions: ")
-try: reps = int(reps)
-except: ValueError
-while type(reps) is not int:
-	print
-	print "Please specify an integer"
-	reps = raw_input("Specify the number of repetitions: ")
-	try: reps = int(reps)
+
+def validate_rep_message():
+	global reps
+	#cp = carrier_disp.get().strip()
+	try: test_reps = int(repetitions.get())
 	except: ValueError
+	if type(reps) is not int:
+		repetitions.delete(0, END)
+		repetitions.insert(0, "1")
+	else:
+		reps = test_reps
+		reps_root.quit()
+		reps_root.destroy()
 
+reps_root = Tk()
+reps_root.wm_title("Repetitions")
+repetitions = Entry(reps_root, width=10, bd=2)
+reps_label = Label(reps_root, text="Repetitions:")
+button = Button(reps_root, text='Submit', command=validate_rep_message)
+reps_label.grid(row=0, column=0)
+repetitions.grid(row=0, column=1)
+button.grid(row=0, column=2)
+repetitions.insert(0, "1")
 
-stimuli = randomize(stuff, reps)
+repetitions.mainloop()
+
+"""
+print "File: %s" % stim_source
+print "Reps: %i" % reps
+if carrier_phrase:
+	print "carrier_phrase: %s" % carrier_phrase
+print "Lines: ", lines
+print "Stuff: ",stuff
+raw_input("OK?")
+"""
+
+stimuli = randomize(unicode_lines, reps)
 
 #iterate through stimuli
 stim_num = (i for i in xrange(len(stimuli)))
@@ -129,8 +169,8 @@ def key(event):
 		current = stimuli[i]
 		response_time = datetime.now()
 		stim.writerow([current_set, current, response_time])
-		if carrier:
-			current = carrier.format(current)
+		if carrier_phrase:
+			current = carrier_phrase.format(current)
 		stimulus.set(current)
 	except: 
 		StopIteration
@@ -148,11 +188,10 @@ def fin(event):
 	master.destroy()
 
 stim.writerow(["SET", "STIMULUS", "TIME"])
-master = Tk()
 stimulus = StringVar()
-s = Label(master, height=40, width=50, text="Please wait for instructions...", wraplength= w_l, font=("Helvetica", f_size), background='green')
-w = Label(master, height=40, width=50, textvariable=stimulus, wraplength= w_l, font=("Helvetica", f_size))
-finish = Label(master, height=40, width=50, text=conclusion, wraplength= w_l, font=("Helvetica", 80, "bold italic"), background='LightBlue')
+s = Label(master, height=h_val, width=w_val, text="Please wait for instructions...", wraplength= w_l, font=("Helvetica", f_size), background='green')
+w = Label(master, height=h_val, width=w_val, textvariable=stimulus, wraplength= w_l, font=("Helvetica", f_size))
+finish = Label(master, height=h_val, width=w_val, text=conclusion, wraplength= w_l, font=("Helvetica", 80, "bold italic"), background='LightBlue')
 s.pack()
 w.pack()
 finish.pack()
@@ -167,7 +206,7 @@ stimulus.set(start)
 response_time = datetime.now()
 stim.writerow(['--', 'START', response_time])
 
-
+master.deiconify()
 w.mainloop()
 
 #move csv file to subject folder...
@@ -178,7 +217,14 @@ latest_subdir = max(all_subdirs, key=os.path.getmtime)
 src = os.path.abspath('stimulus_response.csv')
 dst = os.path.abspath(latest_subdir)
 try: shutil.move(src, dst)
-except: 
-	print "Couldn't move csv file.  The file already exists in the newest directory."
-	on_fail()
+except:
+	root = Tk()
+	root.withdraw()
+	dirSelected = tkFileDialog.askdirectory(title="Select CSV file's Destination Folder",parent=root)
+	try: shutil.move(src, dirSelected)
+	except: 
+		n_name = on_fail()
+		error_message = "Oops!  Something went wrong, so I could only rename the file ('{0}')".format(n_name)
+		tkMessageBox.showerror(title="Failure", icon="error",message=error_message)
+	else: tkMessageBox.showinfo(title="Success", message="File successfully moved!")
 
