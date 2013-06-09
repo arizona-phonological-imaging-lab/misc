@@ -232,10 +232,11 @@ except:
 			error_message = "Something is wrong.  I left the file '{0}' in {1}".format(n_name, os.getcwd())
 			tkMessageBox.showerror(title="Duplicate Encountered", icon="error",message=error_message)	
 		else: 
-			tkMessageBox.showinfo(title="Success", message="File successfully moved!")
+			rename_move_success = "File successfully moved!\nFile: '{0}'\n Destination: '{1}'".format(n_name, dirSelected)
+			tkMessageBox.showinfo(title="Success", message=rename_move_success)
 	else:
-		success_message = "File successfully moved!\nFile: '{0}'\nDestination: '{1}'".format(src, dirSelected) 
-		tkMessageBox.showinfo(title="Success", message=success_message)
+		norename_success_message = "File successfully moved!\nFile: '{0}'\nDestination: '{1}'".format(src, dirSelected) 
+		tkMessageBox.showinfo(title="Success", message=norename_success_message)
 else:
 	complete_success_message = "File successfully moved!\nFile: '{0}'\nDestination: '{1}'".format(src, dst) 
 	tkMessageBox.showinfo(title="Success", message=complete_success_message)
