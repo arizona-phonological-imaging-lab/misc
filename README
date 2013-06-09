@@ -1,2 +1,66 @@
-Added stimuli display script, "stimuli.py".  Reads a newline delimited stimuli file (.txt) from current directory, creates a user-specified number of randomized repetitions, and writes a csv output file with [repetition #, stimulus, time].
+			                                                                              
+			 ad88888ba          88                            88                          
+			d8"     "8b  ,d     ""                            88                          
+			Y8,          88                                   88                          
+			`Y8aaaaa,  MM88MMM  88  8b,dPPYba,    ,adPPYb,d8  88   ,adPPYba,  8b,dPPYba,  
+			  `"""""8b,  88     88  88P'   `"8a  a8"    `Y88  88  a8P_____88  88P'   "Y8  
+			        `8b  88     88  88       88  8b       88  88  8PP"""""""  88          
+			Y8a     a8P  88,    88  88       88  "8a,   ,d88  88  "8b,   ,aa  88          
+			 "Y88888P"   "Y888  88  88       88   `"YbbdP"Y8  88   `"Ybbd8"'  88          
+			                                      aa,    ,88                              
+			                                       "Y8bbdP"                                
 
+--------------------------------------------------------------------------------------------------------
+
+***************	
+* Description *
+***************
+
+As of 6/12/2013: 
+
+The script stimuli.py has been reworked to be even more user-friendly and intuitive.
+
+------------------------------------------------------------------------------------------------------
+
+**************
+* How to Run *
+**************
+
+1. Put the new stimuli.py on the desktop.  Double-click to run.
+
+------------------------------------------------------------------------------------------------------
+
+*******************
+* Important Notes *
+*******************
+
+1. The stimuli list can be in any folder.  The program will prompt you to select the appropriate file.
+
+2a. stimuli.py will attempt to move the csv file into the most recently modified folder.  
+2b. If the script is run from the desktop, the most recently modified folder should always be the current subject's folder.  
+2c. If the script encounters another .csv file of the same name, it will rename the current csv file by prepending the time the file was created (the highest number is the most recent file)
+
+3. If you need to abandon midway through, closing the stimulus display window will still save the incomplete csv file.
+
+4.  The way the stimuli list file needs to be formatted has not changed.  each stimulus must be on a separate line in the file.  The file should be saved in utf-8 as a txt file.
+
+5a.  Carrier phrase formatting has not changed.  The cloze blank is specified with {0}.  
+5b.  If the current stimulus is 'giraffe' and the carrier phrase is "I met a {0} today", the result will be: "I met a giraffe today"
+
+------------------------------------------------------------------------------------------------------
+
+****************
+* Future plans *
+****************
+
+1. Present a form to enter subject info (Name, ID, etc)
+
+2. Could be possible to start post-processing from this script (<-- do we want to do this?)
+
+
+------------------------------------------------------------------------------------------------------
+
+*****************************************
+* Author: Gus Hahn-Powell				*
+*  Email: hahnpowell@email.arizona.edu	*
+*****************************************
