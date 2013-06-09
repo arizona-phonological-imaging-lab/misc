@@ -216,15 +216,27 @@ latest_subdir = max(all_subdirs, key=os.path.getmtime)
 
 src = os.path.abspath('stimulus_response.csv')
 dst = os.path.abspath(latest_subdir)
+root = Tk()
+root.withdraw()
 try: shutil.move(src, dst)
 except:
-	root = Tk()
-	root.withdraw()
 	dirSelected = tkFileDialog.askdirectory(title="Select CSV file's Destination Folder",parent=root)
 	try: shutil.move(src, dirSelected)
 	except: 
 		n_name = on_fail()
-		error_message = "Oops!  Something went wrong, so I could only rename the file ('{0}')".format(n_name)
-		tkMessageBox.showerror(title="Failure", icon="error",message=error_message)
-	else: tkMessageBox.showinfo(title="Success", message="File successfully moved!")
+		warning_message = "Oops!  Something went wrong...\nI had to rename the file to '{0}'\nbefore moving it".format(n_name)
+		tkMessageBox.showwarning(title="Duplicate Encountered", icon="warning",message=warning_message)
+		try: 
+			shutil.move(n_name, dirSelected)
+		except:
+			error_message = "Something is wrong.  I left the file '{0}' in {1}".format(n_name, os.getcwd())
+			tkMessageBox.showerror(title="Duplicate Encountered", icon="error",message=error_message)	
+		else: 
+			tkMessageBox.showinfo(title="Success", message="File successfully moved!")
+	else:
+		success_message = "File successfully moved!\nFile: '{0}'\nDestination: '{1}'".format(src, dirSelected) 
+		tkMessageBox.showinfo(title="Success", message=success_message)
+else:
+	complete_success_message = "File successfully moved!\nFile: '{0}'\nDestination: '{1}'".format(src, dst) 
+	tkMessageBox.showinfo(title="Success", message=complete_success_message)
 
