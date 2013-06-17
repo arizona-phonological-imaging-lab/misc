@@ -48,7 +48,14 @@ def parameters():
 				cp_root.quit()
 				cp_root.destroy()
 
+		def confirm_close():
+			if tkMessageBox.askokcancel("Quit", "Don't use a carrier phrase?"):
+				cp_root.quit()
+				cp_root.destroy()
+
+
 		cp_root = Tk()
+		cp_root.protocol("WM_DELETE_WINDOW", confirm_close)
 		cp_root.wm_title("Carrier Phrase")
 		carrier_disp = Entry(cp_root, width=50, bd=2)
 		cp_label = Label(cp_root, text="Carrier Phrase:")
@@ -94,7 +101,7 @@ def randomize(stuff, reps=2):
 	shuffle(stuff)
 	first = stuff
 	stimuli+=first
-	#
+
 	shuffle(stuff)
 	next = stuff
 	last = stimuli[-1]
@@ -126,6 +133,9 @@ def validate_rep_message():
 		reps_root.quit()
 		reps_root.destroy()
 
+def resist_close():
+	tkMessageBox.showwarning(title="Don't close me", icon="warning", message="Please specify the number of repetitions")
+
 reps_root = Tk()
 reps_root.wm_title("Repetitions")
 repetitions = Entry(reps_root, width=10, bd=2)
@@ -136,7 +146,9 @@ repetitions.grid(row=0, column=1)
 button.grid(row=0, column=2)
 repetitions.insert(0, "1")
 
+reps_root.protocol("WM_DELETE_WINDOW", resist_close)
 repetitions.mainloop()
+
 
 """
 print "File: %s" % stim_source

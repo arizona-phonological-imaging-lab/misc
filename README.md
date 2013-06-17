@@ -1,4 +1,0 @@
-Ultraspeech
-===========
-
-APIL Ultraspeech project
