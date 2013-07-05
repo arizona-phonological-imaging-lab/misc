@@ -1,0 +1,18 @@
+C:\Users\Zooty\AppData\Local\Temporary Projects\VideoPostProcessor\bin\Release\VideoPostProcessor.exe
+C:\Users\Zooty\AppData\Local\Temporary Projects\VideoPostProcessor\bin\Release\VideoPostProcessor.pdb
+C:\Users\Zooty\AppData\Local\Temporary Projects\VideoPostProcessor\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Users\Zooty\AppData\Local\Temporary Projects\VideoPostProcessor\obj\x86\Release\VideoPostProcessor.Form1.resources
+C:\Users\Zooty\AppData\Local\Temporary Projects\VideoPostProcessor\obj\x86\Release\VideoPostProcessor.Properties.Resources.resources
+C:\Users\Zooty\AppData\Local\Temporary Projects\VideoPostProcessor\obj\x86\Release\GenerateResource.read.1.tlog
+C:\Users\Zooty\AppData\Local\Temporary Projects\VideoPostProcessor\obj\x86\Release\GenerateResource.write.1.tlog
+C:\Users\Zooty\AppData\Local\Temporary Projects\VideoPostProcessor\obj\x86\Release\VideoPostProcessor.exe
+C:\Users\Zooty\AppData\Local\Temporary Projects\VideoPostProcessor\obj\x86\Release\VideoPostProcessor.pdb
+C:\Users\Zooty\documents\visual studio 2010\Projects\VideoPostProcessor\VideoPostProcessor\bin\Release\VideoPostProcessor.exe
+C:\Users\Zooty\documents\visual studio 2010\Projects\VideoPostProcessor\VideoPostProcessor\bin\Release\VideoPostProcessor.pdb
+C:\Users\Zooty\documents\visual studio 2010\Projects\VideoPostProcessor\VideoPostProcessor\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Users\Zooty\documents\visual studio 2010\Projects\VideoPostProcessor\VideoPostProcessor\obj\x86\Release\VideoPostProcessor.Form1.resources
+C:\Users\Zooty\documents\visual studio 2010\Projects\VideoPostProcessor\VideoPostProcessor\obj\x86\Release\VideoPostProcessor.Properties.Resources.resources
+C:\Users\Zooty\documents\visual studio 2010\Projects\VideoPostProcessor\VideoPostProcessor\obj\x86\Release\GenerateResource.read.1.tlog
+C:\Users\Zooty\documents\visual studio 2010\Projects\VideoPostProcessor\VideoPostProcessor\obj\x86\Release\GenerateResource.write.1.tlog
+C:\Users\Zooty\documents\visual studio 2010\Projects\VideoPostProcessor\VideoPostProcessor\obj\x86\Release\VideoPostProcessor.exe
+C:\Users\Zooty\documents\visual studio 2010\Projects\VideoPostProcessor\VideoPostProcessor\obj\x86\Release\VideoPostProcessor.pdb
