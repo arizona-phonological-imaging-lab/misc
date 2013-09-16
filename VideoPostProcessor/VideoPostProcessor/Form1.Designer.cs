@@ -172,7 +172,7 @@
             this.wAVToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.wAVToolStripMenuItem.Name = "wAVToolStripMenuItem";
             this.wAVToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.wAVToolStripMenuItem.Text = "WAV";
+            this.wAVToolStripMenuItem.Text = "WAV - mono";
             // 
             // showFFMPEGToolStripMenuItem
             // 
@@ -203,7 +203,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
-            this.Text = "Video Post Processing 1.1";
+            this.Text = "Video Post Processing 1.2";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

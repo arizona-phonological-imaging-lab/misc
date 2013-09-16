@@ -121,7 +121,9 @@ namespace VideoPostProcessor
                 }
 
                 // use FFMPEG WAV command
-                args += " -acodec pcm_s16le -ac 1 " + audioFile;
+                // added '-map_channel 0.1.0 -map_channel -1' on 9/15/2013
+                // outputs left audio channel only
+                args += " -acodec pcm_s16le -map_channel 0.1.0 -map_channel -1 -ac 1 " + audioFile;
                 label2.Text += "\nExporting WAV file to " + @"\" + folderName + @"\ folder.";
             }
 
