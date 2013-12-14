@@ -1,0 +1,23 @@
+# File: makefile.defs.linux.alsa
+
+# System: Linux
+# Paul Boersma, 24 August 2013
+
+CC = gcc -std=gnu99
+
+CXX = g++
+
+CFLAGS = -DUNIX -Dlinux -DALSA `pkg-config --cflags gtk+-2.0` -Werror=missing-prototypes -Werror=implicit -Wreturn-type -Wunused -Wunused-parameter -Wuninitialized -O1 -g1
+
+CXXFLAGS = $(CFLAGS) -Wshadow
+
+LINK = g++
+
+EXECUTABLE = praat
+
+LIBS = `pkg-config --libs gtk+-2.0` -lm -lasound
+
+AR = ar
+RANLIB = ls
+ICON =
+MAIN_ICON =
