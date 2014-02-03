@@ -3,6 +3,8 @@
 import os
 import sys
 
+#script to backup APIL Big Mac stuff...
+
 to_backup = ["/Users/apiladmin/Desktop/Sampleharvard3",
 "/Volumes/Second HD (3TB)/ScotsGaelic2013",
 "/Volumes/Second HD (3TB)/ScotsGaelic_Old",
