@@ -1,5 +1,10 @@
 #!/usr/bin/python
 
+################################
+#Author: Gus Hahn-Powell
+#Date: 1/29/2014
+#
+################################
 import os
 import sys
 
