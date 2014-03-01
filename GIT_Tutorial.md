@@ -82,4 +82,6 @@ Are you tired of entering your username and password after every push?  Wouldn't
 Try [this](https://help.github.com/articles/generating-ssh-keys).
 >***Tips:***  
 	  *&nbsp;&nbsp;&nbsp;- you may need to create `.ssh` with `mkdir`*  
-	  *&nbsp;&nbsp;&nbsp;- use `xclip` instead of `pbcopy` if you're on Linux*
+	  *&nbsp;&nbsp;&nbsp;- use `xclip` instead of `pbcopy` if you're on Linux*  
+	  *&nbsp;&nbsp;&nbsp;- alternatively*
+	  , you can simply copy the output of `cat id_rsa.pub`   
