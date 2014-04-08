@@ -1,3 +1,3 @@
 [submodule "Autotrace"]
 	path = Autotrace
-	url = git@github.com:jjberry/Autotrace.git
+	url = https://github.com/jjberry/Autotrace.git
