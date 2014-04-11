@@ -1,4 +1,4 @@
-#Working with git
+#Version control with git
 As you've surmised by now, [Git](http://git-scm.com) is lab's version control system of choice.  Follow the steps below to get up and running with git and Github.
 
 ##Make a GitHub account 
