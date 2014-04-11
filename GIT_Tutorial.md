@@ -9,7 +9,7 @@ As you've surmised by now, [Git](http://git-scm.com) is lab's version control sy
 ###Mac  
 
 &nbsp;&nbsp;~~`brew install git`~~  
-&nbsp;&nbsp;`sudo port install git +bash_completion`
+&nbsp;&nbsp;`sudo port install git-core +bash_completion`
 
 ###Linux 
 &nbsp;&nbsp;It might already be installed
