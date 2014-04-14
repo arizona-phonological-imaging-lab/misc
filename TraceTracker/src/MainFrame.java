@@ -1,3 +1,6 @@
+import javax.swing.BorderFactory;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JButton;
@@ -10,9 +13,11 @@ import javax.swing.SwingConstants;
 import javax.swing.plaf.FileChooserUI;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
@@ -21,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,7 +54,7 @@ public class MainFrame extends JFrame{
 	DBConnector db;
 	ArrayList<ImageData> tableData;
 	JLabel queryResultLabel;
-	String[] columnNames = {"Image","Video","Subject","Project","Traced","Experiment"};
+	String[] columnNames = {"Image","Video","Subject","Project","Traced","Experiment","Tags","Segment","Word"};
 	final int pageLength = 20;
 	public int currentPage;
 	public int numberOfPages;
@@ -57,6 +63,7 @@ public class MainFrame extends JFrame{
 	public JButton firstButton;
 	public JButton lastButton;
 	public JLabel pageLabel;
+	public static JCheckBoxMenuItem targetSegmentDisplayMode;
 	public MainFrame() {
 		getBackup();
 		currentPage = 1;
@@ -70,14 +77,15 @@ public class MainFrame extends JFrame{
 		}
 
 		queryResultLabel = new JLabel("");
-		queryResultLabel.setBounds(135, 127, 139, 16);
+		queryResultLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		queryResultLabel.setBounds(477, 147, 154, 16);
 		getContentPane().add(queryResultLabel);
 		
-		this.setSize(952,596);
+		this.setSize(952,616);
 		getContentPane().setLayout(null);
 		searchbox = new SearchBox(this);
 		searchbox.setLocation(6, 6);
-		searchbox.setSize(738, 111);
+		searchbox.setSize(738, 131);
 		getContentPane().add(searchbox);
 		
 		bufferPanel = new BufferPanel(this);
@@ -86,8 +94,8 @@ public class MainFrame extends JFrame{
 		
 		bottomPanel = new JPanel();
 		bottomPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		bottomPanel.setLocation(6,154);
-		bottomPanel.setSize(738, 394);
+		bottomPanel.setLocation(6,175);
+		bottomPanel.setSize(738, 391);
 		getContentPane().add(bottomPanel);
 		bottomPanel.setLayout(null);
 		
@@ -98,7 +106,7 @@ public class MainFrame extends JFrame{
 				setCurrentPage(1);
 			}
 		});
-		firstButton.setBounds(164, 359, 75, 29);
+		firstButton.setBounds(126, 359, 75, 29);
 		firstButton.setEnabled(false);
 		bottomPanel.add(firstButton);
 		
@@ -109,7 +117,7 @@ public class MainFrame extends JFrame{
 				setCurrentPage(currentPage-1);
 			}
 		});
-		previousButton.setBounds(244, 359, 75, 29);
+		previousButton.setBounds(206, 359, 75, 29);
 		previousButton.setEnabled(false);
 		bottomPanel.add(previousButton);
 		
@@ -120,7 +128,7 @@ public class MainFrame extends JFrame{
 				setCurrentPage(currentPage+1);
 			}
 		});
-		nextButton.setBounds(406, 359, 75, 29);
+		nextButton.setBounds(439, 359, 75, 29);
 		nextButton.setEnabled(false);
 		bottomPanel.add(nextButton);
 		
@@ -131,7 +139,7 @@ public class MainFrame extends JFrame{
 				setCurrentPage(numberOfPages);
 			}
 		});
-		lastButton.setBounds(486, 359, 75, 29);
+		lastButton.setBounds(519, 359, 75, 29);
 		lastButton.setEnabled(false);
 		bottomPanel.add(lastButton);
 		
@@ -139,21 +147,36 @@ public class MainFrame extends JFrame{
 		scrollPane.setBounds(6, 6, 726, 341);
 		bottomPanel.add(scrollPane);
 		
-		table = new JTable(new MyTableModel());
+		table = new JTable(new MyTableModel()){
+			public Component prepareRenderer(TableCellRenderer renderer, int index_row, int index_col) {
+		        // get the current row
+		        Component comp = super.prepareRenderer(renderer, index_row, index_col);
+		        JComponent jc = (JComponent) comp;
+		        int index = (currentPage-1)*pageLength+index_row;
+				if(tableData == null || tableData.size()<index+1){
+					return jc;
+				}
+				ImageData image = tableData.get(index);
+				if(image !=null && image.isLastInSet){					
+					jc.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0,Color.decode("#aabbff")));
+				}
+		        return jc;
+		    }
+		};
 		scrollPane.setViewportView(table);
 		table.setBorder(new LineBorder(Color.decode("#aabbff")));
 		table.setShowGrid(true);
 		table.setGridColor(Color.decode("#aabbff"));
 		
 		pageLabel = new JLabel("Page 1 of 1");
-		pageLabel.setBounds(315, 364, 94, 16);
+		pageLabel.setBounds(291, 364, 136, 16);
 		pageLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		bottomPanel.add(pageLabel);
-		table.getColumnModel().getColumn(4).setPreferredWidth(150);
-		table.getColumnModel().getColumn(5).setPreferredWidth(150);
+		table.getColumnModel().getColumn(4).setPreferredWidth(100);
+		table.getColumnModel().getColumn(5).setPreferredWidth(100);
 		
 		JButton btnSearch = new JButton("Search");
-		btnSearch.setBounds(6, 122, 117, 29);
+		btnSearch.setBounds(630, 142, 117, 29);
 		btnSearch.addActionListener(new ActionListener(){
 
 			@Override
@@ -161,6 +184,9 @@ public class MainFrame extends JFrame{
 				try {
 					tableData = db.executeQuery(searchbox);
 					numberOfPages = tableData.size()/pageLength+1;
+					if(tableData.size()!=0 && tableData.size()%20==0){
+						numberOfPages--;
+					}
 					setCurrentPage(1);
 					queryResultLabel.setText(tableData.size()+" results");
 					//queryResultLabel.paintImmediately(queryResultLabel.getVisibleRect());
@@ -175,26 +201,35 @@ public class MainFrame extends JFrame{
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
-		JMenu collectMenu = new JMenu("Collect");
+		JMenu collectMenu = new JMenu("Export");
 		JMenu tagMenu = new JMenu("Tag");
-		JMenu updateMenu = new JMenu("Update");
+		JMenu updateMenu = new JMenu("Add data");
+		JMenu viewMenu = new JMenu("View");
 		menuBar.add(collectMenu);
 		menuBar.add(tagMenu);
 		menuBar.add(updateMenu);
-		JMenuItem updateDatabase = new JMenuItem("Update database from folder...");
-		updateDatabase.addActionListener(new ActionListener() {
+		menuBar.add(viewMenu);
+		JMenuItem addProject = new JMenuItem("Add new project...");
+		addProject.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Updater updater = new Updater(MainFrame.this);
-				String feedback = updater.updateDB();
-				if(!"noFileChosen".equals(feedback)){
-					JOptionPane.showMessageDialog(null, feedback);
-				}
+				updater.updateDB("addProject");
 			}
 		});
-		updateMenu.add(updateDatabase);
-		JMenuItem collectImages = new JMenuItem("Collect buffer images...");
+		updateMenu.add(addProject);
+		JMenuItem updateProject = new JMenuItem("Update existing project...");
+		updateProject.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Updater updater = new Updater(MainFrame.this);
+				updater.updateDB("updateProject");
+			}
+		});
+		updateMenu.add(updateProject);
+		JMenuItem collectImages = new JMenuItem("Export buffer images...");
 		collectImages.addActionListener(new ActionListener() {
 			
 			@Override
@@ -204,7 +239,7 @@ public class MainFrame extends JFrame{
 		});
 		collectMenu.add(collectImages);
 		
-		JMenuItem collectImagesWithTraces = new JMenuItem("Collect buffer images with traces...");
+		JMenuItem collectImagesWithTraces = new JMenuItem("Export buffer images with traces...");
 		collectImagesWithTraces.addActionListener(new ActionListener() {
 			
 			@Override
@@ -233,6 +268,9 @@ public class MainFrame extends JFrame{
 			}
 		});
 		tagMenu.add(untagImages);
+		
+		targetSegmentDisplayMode = new JCheckBoxMenuItem("Do not use colors.");
+		viewMenu.add(targetSegmentDisplayMode);
 	}
 
 
@@ -287,10 +325,10 @@ public class MainFrame extends JFrame{
 	}
 	
 	public void printErrorLog(Exception e){
-		String error = "";
-		for(StackTraceElement ste: e.getStackTrace()){
-			error += ste.toString()+"\n";
-		}
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		e.printStackTrace(pw);
+		String error = sw.toString();
 		try {
 			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("error log.txt", true)));
 			String timeStamp = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
@@ -300,14 +338,14 @@ public class MainFrame extends JFrame{
 			out.close();
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
-			System.err.println("Khayyat oftad tu kuze");
+			System.err.println("begandad namak");
 			e1.printStackTrace();
 		}
 	}
 	
 	public class MyTableModel extends DefaultTableModel{
 		public int getColumnCount() {
-			return 6;
+			return 9;
 		}
 		
 		public int getRowCount() {
@@ -349,7 +387,32 @@ public class MainFrame extends JFrame{
 					printErrorLog(e);
 					return "";
 				}
+			case 6:
+				try {
+					return db.getTags(image.id);
+				} catch (Exception e) {
+					e.printStackTrace();
+					printErrorLog(e);
+					return "";
+				}
+			case 7:
+				try {
+					return db.getEnvironment(image.id);
+				} catch (Exception e) {
+					e.printStackTrace();
+					printErrorLog(e);
+					return "";
+				}
+			case 8:
+				try {
+					return db.getWord(image.id);
+				} catch (Exception e) {
+					e.printStackTrace();
+					printErrorLog(e);
+					return "";
+				}
 			}
+			
 			return " ";
 		}
 		
@@ -368,4 +431,5 @@ public class MainFrame extends JFrame{
 			}
 		}
 	}
+
 }

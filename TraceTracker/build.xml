@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+ 
+<project name="AutoTraceFileManager" default="CreateExecutableJarFileWithExternalLibrary">
+	<target name="CreateExecutableJarFileWithExternalLibrary">
+		<jar destfile="ATFM-v1.jar">
+			<zipfileset dir="bin" prefix="" />
+			<zipfileset src="sqlitejdbc-v056.jar" />
+			<manifest>
+				<attribute name="Main-Class" value="MainFrame" />
+			</manifest>
+		</jar>
+	</target>
+</project>
