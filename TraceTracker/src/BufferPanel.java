@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
@@ -110,7 +111,11 @@ public class BufferPanel extends JPanel{
 	}
 
 	public void collect(String duty) {
-		String folderName = (String) JOptionPane.showInputDialog(null, "Please choose the name of your collection.");
+		if(buffer.isEmpty()){
+			JOptionPane.showMessageDialog(null, "The buffer is empty","Error",JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		String folderName = (String) JOptionPane.showInputDialog(null, "Please choose the name of your export folder.");
 		if(folderName==null){
 			return;
 		}
@@ -120,12 +125,21 @@ public class BufferPanel extends JPanel{
 			JOptionPane.showMessageDialog(null, "A folder with this name already exists in the working directory!","Error",JOptionPane.ERROR_MESSAGE);
 			return;
 		}
+		int counter = 0;
+		String[] badAddresses = new String[buffer.size()];
+		int badAddressesCounter = 0;
 		for(ImageData image: buffer.values()){
+			counter++;
 			if(image.address==null){
 				System.out.println("no address: "+image.title);
+				counter--;
 				continue;
 			}
 			File source = new File(image.address);
+			if(!source.exists()){
+				badAddresses[badAddressesCounter] = image.address;
+				badAddressesCounter++;
+			}
 			int underscoreIndex = image.video.indexOf("_");
 			String shortVideoName = image.video.substring(0,underscoreIndex);
 			File dest = new File(theFolder.getAbsolutePath()+"/"+image.project+"_"+shortVideoName+"_"+image.title);
@@ -163,9 +177,17 @@ public class BufferPanel extends JPanel{
 					}
 				}
 			}
+			String errorMessage = badAddressesCounter+" addresses were incorrect:";
+			for(int i=0; i<badAddressesCounter & i<10; i++){
+				errorMessage += "\n"+badAddresses[i];
+			}
+			if(badAddressesCounter>=10){
+				errorMessage += "\n,...";
+			}
+			JOptionPane.showMessageDialog(null, errorMessage,"Error",JOptionPane.ERROR_MESSAGE);
 		}
 
-		JOptionPane.showMessageDialog(null,"The files were copied successfully.");
+		JOptionPane.showMessageDialog(null,counter+" images were copied successfully.");
 	}
 	public static void copy(File src, File dst) throws IOException {
 	    InputStream in = new FileInputStream(src);
@@ -182,6 +204,10 @@ public class BufferPanel extends JPanel{
 	}
 
 	public void tag() {
+		if(buffer.isEmpty()){
+			JOptionPane.showMessageDialog(null, "The buffer is empty","Error",JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 		String tagContent = (String) JOptionPane.showInputDialog(null, "Please write the content of the tag.");
 		if(tagContent==null){
 			return;
@@ -199,24 +225,50 @@ public class BufferPanel extends JPanel{
 			mainFrame.printErrorLog(e);
 		}
 		JOptionPane.showMessageDialog(null,tagged+" images were tagged '"+tagContent+"'.");
-	}
-
-	public void untag() {
-		String tagContent = (String) JOptionPane.showInputDialog(null, "Please write the tag name.");
-		if(tagContent==null){
-			return;
-		}
-		if(tagContent.length()==0){
-			JOptionPane.showMessageDialog(null, "No tag name was entered.","Error",JOptionPane.ERROR_MESSAGE);
-			return;
-		}
 		try {
-			db.untagImages(buffer, tagContent);
+			mainFrame.searchbox.tagsList = db.getTagsList();
+			DefaultComboBoxModel model = (DefaultComboBoxModel) mainFrame.searchbox.tagsCombo.getModel();
+			model.removeAllElements();
+			for(String s:mainFrame.searchbox.tagsList){
+				model.addElement(s);
+			}
+			
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "There was an error. See the log file.","Error",JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 			mainFrame.printErrorLog(e);
 		}
-		JOptionPane.showMessageDialog(null,"The images were successfully untagged.");
+	}
+
+	public void untag() {
+		if(buffer.isEmpty()){
+			JOptionPane.showMessageDialog(null, "The buffer is empty","Error",JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		String[] tagsList = mainFrame.searchbox.tagsList;
+		String userInput = (String)JOptionPane.showInputDialog(
+		                    null,
+		                    "Choose the tag you want to remove.",
+		                    "Choose tag", JOptionPane.PLAIN_MESSAGE,
+		                    null,
+		                    tagsList,
+		                    tagsList[0]);
+
+		//If a string was returned, say so.
+		if ((userInput != null) && (userInput.length() > 0)) {
+			try {
+				db.untagImages(buffer, userInput);
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "There was an error. See the log file.","Error",JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+				mainFrame.printErrorLog(e);
+			}
+			JOptionPane.showMessageDialog(null,"The images were successfully untagged.");
+		}
+
+		//If you're here, the return value was null/empty.
+		if(userInput==null || userInput.length()==0){
+			JOptionPane.showMessageDialog(null, "No tag name was entered.","Error",JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 	}
 }

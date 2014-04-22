@@ -10,4 +10,7 @@ public class ImageData {
 	public String tracersList;
 	public String experimentsList;
 	public String address;
+	public int segment_id;
+	public boolean isLastInSet;
+	public int video_id;
 }
