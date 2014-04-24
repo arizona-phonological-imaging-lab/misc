@@ -263,18 +263,17 @@ public class DBConnector {
 	}
 
 	private void addPeripheralImageToResult(ArrayList<ImageData> result, int video_id, String fullTitle, int domain) throws SQLException {
+		long t1 = System.currentTimeMillis();
 		if(domain==0){
 			return;
 		}
 		Statement stat = conn.createStatement();
 		String query = "SELECT image.id AS theid, image.title AS image_title, video.title AS video_title, video.subject AS subject, project.title AS project_title, image.address AS address ";
-		query += " FROM image JOIN video ON image.video_id=video.id JOIN project ON project.id=video.project_id WHERE video.id="+video_id+" AND";
+		query += " FROM image JOIN video ON image.video_id=video.id JOIN project ON project.id=video.project_id WHERE video.id="+video_id+" AND (";
 		int title = Integer.valueOf(fullTitle.substring(0,fullTitle.length()-4));
 		String suffix = fullTitle.substring(fullTitle.length()-4);
-		System.out.println("in function");
 		if(domain>0){
 			for(int i=title+1;i<=title+domain; i++){
-				System.out.println("in for");
 				Statement stat2 = conn.createStatement();
 				int iDigits = String.valueOf(i).length();
 				String prefix = "";
@@ -308,8 +307,12 @@ public class DBConnector {
 			}
 		}
 		//Now we have a query that looks for the desired image IDs.
-		query = query.substring(0, query.length()-3)+" ORDER BY image.title ASC;";
+		query = query.substring(0, query.length()-3)+") ORDER BY image.title ASC;";
+		long a1 = System.currentTimeMillis();
+		System.out.println(query);
 		ResultSet rs = stat.executeQuery(query);
+		long a2 = System.currentTimeMillis();
+		System.out.println("Query time: "+(a2-a1));
 		while(rs.next()){
 			ImageData image = new ImageData();
 			image.id = rs.getString("theid");
@@ -321,6 +324,8 @@ public class DBConnector {
 			result.add(image);
 		}
 		stat.close();
+		long t2 = System.currentTimeMillis();
+		System.out.println("Function time: "+(t2-t1));
 	}
 
 	private HashSet<Integer> findSegmentIDs(String segmentEntered) throws SQLException {
@@ -346,7 +351,6 @@ public class DBConnector {
 		searchTerm = searchTerm.replace("(", "");
 		searchTerm = searchTerm.replace(")", "");
 		String query1 = "SELECT segment_sequence,segment_id_sequence FROM word WHERE segment_sequence LIKE '"+searchTerm+"'";
-		System.out.println(query1);
 		ResultSet rs = stat.executeQuery(query1);
 		//For each word that has such a pattern:
 		HashSet<Integer> resultIDs = new HashSet<Integer>();
