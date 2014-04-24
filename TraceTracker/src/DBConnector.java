@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Properties;
 
+import javax.swing.JOptionPane;
+
 public class DBConnector {
 	Connection conn;
 	public void initializeDB() throws Exception {
@@ -39,10 +41,10 @@ public class DBConnector {
 		String wordEntered = sb.wordTextField.getText().trim();
 		String segmentEntered = sb.segmentTextField.getText().trim();
 		String targetSegment = findTargetSegment(segmentEntered);
-		if(targetSegment==""){
-			segmentEntered = "";
+		if(segmentEntered.length()>0 && targetSegment.length()==0){
+			JOptionPane.showMessageDialog(null, "Segment sequence not valid. Use brackets to indicate target segment.","Error",JOptionPane.ERROR_MESSAGE);
+			return result;
 		}
-		System.out.println(segmentEntered.length());
 		String representativeFrame = (String) sb.representativeFramesCombo.getSelectedItem();
 		Integer marginSizeBefore = sb.getMarginSize("before");
 		Integer marginSizeAfter= sb.getMarginSize("after");
@@ -159,12 +161,10 @@ public class DBConnector {
 			int fromIndex = query.indexOf("FROM");
 			int orderIndex = query.indexOf("ORDER BY");
 			String countQuery = "SELECT COUNT(*) "+query.substring(fromIndex,orderIndex-1)+";";
-			System.out.println(countQuery);
 			Statement countStat = conn.createStatement();
 			ResultSet rsCount = countStat.executeQuery(countQuery);
 			rsCount.next();
 			int count = rsCount.getInt(1);
-			System.out.println(count);
 			MainFrame.resultSize = count;
 		}
 		//
@@ -251,7 +251,7 @@ public class DBConnector {
 
 	private String findTargetSegment(String input) {
 		if(input.contains("[") && input.contains("]")){
-			String result = input.replaceAll(".*[(.*)].*", "$1");
+			String result = input.replaceAll(".*\\[(.*)\\].*", "$1");
 			return result;
 		}
 		else{
@@ -271,8 +271,10 @@ public class DBConnector {
 		query += " FROM image JOIN video ON image.video_id=video.id JOIN project ON project.id=video.project_id WHERE video.id="+video_id+" AND";
 		int title = Integer.valueOf(fullTitle.substring(0,fullTitle.length()-4));
 		String suffix = fullTitle.substring(fullTitle.length()-4);
+		System.out.println("in function");
 		if(domain>0){
 			for(int i=title+1;i<=title+domain; i++){
+				System.out.println("in for");
 				Statement stat2 = conn.createStatement();
 				int iDigits = String.valueOf(i).length();
 				String prefix = "";
