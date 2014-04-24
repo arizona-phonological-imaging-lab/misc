@@ -204,6 +204,9 @@ public class SearchBox extends JPanel{
 		if(isInteger(ms)){			
 			marginSize = Integer.parseInt(ms);
 		}
+		if(marginSize==null){
+			marginSize=0;
+		}
 		return marginSize;
 	}
 	public static boolean isInteger(String s) {

@@ -27,7 +27,7 @@ public class DBConnector {
 			conn = DriverManager.getConnection("jdbc:sqlite:traceFiles.db",props);
 		}
 		ArrayList<ImageData> result = new ArrayList<ImageData>();
-		String titleEntered = sb.imageTitleTextField.getText(); 
+		String titleEntered = sb.imageTitleTextField.getText().trim(); 
 		String projectEntered = (String) sb.projectCombo.getSelectedItem();
 		String tracerEntered = (String) sb.tracerCombo.getSelectedItem();
 		String languageEntered = (String) sb.languageCombo.getSelectedItem();
@@ -36,15 +36,26 @@ public class DBConnector {
 		int corruptEntered = sb.corruptCheckbox.isSelected()? 1 : 0;
 		int howManyTracersEntered = sb.howManyTracersCombo.getSelectedIndex();
 		String tag = (String) sb.tagsCombo.getSelectedItem();
-		String wordEntered = sb.wordTextField.getText();
-		String segmentEntered = sb.segmentTextField.getText();
+		String wordEntered = sb.wordTextField.getText().trim();
+		String segmentEntered = sb.segmentTextField.getText().trim();
+		String targetSegment = findTargetSegment(segmentEntered);
+		if(targetSegment==""){
+			segmentEntered = "";
+		}
+		System.out.println(segmentEntered.length());
 		String representativeFrame = (String) sb.representativeFramesCombo.getSelectedItem();
 		Integer marginSizeBefore = sb.getMarginSize("before");
 		Integer marginSizeAfter= sb.getMarginSize("after");
 		
 		String query = "SELECT image.id AS theid, image.title AS image_title, video.title AS video_title, video.subject AS subject, project.title AS project_title, image.address AS address, image.segment_id AS segment_id, image.video_id AS video_id"
-		+" FROM image JOIN video ON image.video_id=video.id JOIN project ON project.id=video.project_id"
-		+" WHERE image.id>=0 "; //This last thing after "where" is a dummy condition
+		+" FROM image JOIN video ON image.video_id=video.id JOIN project ON project.id=video.project_id";
+		
+		//Do a preliminary segment filtering here to speed up the segment search (part 1)
+		if(segmentEntered.length()>0){
+			query += " JOIN segment ON image.segment_id=segment.id";
+		}		
+		
+		query +=" WHERE image.id>=0 "; //This last thing after "where" is a dummy condition
 		
 		if(titleEntered != null && titleEntered.length()>0){
 			query += "AND image.title LIKE '%"+titleEntered+"%' "; 
@@ -91,26 +102,26 @@ public class DBConnector {
 		if(wordEntered != null && wordEntered.length()>0){
 			query += "AND theid IN (SELECT image.id FROM image JOIN word ON image.word_id=word.id WHERE word.spelling='"+wordEntered+"') "; 
 		}
-		query += "ORDER BY project_title, video_title, image_title LIMIT 2000;";
-		//Build the countQuery and use it
-		int fromIndex = query.indexOf("FROM");
-		int orderIndex = query.indexOf("ORDER BY");
-		String countQuery = "SELECT COUNT(*) "+query.substring(fromIndex,orderIndex-1)+";";
-		System.out.println(countQuery);
-		Statement countStat = conn.createStatement();
-		ResultSet rsCount = countStat.executeQuery(countQuery);
-		rsCount.next();
-		int count = rsCount.getInt(1);
-		System.out.println(count);
-		//
-				
+		//Do a preliminary segment filtering here to speed up the segment search (part 2)
+		if(segmentEntered.length()>0){
+			query += "AND segment.spelling='"+targetSegment+"' ";
+		}
+		query += "ORDER BY project_title, video_title, image_title";
+		//If we dont't need to fetch more than what we will show, we can limit the query.
+		boolean weAreLimiting = false;
+		if( segmentEntered.length()==0 ){
+			weAreLimiting = true;
+			query += " LIMIT 2000";
+		}
+		query += ";";
+		
 		Statement stat = conn.createStatement();
 		long t_beforeQuery = System.currentTimeMillis();
 		ResultSet rs = stat.executeQuery(query);
 		long t_med = System.currentTimeMillis();
 		System.out.println("medTime: "+(t_med-t_beforeQuery));
 		HashSet<Integer> segmentIDs = null;
-		if(segmentEntered !=null && segmentEntered.length()>0){
+		if(segmentEntered.length()>0){
 			segmentIDs = findSegmentIDs(segmentEntered);
 		}
 		int lastVideoID = 0;
@@ -142,6 +153,22 @@ public class DBConnector {
 				result.add(image);
 			}
 		}
+		
+		//If we are limiting, we want to know the actual number of results too.
+		if(weAreLimiting){
+			int fromIndex = query.indexOf("FROM");
+			int orderIndex = query.indexOf("ORDER BY");
+			String countQuery = "SELECT COUNT(*) "+query.substring(fromIndex,orderIndex-1)+";";
+			System.out.println(countQuery);
+			Statement countStat = conn.createStatement();
+			ResultSet rsCount = countStat.executeQuery(countQuery);
+			rsCount.next();
+			int count = rsCount.getInt(1);
+			System.out.println(count);
+			MainFrame.resultSize = count;
+		}
+		//
+		
 		ArrayList<ImageData> refinedResult = new ArrayList<ImageData>();
 		ArrayList<ImageData> currentSeries = new ArrayList<ImageData>();
 		int lastSegmentId = -10;
@@ -186,7 +213,7 @@ public class DBConnector {
 		refinedResult = new ArrayList<ImageData>();
 		String lastTitle = null;
 		//We may want the marginal frames too:
-		if( (marginSizeBefore!=null && marginSizeBefore>0) || (marginSizeAfter!=null && marginSizeAfter>0) ){
+		if( segmentEntered.length()>0 && (marginSizeBefore>0 || marginSizeAfter>0) ){
 			int lastSegmentID = -1;
 			for(int i=0; i<result.size(); i++){
 				ImageData theImage = result.get(i);
@@ -216,7 +243,23 @@ public class DBConnector {
 		stat.close();
 		long t2 = System.currentTimeMillis();
 		System.out.println("Time: "+(t2-t1));
+		if(!weAreLimiting){
+			MainFrame.resultSize = result.size();
+		}
 		return result;
+	}
+
+	private String findTargetSegment(String input) {
+		if(input.contains("[") && input.contains("]")){
+			String result = input.replaceAll(".*[(.*)].*", "$1");
+			return result;
+		}
+		else{
+			if(input.contains(" ")){
+				return "";
+			}
+			return input;
+		}
 	}
 
 	private void addPeripheralImageToResult(ArrayList<ImageData> result, int video_id, String fullTitle, int domain) throws SQLException {
