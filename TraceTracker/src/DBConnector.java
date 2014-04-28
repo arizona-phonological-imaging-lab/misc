@@ -19,6 +19,9 @@ public class DBConnector {
 		pragmaPrep2.execute();
 		PreparedStatement pragmaPrep3 = conn.prepareStatement("PRAGMA temp_store=2;");
 		pragmaPrep3.execute();
+		pragmaPrep.close();
+		pragmaPrep2.close();
+		pragmaPrep3.close();
 	}
 
 	synchronized public ArrayList<ImageData> executeQuery(SearchBox sb) throws SQLException{
@@ -50,14 +53,14 @@ public class DBConnector {
 		Integer marginSizeAfter= sb.getMarginSize("after");
 		
 		String query = "SELECT image.id AS theid, image.title AS image_title, video.title AS video_title, video.subject AS subject, project.title AS project_title, image.address AS address, image.segment_id AS segment_id, image.video_id AS video_id"
-		+" FROM image JOIN video ON image.video_id=video.id JOIN project ON project.id=video.project_id";
+		+" FROM image JOIN video ON image.video_id=video.id JOIN project ON project.id=video.project_id ";
 		
 		//Do a preliminary segment filtering here to speed up the segment search (part 1)
 		if(segmentEntered.length()>0){
-			query += " JOIN segment ON image.segment_id=segment.id";
+			query += "JOIN segment ON image.segment_id=segment.id ";
 		}		
 		
-		query +=" WHERE image.id>=0 "; //This last thing after "where" is a dummy condition
+		query +="WHERE 1=1 "; //This last thing after "where" is a dummy condition
 		
 		if(titleEntered != null && titleEntered.length()>0){
 			query += "AND image.title LIKE '%"+titleEntered+"%' "; 
@@ -108,12 +111,12 @@ public class DBConnector {
 		if(segmentEntered.length()>0){
 			query += "AND segment.spelling='"+targetSegment+"' ";
 		}
-		query += "ORDER BY project_title, video_title, image_title";
+		query += "ORDER BY image.sorting_code ";
 		//If we dont't need to fetch more than what we will show, we can limit the query.
 		boolean weAreLimiting = false;
 		if( segmentEntered.length()==0 ){
 			weAreLimiting = true;
-			query += " LIMIT 2000";
+			query += "LIMIT "+MainFrame.fetchLimit;
 		}
 		query += ";";
 		
@@ -121,6 +124,7 @@ public class DBConnector {
 		long t_beforeQuery = System.currentTimeMillis();
 		ResultSet rs = stat.executeQuery(query);
 		long t_med = System.currentTimeMillis();
+		System.out.println(query);
 		System.out.println("medTime: "+(t_med-t_beforeQuery));
 		HashSet<Integer> segmentIDs = null;
 		if(segmentEntered.length()>0){
@@ -166,6 +170,7 @@ public class DBConnector {
 			rsCount.next();
 			int count = rsCount.getInt(1);
 			MainFrame.resultSize = count;
+			countStat.close();
 		}
 		//
 		
@@ -263,7 +268,6 @@ public class DBConnector {
 	}
 
 	private void addPeripheralImageToResult(ArrayList<ImageData> result, int video_id, String fullTitle, int domain) throws SQLException {
-		long t1 = System.currentTimeMillis();
 		if(domain==0){
 			return;
 		}
@@ -286,6 +290,7 @@ public class DBConnector {
 				if(rs2.next()){
 					id = rs2.getInt(1);
 				}
+				stat2.close();
 				query += " image.id="+id+" OR";
 			}
 		}
@@ -303,16 +308,13 @@ public class DBConnector {
 				if(rs2.next()){
 					id = rs2.getInt(1);
 				}
+				stat2.close();
 				query += " image.id="+id+" OR";
 			}
 		}
 		//Now we have a query that looks for the desired image IDs.
 		query = query.substring(0, query.length()-3)+") ORDER BY image.title ASC;";
-		long a1 = System.currentTimeMillis();
-		System.out.println(query);
 		ResultSet rs = stat.executeQuery(query);
-		long a2 = System.currentTimeMillis();
-		System.out.println("Query time: "+(a2-a1));
 		while(rs.next()){
 			ImageData image = new ImageData();
 			image.id = rs.getString("theid");
@@ -324,8 +326,6 @@ public class DBConnector {
 			result.add(image);
 		}
 		stat.close();
-		long t2 = System.currentTimeMillis();
-		System.out.println("Function time: "+(t2-t1));
 	}
 
 	private HashSet<Integer> findSegmentIDs(String segmentEntered) throws SQLException {
@@ -517,6 +517,7 @@ public class DBConnector {
 			ResultSet rs2 = stat2.getGeneratedKeys();
 			rs2.next();
 			projectID = rs2.getInt(1);
+			stat2.close();
 		}
 		else{
 			projectID = rs.getInt(1);
@@ -552,7 +553,7 @@ public class DBConnector {
 				}
 			}
 			if("-1".equals(image.id)){
-				String query4 = "INSERT INTO image(video_id, title, address) VALUES("+videoID+",'"+image.title+"','"+image.address+"');";
+				String query4 = "INSERT INTO image(video_id, title, address, sorting_code) VALUES("+videoID+",'"+image.title+"','"+image.address+"','"+(projectName+videoName+image.title)+"');";
 				stat4.executeUpdate(query4);
 				//Save the db id of the image we just added. We need it when associating trace files with images in the next loop
 				ResultSet rs5 = stat4.getGeneratedKeys();
