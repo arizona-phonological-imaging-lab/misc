@@ -124,7 +124,6 @@ public class DBConnector {
 		long t_beforeQuery = System.currentTimeMillis();
 		ResultSet rs = stat.executeQuery(query);
 		long t_med = System.currentTimeMillis();
-		System.out.println(query);
 		System.out.println("medTime: "+(t_med-t_beforeQuery));
 		HashSet<Integer> segmentIDs = null;
 		if(segmentEntered.length()>0){
@@ -162,9 +161,9 @@ public class DBConnector {
 		
 		//If we are limiting, we want to know the actual number of results too.
 		if(weAreLimiting){
-			int fromIndex = query.indexOf("FROM");
 			int orderIndex = query.indexOf("ORDER BY");
-			String countQuery = "SELECT COUNT(*) "+query.substring(fromIndex,orderIndex-1)+";";
+			String countQuery = "SELECT COUNT(*) FROM ("+query.substring(0,orderIndex-1)+");";
+			System.out.println(countQuery);
 			Statement countStat = conn.createStatement();
 			ResultSet rsCount = countStat.executeQuery(countQuery);
 			rsCount.next();

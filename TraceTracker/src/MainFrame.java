@@ -300,8 +300,18 @@ public class MainFrame extends JFrame{
 		});
 		
 		//The columns view
+		ActionListener columnViewChangeListener = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Hello");
+			}
+		};
 		JMenu columnDisplayMenu = new JMenu("Columns");
-		JCheckBoxMenuItem videoMenuItem = new JCheckBoxMenuItem("video");
+		JCheckBoxMenuItem videoMenuItem = new JCheckBoxMenuItem("video", true);
+		columnDisplayMenu.add(videoMenuItem);
+		viewMenu.add(columnDisplayMenu);
+		
 		
 	}
 
