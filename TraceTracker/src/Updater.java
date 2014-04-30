@@ -24,6 +24,7 @@ public class Updater implements PropertyChangeListener{
 	private JProgressBar progressBar;
 	private int progressResult;
 	private int progressCounter;
+	private boolean someError;
 	String feedback;
 	String command;
 	Task backgroundTask;
@@ -82,6 +83,7 @@ public class Updater implements PropertyChangeListener{
 		}
 
 		private void doTheUpdate() {
+			someError = false;
 			boolean updateMode = "updateProject".equals(command);
 			int returnVal = fc.showOpenDialog(null);
 			if(returnVal!=JFileChooser.APPROVE_OPTION){
@@ -101,32 +103,38 @@ public class Updater implements PropertyChangeListener{
 				boolean isNew = db.checkProjectIsNew(projectAddress);
 				if(!isNew && !updateMode){
 					JOptionPane.showMessageDialog(null, "This project has already been added to the database. No operation was performed.","Error",JOptionPane.ERROR_MESSAGE);
+					someError = true;
 					return;
 				}
 				else if(isNew && updateMode){
 					JOptionPane.showMessageDialog(null, "This project does not exist in the database. No operation was performed.","Error",JOptionPane.ERROR_MESSAGE);
+					someError = true;
 					return;
 				}
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 				mainFrame.printErrorLog(e1);
 				JOptionPane.showMessageDialog(null, "There was an error while checking whether the project is new.","Error",JOptionPane.ERROR_MESSAGE);
+				someError = true;
 				return;
 			}
 			try {
 				boolean isNew = db.checkProjectNameIsNew(projectName);
 				if(!isNew && !updateMode){
 					JOptionPane.showMessageDialog(null, "A project with this name already exists in the database. Make sure the project is new\nand try renaming it.","Error",JOptionPane.ERROR_MESSAGE);
+					someError = true;
 					return;
 				}
 				else if(isNew && updateMode){
 					JOptionPane.showMessageDialog(null, "A project with this name does not exist in the database. No operation was performed.","Error",JOptionPane.ERROR_MESSAGE);
+					someError = true;
 					return;
 				}
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 				mainFrame.printErrorLog(e1);
 				JOptionPane.showMessageDialog(null, "There was some error while checking whether the project is new.","Error",JOptionPane.ERROR_MESSAGE);
+				someError = true;
 				return;
 			}
 			String language = "";
@@ -242,6 +250,7 @@ public class Updater implements PropertyChangeListener{
 					mainFrame.printErrorLog(e);
 					System.out.println("Error in the update process!");
 					JOptionPane.showMessageDialog(null, "There was some error in the update process. Restarting the\napplication might solve the problem.","Error",JOptionPane.ERROR_MESSAGE);
+					someError = true;
 					return;
 				}
 				//The textgrid
@@ -250,7 +259,7 @@ public class Updater implements PropertyChangeListener{
 				File[] filesInsideVideo = video.listFiles();
 				File textGridFile = null;
 				for(File file: filesInsideVideo){
-					if(file.getName().endsWith(".TextGrid") && file.getName().length()<17 && !file.getName().startsWith("_")){
+					if(file.getName().endsWith(".TextGrid") && !file.getName().startsWith("_")){
 						textGridFile = file;
 						break;
 					}
@@ -276,7 +285,9 @@ public class Updater implements PropertyChangeListener{
 				progressFrame.setVisible(false);
 				progressFrame.dispose();
 				System.out.println("progress finished: "+this.getProgress());
-				JOptionPane.showMessageDialog(null, "The database was updated successfully.");				
+				if(!someError){					
+					JOptionPane.showMessageDialog(null, "The database was updated successfully.");				
+				}
 			}
 			catch (Exception e){
 				e.printStackTrace();
@@ -325,7 +336,6 @@ public class Updater implements PropertyChangeListener{
 				lineCount++;
 				int addedProgress = (95*lineCount/numberOfLines)/numberOfVideos;
 				if(lineCount%1==0){					
-					System.out.println("lineCount: "+lineCount+" numOfLines:"+numberOfLines+" numOfVideos: "+numberOfVideos+" Added progress: "+addedProgress+" progress: "+(progressResult+addedProgress));
 				}
 				setProgress(progressResult+addedProgress);
 				String line = scanner.nextLine();
@@ -438,7 +448,6 @@ public class Updater implements PropertyChangeListener{
 						else{
 							name += ".jpg";
 						}
-						System.out.println("generated name: "+name+"\tfirst member of results: "+result.get(result.keySet().iterator().next()).title);
 						ImageData image = result.get(name);
 						if(tier==1 && text.length()>0){
 							//assigning the image a word

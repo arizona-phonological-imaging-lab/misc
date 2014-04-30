@@ -62,8 +62,10 @@ public class MainFrame extends JFrame{
 	public JButton lastButton;
 	public JLabel pageLabel;
 	public static String targetSegmentDisplayMode;
-	public static int resultSize;
+	public static int fetchLimit;
+	public static int resultSize;	//This is the number we will tell the user when we are showing only the first "fetchLimit" results.
 	public MainFrame() {
+		fetchLimit = 10000;
 		getBackup();
 		currentPage = 1;
 		numberOfPages =1;
