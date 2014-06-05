@@ -5,11 +5,11 @@
 #Date: 1/29/2014
 #
 ################################
+from time import localtime, strftime
 import os
 import sys
 import subprocess as sp
 import shlex
-from time import localtime, strftime
 
 #script to backup APIL Big Mac stuff...
 
@@ -48,7 +48,7 @@ def backup():
 def commit():
 	print "Committing changes"
 	os.chdir(backup_loc)
-	sp.Popen(shlex.split("git add *").wait()
+	sp.Popen(shlex.split("git add *")).wait()
 	commit_msg = "backup for {0}".format(strftime("%Y-%m-%d %H:%M:%S", localtime()))
 	o, e = sp.Popen(shlex.split("git commit -am {0}".format(commit_msg)), stdout=sp.PIPE, stderr=sp.PIPE).communicate()
 	print o

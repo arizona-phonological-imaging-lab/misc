@@ -1,12 +1,13 @@
-# -*- coding: utf-8 -*-
-# with unicode support
-
+#!/usr/bin/env python
+from __future__ import unicode_literals, division
 from Tkinter import *
 from random import shuffle
 from datetime import datetime
 import tkFileDialog, tkMessageBox
 import os, platform, csv, time, codecs, shutil 
 
+# -*- coding: utf-8 -*-
+# with unicode support
 
 #default tkinter stuff
 master = Tk()
