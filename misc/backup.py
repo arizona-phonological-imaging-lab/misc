@@ -34,12 +34,9 @@ def backup():
 	print "Starting backup..."
 	for f in to_backup:
 		try:
-			destination = f[f.rfind('/')+1:]
-			destination = '/'.join([backup_loc, destination])
-
 			os.path.join("/Volumes/BigMacBack")
-			command = "rsync -rtvazl --progress \"{0}\"/* {1}".format(f, destination)
-			print "Backing up \"{0}\"".format(destination)
+			command = "rsync -rtvazl --progress \"{0}\" {1}".format(f, backup_loc)
+			print "Backing up \"{0}\"".format(f)
 			sp.Popen(shlex.split(command)).wait()
 		except:
 			print "{0} shiznat failed to backup!".format(f)
