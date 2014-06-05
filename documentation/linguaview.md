@@ -12,9 +12,9 @@ Opening LinguaView
 
 ![Image1L](images/Image1L.png)
 
-Locating Files and Setting up the LinguaViewer
+Locating Files and Setting up the LinguaView
 ---
- >LinguaViewer will not work unless it has __.csv__ files to work with
+ >LinguaView will not work unless it has __.csv__ files to work with
 
  + The __.csv__ file contains the coordinates for the traced tongue
 

@@ -21,3 +21,4 @@ Analyzing Data
  
 Using a Network
 ---
+ + [Training a Network](Trainginganetwork.md)
