@@ -38,7 +38,7 @@ def backup():
 			destination = '/'.join([backup_loc, destination])
 
 			os.path.join("/Volumes/BigMacBack")
-			command = "rsync -rtvazl \"{0}\"/* {1}".format(f, destination)
+			command = "rsync -rtvazl --progress \"{0}\"/* {1}".format(f, destination)
 			print "Backing up \"{0}\"".format(destination)
 			os.system(command)
 		except:
