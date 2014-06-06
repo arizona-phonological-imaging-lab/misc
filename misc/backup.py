@@ -48,7 +48,7 @@ def commit():
 	sp.Popen(shlex.split("git add -vA .")).wait()
 	print "Cleaning repository..."
 	sp.Popen(shlex.split("git gc")).wait()
-	commit_msg = "backup for {0}".format(strftime("%Y-%m-%d %H:%M:%S", localtime()))
+	commit_msg = "\"backup for {0}\"".format(strftime("%Y-%m-%d %H:%M:%S", localtime()))
 	print "Committing changes..."
 	sp.Popen(shlex.split("git commit -am {0}".format(commit_msg))).wait()
 
