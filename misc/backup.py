@@ -31,28 +31,26 @@ def backup():
 	"""
 
 	"""
-	print "Backing up stuff..."
+	print "Starting backup..."
 	for f in to_backup:
 		try:
-			destination = f[f.rfind('/')+1:]
-			destination = '/'.join([backup_loc, destination])
-
 			os.path.join("/Volumes/BigMacBack")
-			command = "rsync -rtvazl --progress \"{0}\"/* {1}".format(f, destination)
-			print "Backing up \"{0}\"".format(destination)
-			os.system(command)
+			command = "rsync -rtvazl --progress \"{0}\" {1}".format(f, backup_loc)
+			print "Backing up \"{0}\"".format(f)
+			sp.Popen(shlex.split(command)).wait()
 		except:
 			print "{0} shiznat failed to backup!".format(f)
-	print "Finished backing up stuff..."
+	print "Backup completed!"
 
 def commit():
-	print "Committing changes"
+	print "Tracking new files..."
 	os.chdir(backup_loc)
-	sp.Popen(shlex.split("git add *")).wait()
-	commit_msg = "\"backup for {0}\"".format(strftime("%Y-%m-%d %H:%M:%S", localtime()))
-	o, e = sp.Popen(shlex.split("git commit -am {0}".format(commit_msg)), stdout=sp.PIPE, stderr=sp.PIPE).communicate()
-	print o
-	print e
+	sp.Popen(shlex.split("git add -vA .")).wait()
+	print "Cleaning repository..."
+	sp.Popen(shlex.split("git gc")).wait()
+	commit_msg = "backup for {0}".format(strftime("%Y-%m-%d %H:%M:%S", localtime()))
+	print "Committing changes..."
+	sp.Popen(shlex.split("git commit -am {0}".format(commit_msg))).wait()
 
 if __name__ == "__main__":
 	backup()
