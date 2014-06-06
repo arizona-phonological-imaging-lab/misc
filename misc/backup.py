@@ -37,7 +37,7 @@ def backup():
 			os.path.join("/Volumes/BigMacBack")
 			command = "rsync -rtvazl --progress \"{0}\" {1}".format(f, backup_loc)
 			print "Backing up \"{0}\"".format(f)
-			sp.Popen(shlex.split(command)).wait()
+			sp.Popen(shlex.split(command)).communicate()
 		except:
 			print "{0} shiznat failed to backup!".format(f)
 	print "Backup completed!"
@@ -45,12 +45,12 @@ def backup():
 def commit():
 	print "Tracking new files..."
 	os.chdir(backup_loc)
-	sp.Popen(shlex.split("git add -vA .")).wait()
+	sp.Popen(shlex.split("git add -vA .")).communicate()
 	print "Cleaning repository..."
-	sp.Popen(shlex.split("git gc")).wait()
+	sp.Popen(shlex.split("git gc")).communicate()
 	commit_msg = "\"backup for {0}\"".format(strftime("%Y-%m-%d %H:%M:%S", localtime()))
 	print "Committing changes..."
-	sp.Popen(shlex.split("git commit -am {0}".format(commit_msg))).wait()
+	sp.Popen(shlex.split("git commit -am {0}".format(commit_msg))).communicate()
 
 if __name__ == "__main__":
 	backup()
