@@ -49,7 +49,7 @@ def commit():
 	print "Committing changes"
 	os.chdir(backup_loc)
 	sp.Popen(shlex.split("git add *")).wait()
-	commit_msg = "backup for {0}".format(strftime("%Y-%m-%d %H:%M:%S", localtime()))
+	commit_msg = "\"backup for {0}\"".format(strftime("%Y-%m-%d %H:%M:%S", localtime()))
 	o, e = sp.Popen(shlex.split("git commit -am {0}".format(commit_msg)), stdout=sp.PIPE, stderr=sp.PIPE).communicate()
 	print o
 	print e
