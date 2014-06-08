@@ -220,7 +220,23 @@ public class Updater implements PropertyChangeListener{
 				}
 				System.out.println("Finished reading the files");
 				ArrayList<Trace> traceFiles = new ArrayList<Trace>();
+
+				//Also look in the possibly existent folder "completedTraces"
+				File tracesDirectory = new File(video.getAbsolutePath()+"/completedTraces");
+				File[] theTraceFolderFiles = null;
+				if(tracesDirectory.exists()){
+					theTraceFolderFiles = tracesDirectory.listFiles();
+				}
+				ArrayList<File> possibleTraceFiles = new ArrayList<File>();
 				for(File file: theFiles){
+					possibleTraceFiles.add(file);
+				}
+				if(tracesDirectory.exists()){
+					for(File file: theTraceFolderFiles){
+						possibleTraceFiles.add(file);
+					}
+				}
+				for(File file: possibleTraceFiles){
 					if( (file.getName().contains("png") || file.getName().contains("jpg")) && file.getName().endsWith("txt")){
 						Trace trace = new Trace();
 						trace.address = file.getAbsolutePath();
@@ -242,6 +258,12 @@ public class Updater implements PropertyChangeListener{
 						setProgress(progressResult);
 					}
 				}
+				
+				//Fix the names of traces files that look like 01b_1;2_sad_m_si_T_frame-0005273.png.MAK.traced
+				for(Trace trace: traceFiles){
+					trace.imageName = trace.imageName.replaceAll(".*?(\\d+\\..*)", "$1");
+				}
+				
 				System.out.println("Done with the images");
 				try {
 					db.addImages(result, traceFiles, projectName, projectAddress, videoName, videoAddress, language, updateMode);
