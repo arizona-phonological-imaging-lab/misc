@@ -363,6 +363,7 @@ public class DBConnector {
 			//If it had to be like %searchTerm%:
 			query1 = "SELECT segment_sequence,segment_id_sequence FROM word WHERE segment_sequence LIKE '% "+searchTerm+" %' OR segment_sequence LIKE '% "+searchTerm+"' or segment_sequence LIKE '"+searchTerm+" %' or segment_sequence LIKE '"+searchTerm+"'";
 		}
+		System.out.println(query1);
 		ResultSet rs = stat.executeQuery(query1);
 		//For each word that has such a pattern:
 		HashSet<Integer> resultIDs = new HashSet<Integer>();
@@ -382,6 +383,7 @@ public class DBConnector {
 			int closedBracketIndex = st2.indexOf(")");
 			st2 = "("+st2.substring(0,openBracketIndex)+")"+st2.substring(openBracketIndex,closedBracketIndex+1)+"("+st2.substring(closedBracketIndex+1)+")";
 			// st2 = ($a )(r)( o) 
+			st2 = st2.replace("%", ".+");
 			segments = segments.replaceAll(st2, "$1($2)$3");
 			// segments = m a (r) o n 0 z
 			
