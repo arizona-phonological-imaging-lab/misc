@@ -21,6 +21,7 @@ public class SearchBox extends JPanel{
 	public JComboBox howManyTracersCombo;
 	public JComboBox tagsCombo;
 	String[] tagsList;
+	String[] experimentsList;
 	private DBConnector db;
 	private JLabel lblTags;
 	public JTextField wordTextField;
@@ -102,7 +103,7 @@ public class SearchBox extends JPanel{
 		languageCombo.setBounds(103, 68, 138, 27);
 		add(languageCombo);
 		
-		String[] experimentsList = new String[0];
+		experimentsList = new String[0];
 		try {
 			experimentsList = db.getExperimentsList();
 		} catch (SQLException e) {

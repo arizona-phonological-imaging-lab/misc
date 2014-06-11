@@ -84,7 +84,7 @@ public class DBConnector {
 			query += "AND (project.language = '' OR project.language is null) ";
 		}
 		if(experimentEntered != null && experimentEntered.length()>0){
-			query += "AND theid IN (SELECT image.id FROM image JOIN experiment_association ON image.id=experiment_association.image_id JOIN experiment ON experiment.id=experiment_association.experiment_id WHERE experiment.title='"+experimentEntered+"') ";
+			query += "AND (SELECT COUNT(*) FROM experiment WHERE experiment.content='"+tag+"' AND experiment.image_id=theid)>0 ";
 		}
 		if(corruptEntered==1){
 			query += "AND image.is_bad = 1 ";
@@ -454,7 +454,7 @@ public class DBConnector {
 	
 	public String[] getExperimentsList() throws SQLException {
 		Statement stat = conn.createStatement();
-		String query = "SELECT title FROM experiment;";
+		String query = "SELECT DISTINCT content FROM experiment;";
 		ResultSet rs = stat.executeQuery(query);
 		ArrayList<String> titles = new ArrayList<String>();
 		while(rs.next()){
@@ -488,7 +488,7 @@ public class DBConnector {
 	
 	public String getExperiments(String id) throws SQLException{
 		Statement stat = conn.createStatement();
-		String query = "SELECT experiment.title FROM experiment_association JOIN image ON experiment_association.image_id=image.id JOIN experiment ON experiment.id=experiment_association.experiment_id WHERE image.id="+id+";";
+		String query = "SELECT experiment.content FROM experiment WHERE image_id="+id+";";
 		ResultSet rs = stat.executeQuery(query);
 		String result = "";
 		while(rs.next()){
@@ -673,19 +673,34 @@ public class DBConnector {
 		return addresses;
 	}
 
-	public int tagImages(HashMap<Integer, ImageData> buffer, String tagContent) throws SQLException {
+	public int tagImages(HashMap<Integer, ImageData> buffer, String tagContent, boolean isExperiment) throws SQLException {
 		Statement stat = conn.createStatement();
 		int counter = 0;
 		for(ImageData image: buffer.values()){
 			//Check if this image doesn't already have that tag
 			Statement stat2 = conn.createStatement();
-			String query = "SELECT id FROM tag WHERE image_id="+image.id+" AND content='"+tagContent+"';";
+			String query;
+			query = "SELECT id FROM";
+			if(isExperiment){
+				query += " experiment ";
+			}
+			else{
+				query += " tag ";
+			}
+			query+= "WHERE image_id="+image.id+" AND content='"+tagContent+"';";
 			ResultSet rs = stat2.executeQuery(query);
 			if(rs.next()){
 				continue;
 			}
 			//Now insert the tag
-			String update = "INSERT INTO tag(image_id,content) VALUES("+image.id+",'"+tagContent+"');";
+			String update = "INSERT INTO";
+			if(isExperiment){
+				update += " experiment";
+			}
+			else{
+				update += " tag";
+			}
+			update += "(image_id,content) VALUES("+image.id+",'"+tagContent+"');";
 			stat.addBatch(update);
 			counter++;
 		}
@@ -694,11 +709,18 @@ public class DBConnector {
 		return counter;
 	}
 
-	public void untagImages(HashMap<Integer, ImageData> buffer, String tagContent) throws SQLException {
+	public void untagImages(HashMap<Integer, ImageData> buffer, String tagContent, boolean isExperiment) throws SQLException {
 		Statement stat = conn.createStatement();
 		for(ImageData image: buffer.values()){
 			//Check if this image doesn't already have that tag
-			String update = "DELETE FROM tag WHERE image_id="+image.id+" AND content='"+tagContent+"';";
+			String update = "DELETE FROM";
+			if (isExperiment){
+				update += " experiment ";
+			}
+			else{
+				update += " tag ";
+			}
+			update += "WHERE image_id="+image.id+" AND content='"+tagContent+"';";
 			stat.addBatch(update);
 		}
 		stat.close();
@@ -883,5 +905,5 @@ public class DBConnector {
 		stat.executeUpdate(update);
 		stat.close();
 	}
-
+	
 }

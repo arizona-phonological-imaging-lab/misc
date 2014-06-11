@@ -263,7 +263,7 @@ public class MainFrame extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				bufferPanel.tag();
+				bufferPanel.tag(false);
 			}
 		});
 		tagMenu.add(tagImages);
@@ -273,10 +273,30 @@ public class MainFrame extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				bufferPanel.untag();
+				bufferPanel.untag(false);
 			}
 		});
 		tagMenu.add(untagImages);
+		
+		JMenuItem addExperiment = new JMenuItem("Assign experiment to buffer images...");
+		addExperiment.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				bufferPanel.tag(true);
+			}
+		});
+		tagMenu.add(addExperiment);
+		
+		JMenuItem removeExperiment = new JMenuItem("Remove experiment from buffer images...");
+		removeExperiment.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				bufferPanel.untag(true);
+			}
+		});
+		tagMenu.add(removeExperiment);
 		
 		
 		JMenuItem segmentDisplayMenuItem = new JMenu("Segment display method");
@@ -474,7 +494,7 @@ public class MainFrame extends JFrame{
 			else if("Subject".equals(colName)){
 				return image.subject;
 			}
-			else if("Experiments".equals(colName)){
+			else if("Experiment".equals(colName)){
 				try {
 					return db.getExperiments(image.id);
 				} catch (SQLException e) {

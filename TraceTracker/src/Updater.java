@@ -51,6 +51,7 @@ public class Updater implements PropertyChangeListener{
 
 	
 	public static String getSegmentSpelling(String detailedSpelling){
+		detailedSpelling = detailedSpelling.replace("neutral", "neut");
 		if(detailedSpelling.contains(" ")){
 			String result = detailedSpelling.split("\\s+")[1];
 			if(result.matches(".*[ifpncv]") || result.endsWith("f") || result.matches(".*[0-9]")){
@@ -439,7 +440,7 @@ public class Updater implements PropertyChangeListener{
 							}
 						}
 						//The segment is inside the word now
-						if(segmentMidpoint<currentWord.xmin){
+						if(segmentMidpoint<currentWord.xmin && text.length()>0){
 							System.err.println("There was an error!");
 						}
 						if(text.length()==0){

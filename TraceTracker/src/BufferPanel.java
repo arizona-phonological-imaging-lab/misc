@@ -203,7 +203,7 @@ public class BufferPanel extends JPanel{
 	    out.close();
 	}
 
-	public void tag() {
+	public void tag(boolean isExperiment) {
 		if(buffer.isEmpty()){
 			JOptionPane.showMessageDialog(null, "The buffer is empty","Error",JOptionPane.ERROR_MESSAGE);
 			return;
@@ -213,24 +213,34 @@ public class BufferPanel extends JPanel{
 			return;
 		}
 		if(tagContent.length()==0){
-			JOptionPane.showMessageDialog(null, "No tag name was entered.","Error",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "No name was entered.","Error",JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		int tagged = 0;
+		int taggedCounter = 0;
 		try {
-			tagged = db.tagImages(buffer, tagContent);
+			taggedCounter = db.tagImages(buffer, tagContent, isExperiment);
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "There was an error. See the log file.","Error",JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 			mainFrame.printErrorLog(e);
 		}
-		JOptionPane.showMessageDialog(null,tagged+" images were tagged '"+tagContent+"'.");
+		JOptionPane.showMessageDialog(null,taggedCounter+" images were tagged '"+tagContent+"'.");
 		try {
-			mainFrame.searchbox.tagsList = db.getTagsList();
-			DefaultComboBoxModel model = (DefaultComboBoxModel) mainFrame.searchbox.tagsCombo.getModel();
-			model.removeAllElements();
-			for(String s:mainFrame.searchbox.tagsList){
-				model.addElement(s);
+			if(isExperiment){
+				mainFrame.searchbox.experimentsList = db.getExperimentsList();
+				DefaultComboBoxModel model = (DefaultComboBoxModel) mainFrame.searchbox.experimentCombo.getModel();
+				model.removeAllElements();
+				for(String s:mainFrame.searchbox.experimentsList){
+					model.addElement(s);
+				}
+			}
+			else{				
+				mainFrame.searchbox.tagsList = db.getTagsList();
+				DefaultComboBoxModel model = (DefaultComboBoxModel) mainFrame.searchbox.tagsCombo.getModel();
+				model.removeAllElements();
+				for(String s:mainFrame.searchbox.tagsList){
+					model.addElement(s);
+				}
 			}
 			
 		} catch (SQLException e) {
@@ -239,35 +249,49 @@ public class BufferPanel extends JPanel{
 		}
 	}
 
-	public void untag() {
+	public void untag(boolean isExperiment) {
 		if(buffer.isEmpty()){
 			JOptionPane.showMessageDialog(null, "The buffer is empty","Error",JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		String[] tagsList = mainFrame.searchbox.tagsList;
-		String userInput = (String)JOptionPane.showInputDialog(
-		                    null,
-		                    "Choose the tag you want to remove.",
-		                    "Choose tag", JOptionPane.PLAIN_MESSAGE,
-		                    null,
-		                    tagsList,
-		                    tagsList[0]);
+		String title;
+		String message;
+		if(isExperiment){
+			title = "Choose the experiment you want to remove";
+			message = "Choose experiment";
+		}
+		else{
+			title = "Choose the tag you want to remove";
+			message = "Choose tag";
+		}
+		String[] theAppropriateList = tagsList;
+		if(isExperiment){
+			theAppropriateList = mainFrame.searchbox.experimentsList; 
+		}
+		
+		String userInput = (String)JOptionPane.showInputDialog(null,message,title, JOptionPane.PLAIN_MESSAGE, null, theAppropriateList, theAppropriateList[0]);
 
 		//If a string was returned, say so.
 		if ((userInput != null) && (userInput.length() > 0)) {
 			try {
-				db.untagImages(buffer, userInput);
+				db.untagImages(buffer, userInput, isExperiment);
 			} catch (SQLException e) {
 				JOptionPane.showMessageDialog(null, "There was an error. See the log file.","Error",JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 				mainFrame.printErrorLog(e);
 			}
-			JOptionPane.showMessageDialog(null,"The images were successfully untagged.");
+			if(isExperiment){
+				JOptionPane.showMessageDialog(null,"The experiment was successfully assigned to the images.");
+			}
+			else{
+				JOptionPane.showMessageDialog(null,"The images were successfully untagged.");
+			}
 		}
 
 		//If you're here, the return value was null/empty.
 		if(userInput==null || userInput.length()==0){
-			JOptionPane.showMessageDialog(null, "No tag name was entered.","Error",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "No name was entered.","Error",JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 	}
