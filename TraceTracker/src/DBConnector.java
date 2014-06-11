@@ -333,21 +333,36 @@ public class DBConnector {
 		
 		//First find the words that have the desired sequence
 		String searchTerm = segmentEntered;
+		boolean hasPrefix = false;
+		boolean hasSuffix = false;
 		if(searchTerm.startsWith("$")){
 			searchTerm = searchTerm.substring(1);
 		}
 		else{
-			searchTerm = "%"+searchTerm;
+			hasPrefix = true;
 		}
 		if(searchTerm.endsWith("$")){
 			searchTerm = searchTerm.substring(0,searchTerm.length()-1);
 		}
 		else{
-			searchTerm = searchTerm+"%";
+			hasSuffix = true;
 		}
 		searchTerm = searchTerm.replace("(", "");
 		searchTerm = searchTerm.replace(")", "");
-		String query1 = "SELECT segment_sequence,segment_id_sequence FROM word WHERE segment_sequence LIKE '"+searchTerm+"'";
+		String query1 = "";
+		if(!hasPrefix && !hasSuffix){
+			query1 = "SELECT segment_sequence,segment_id_sequence FROM word WHERE segment_sequence = '"+searchTerm+"'";
+		}
+		else if(!hasPrefix){
+			query1 = "SELECT segment_sequence,segment_id_sequence FROM word WHERE segment_sequence LIKE '"+searchTerm+" %' OR segment_sequence LIKE '"+searchTerm+"'";
+		}
+		else if(!hasSuffix){
+			query1 = "SELECT segment_sequence,segment_id_sequence FROM word WHERE segment_sequence LIKE '% "+searchTerm+"' OR segment_sequence LIKE '"+searchTerm+"'";
+		}
+		else{
+			//If it had to be like %searchTerm%:
+			query1 = "SELECT segment_sequence,segment_id_sequence FROM word WHERE segment_sequence LIKE '% "+searchTerm+" %' OR segment_sequence LIKE '% "+searchTerm+"' or segment_sequence LIKE '"+searchTerm+" %' or segment_sequence LIKE '"+searchTerm+"'";
+		}
 		ResultSet rs = stat.executeQuery(query1);
 		//For each word that has such a pattern:
 		HashSet<Integer> resultIDs = new HashSet<Integer>();
