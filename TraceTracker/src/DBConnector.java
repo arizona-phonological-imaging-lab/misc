@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Properties;
@@ -84,7 +85,7 @@ public class DBConnector {
 			query += "AND (project.language = '' OR project.language is null) ";
 		}
 		if(experimentEntered != null && experimentEntered.length()>0){
-			query += "AND (SELECT COUNT(*) FROM experiment WHERE experiment.content='"+tag+"' AND experiment.image_id=theid)>0 ";
+			query += "AND (SELECT COUNT(*) FROM experiment WHERE experiment.content='"+experimentEntered+"' AND experiment.image_id=theid)>0 ";
 		}
 		if(corruptEntered==1){
 			query += "AND image.is_bad = 1 ";
@@ -158,6 +159,10 @@ public class DBConnector {
 				result.add(image);
 			}
 		}
+
+		
+		long t_med2 = System.currentTimeMillis();
+//		System.out.println("First While: "+(t_med2-t_med));
 		//If we are limiting, we want to know the actual number of results too.
 		if(weAreLimiting){
 			int orderIndex = query.indexOf("ORDER BY");
@@ -363,7 +368,7 @@ public class DBConnector {
 			//If it had to be like %searchTerm%:
 			query1 = "SELECT segment_sequence,segment_id_sequence FROM word WHERE segment_sequence LIKE '% "+searchTerm+" %' OR segment_sequence LIKE '% "+searchTerm+"' or segment_sequence LIKE '"+searchTerm+" %' or segment_sequence LIKE '"+searchTerm+"'";
 		}
-		System.out.println(query1);
+//		System.out.println(query1);
 		ResultSet rs = stat.executeQuery(query1);
 		//For each word that has such a pattern:
 		HashSet<Integer> resultIDs = new HashSet<Integer>();
@@ -690,10 +695,10 @@ public class DBConnector {
 		return addresses;
 	}
 
-	public int tagImages(HashMap<Integer, ImageData> buffer, String tagContent, boolean isExperiment) throws SQLException {
+	public int tagImages(Collection<ImageData> images, String tagContent, boolean isExperiment) throws SQLException {
 		Statement stat = conn.createStatement();
 		int counter = 0;
-		for(ImageData image: buffer.values()){
+		for(ImageData image: images){
 			//Check if this image doesn't already have that tag
 			Statement stat2 = conn.createStatement();
 			String query;
@@ -726,9 +731,9 @@ public class DBConnector {
 		return counter;
 	}
 
-	public void untagImages(HashMap<Integer, ImageData> buffer, String tagContent, boolean isExperiment) throws SQLException {
+	public void untagImages(Collection<ImageData> images, String tagContent, boolean isExperiment) throws SQLException {
 		Statement stat = conn.createStatement();
-		for(ImageData image: buffer.values()){
+		for(ImageData image: images){
 			//Check if this image doesn't already have that tag
 			String update = "DELETE FROM";
 			if (isExperiment){

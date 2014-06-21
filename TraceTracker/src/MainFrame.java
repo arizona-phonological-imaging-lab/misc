@@ -8,9 +8,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -20,6 +22,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -182,6 +186,77 @@ public class MainFrame extends JFrame{
 		table.getColumnModel().getColumn(4).setPreferredWidth(100);
 		table.getColumnModel().getColumn(5).setPreferredWidth(100);
 		
+		class PopUpMenu extends JPopupMenu{
+			JMenuItem tagItem;
+			JMenuItem untagItem;
+			JMenuItem addExpItem;
+			JMenuItem removeExpItem;
+		    public PopUpMenu(){
+		        tagItem = new JMenuItem("Tag selected images");
+		        tagItem.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						bufferPanel.tag(false, true);
+					}
+				});
+		        untagItem = new JMenuItem("Untag selected images");
+		        untagItem.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						bufferPanel.untag(false, true);
+					}
+				});
+		        addExpItem = new JMenuItem("Add experiment to selected images");
+		        addExpItem.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						bufferPanel.tag(true, true);
+					}
+				});
+		        removeExpItem = new JMenuItem("Remove experiment from selected images");
+		        removeExpItem.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						bufferPanel.untag(true, true);
+					}
+				});
+		        add(tagItem);
+		        add(untagItem);
+		        add(addExpItem);
+		        add(removeExpItem);
+		    }
+		}
+		table.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (SwingUtilities.isRightMouseButton(e)){
+					PopUpMenu p = new PopUpMenu();
+					p.show(e.getComponent(),e.getX(), e.getY());
+				}
+			}
+		});
+		
 		JButton btnSearch = new JButton("Search");
 		btnSearch.setBounds(630, 142, 117, 29);
 		btnSearch.addActionListener(new ActionListener(){
@@ -207,6 +282,7 @@ public class MainFrame extends JFrame{
 			
 		});
 		getContentPane().add(btnSearch);
+		getRootPane().setDefaultButton(btnSearch);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -258,22 +334,22 @@ public class MainFrame extends JFrame{
 		});
 		collectMenu.add(collectImagesWithTraces);
 		
-		JMenuItem tagImages = new JMenuItem("Add tag to buffer images...");
+		JMenuItem tagImages = new JMenuItem("Tag buffer images...");
 		tagImages.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				bufferPanel.tag(false);
+				bufferPanel.tag(false, false);
 			}
 		});
 		tagMenu.add(tagImages);
 		
-		JMenuItem untagImages = new JMenuItem("Remove tag from buffer images...");
+		JMenuItem untagImages = new JMenuItem("Untag buffer images...");
 		untagImages.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				bufferPanel.untag(false);
+				bufferPanel.untag(false, false);
 			}
 		});
 		tagMenu.add(untagImages);
@@ -283,7 +359,7 @@ public class MainFrame extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				bufferPanel.tag(true);
+				bufferPanel.tag(true, false);
 			}
 		});
 		tagMenu.add(addExperiment);
@@ -293,7 +369,7 @@ public class MainFrame extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				bufferPanel.untag(true);
+				bufferPanel.untag(true, false);
 			}
 		});
 		tagMenu.add(removeExperiment);
