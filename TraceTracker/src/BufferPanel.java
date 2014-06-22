@@ -327,10 +327,32 @@ public class BufferPanel extends JPanel{
 			}
 		}
 
-		//If you're here, the return value was null/empty.
-		if(userInput==null || userInput.length()==0){
+		if(userInput!=null && userInput.length()==0){
 			JOptionPane.showMessageDialog(null, "No name was entered.","Error",JOptionPane.ERROR_MESSAGE);
 			return;
+		}
+		
+		try {
+			if(isExperiment){
+				mainFrame.searchbox.experimentsList = db.getExperimentsList();
+				DefaultComboBoxModel model = (DefaultComboBoxModel) mainFrame.searchbox.experimentCombo.getModel();
+				model.removeAllElements();
+				for(String s:mainFrame.searchbox.experimentsList){
+					model.addElement(s);
+				}
+			}
+			else{				
+				mainFrame.searchbox.tagsList = db.getTagsList();
+				DefaultComboBoxModel model = (DefaultComboBoxModel) mainFrame.searchbox.tagsCombo.getModel();
+				model.removeAllElements();
+				for(String s:mainFrame.searchbox.tagsList){
+					model.addElement(s);
+				}
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			mainFrame.printErrorLog(e);
 		}
 	}
 }

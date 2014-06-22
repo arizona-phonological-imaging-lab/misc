@@ -22,6 +22,7 @@ public class SearchBox extends JPanel{
 	public JComboBox tagsCombo;
 	String[] tagsList;
 	String[] experimentsList;
+	String[] tracersList;
 	private DBConnector db;
 	private JLabel lblTags;
 	public JTextField wordTextField;
@@ -79,7 +80,7 @@ public class SearchBox extends JPanel{
 		projectCombo.setBounds(103, 38, 138, 27);
 		add(projectCombo);
 		
-		String[] tracersList = new String[0];
+		tracersList = new String[0];
 		try {
 			tracersList = db.getTracersList();
 		} catch (SQLException e) {

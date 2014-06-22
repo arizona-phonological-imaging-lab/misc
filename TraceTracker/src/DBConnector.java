@@ -927,5 +927,31 @@ public class DBConnector {
 		stat.executeUpdate(update);
 		stat.close();
 	}
+
+	public void deleteProject(String title) throws SQLException{
+		Statement stat = conn.createStatement();
+		String deleteTags = "DELETE FROM tag WHERE id IN (SELECT tag.id FROM tag JOIN image ON tag.image_id=image.id JOIN video ON video.id=image.video_id JOIN project ON project.id=video.project_id WHERE project.title='"+title+"');";
+		String deleteExps =  "DELETE FROM experiment WHERE id IN (SELECT experiment.id FROM experiment JOIN image ON experiment.image_id=image.id JOIN video ON video.id=image.video_id JOIN project ON project.id=video.project_id WHERE project.title='"+title+"');";
+		String deleteWords =  "DELETE FROM word WHERE id IN (SELECT image.id FROM word JOIN image ON (image.word_id=word.id OR image.start_word_id=word.id OR image.end_word_id=word.id) JOIN video ON video.id=image.video_id JOIN project ON project.id=video.project_id WHERE project.title='"+title+"');";
+		String deleteSegments =  "DELETE FROM segment WHERE id IN (SELECT segment.id FROM segment JOIN image ON (image.segment_id=segment.id OR image.end_segment_id=segment.id OR image.start_segment_id=segment.id) JOIN video ON video.id=image.video_id JOIN project ON project.id=video.project_id WHERE project.title='"+title+"');";
+		String deleteTraces =  "DELETE FROM trace WHERE id IN (SELECT trace.id FROM trace JOIN image ON trace.image_id=image.id JOIN video ON video.id=image.video_id JOIN project ON project.id=video.project_id WHERE project.title='"+title+"');";
+		String deleteTracers =  "DELETE FROM tracer WHERE tracer.id NOT IN (SELECT tracer_id FROM trace);";
+		String deleteImages = "DELETE FROM image WHERE id IN (SELECT image.id FROM image JOIN video ON video.id=image.video_id JOIN project ON project.id=video.project_id WHERE project.title='"+title+"');";
+		String deleteVideos = "DELETE FROM video WHERE id IN (SELECT video.id FROM video JOIN project ON project.id=video.project_id WHERE project.title='"+title+"');";
+		String deleteProject= "DELETE FROM project WHERE project.title='"+title+"';";
+		
+		stat.addBatch(deleteTags);
+		stat.addBatch(deleteExps);
+		stat.addBatch(deleteWords);
+		stat.addBatch(deleteSegments);
+		stat.addBatch(deleteTraces);
+		stat.addBatch(deleteTracers);
+		stat.addBatch(deleteImages);
+		stat.addBatch(deleteVideos);
+		stat.addBatch(deleteProject);
+		
+		stat.executeBatch();
+		stat.close();
+	}
 	
 }

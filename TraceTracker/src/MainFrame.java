@@ -289,10 +289,12 @@ public class MainFrame extends JFrame{
 		JMenu collectMenu = new JMenu("Export");
 		JMenu tagMenu = new JMenu("Tag");
 		JMenu updateMenu = new JMenu("Add data");
+		JMenu deleteMenu = new JMenu("Remove data");
 		JMenu viewMenu = new JMenu("View");
 		menuBar.add(collectMenu);
 		menuBar.add(tagMenu);
 		menuBar.add(updateMenu);
+		menuBar.add(deleteMenu);
 		menuBar.add(viewMenu);
 		JMenuItem addProject = new JMenuItem("Add new project...");
 		addProject.addActionListener(new ActionListener() {
@@ -373,6 +375,17 @@ public class MainFrame extends JFrame{
 			}
 		});
 		tagMenu.add(removeExperiment);
+		
+		JMenuItem removeProject = new JMenuItem("Remove a project...");
+		removeProject.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Updater updater = new Updater(MainFrame.this);
+				updater.removeProject();
+			}
+		});
+		deleteMenu.add(removeProject);
 		
 		
 		JMenuItem segmentDisplayMenuItem = new JMenu("Segment display method");
