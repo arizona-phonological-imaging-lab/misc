@@ -310,6 +310,9 @@ public class Updater implements PropertyChangeListener{
 				progressFrame.setVisible(false);
 				progressFrame.dispose();
 				System.out.println("progress finished: "+this.getProgress());
+				
+				//Update the search box combo boxes with the new data
+				mainFrame.searchbox.updateData();
 				if(!someError){					
 					JOptionPane.showMessageDialog(null, "The database was updated successfully.");				
 				}
@@ -544,14 +547,7 @@ public class Updater implements PropertyChangeListener{
 	public void removeProject() {
 		String title = "Remove project";
 		String message = "Please choose the project you want to delete. All images and\ndata associated with them will be deleted from the database,\nbut they will not be deleted from disk.";
-		String[] projectsList = {""};
-		try {
-			projectsList = db.getProjectsList();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			mainFrame.printErrorLog(e);
-		}
-		String userInput = (String)JOptionPane.showInputDialog(null,message,title, JOptionPane.PLAIN_MESSAGE, null, projectsList, projectsList[0]);
+		String userInput = (String)JOptionPane.showInputDialog(null,message,title, JOptionPane.PLAIN_MESSAGE, null, mainFrame.searchbox.projectsList, mainFrame.searchbox.projectsList[0]);
 		if(userInput!=null && userInput.length()==0){
 			JOptionPane.showMessageDialog(null, "No name was entered.","Error",JOptionPane.ERROR_MESSAGE);
 		}
@@ -564,31 +560,7 @@ public class Updater implements PropertyChangeListener{
 			}
 			
 			//We should update the list of tags, experiments, and tracers after we are done.
-			try {
-				mainFrame.searchbox.experimentsList = db.getExperimentsList();
-				DefaultComboBoxModel model = (DefaultComboBoxModel) mainFrame.searchbox.experimentCombo.getModel();
-				model.removeAllElements();
-				for(String s:mainFrame.searchbox.experimentsList){
-					model.addElement(s);
-				}
-				
-				mainFrame.searchbox.tagsList = db.getTagsList();
-				model = (DefaultComboBoxModel) mainFrame.searchbox.tagsCombo.getModel();
-				model.removeAllElements();
-				for(String s:mainFrame.searchbox.tagsList){
-					model.addElement(s);
-				}
-				
-				mainFrame.searchbox.tracersList = db.getTracersList();
-				model = (DefaultComboBoxModel) mainFrame.searchbox.tracerCombo.getModel();
-				model.removeAllElements();
-				for(String s:mainFrame.searchbox.tracersList){
-					model.addElement(s);
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-				mainFrame.printErrorLog(e);
-			}
+			mainFrame.searchbox.updateData();
 			
 			JOptionPane.showMessageDialog(null, "The project and its associated entries were deleted successfully.");
 			

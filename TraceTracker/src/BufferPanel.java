@@ -245,28 +245,7 @@ public class BufferPanel extends JPanel{
 			mainFrame.printErrorLog(e);
 		}
 		JOptionPane.showMessageDialog(null,taggedCounter+" images were tagged '"+tagContent+"'.");
-		try {
-			if(isExperiment){
-				mainFrame.searchbox.experimentsList = db.getExperimentsList();
-				DefaultComboBoxModel model = (DefaultComboBoxModel) mainFrame.searchbox.experimentCombo.getModel();
-				model.removeAllElements();
-				for(String s:mainFrame.searchbox.experimentsList){
-					model.addElement(s);
-				}
-			}
-			else{				
-				mainFrame.searchbox.tagsList = db.getTagsList();
-				DefaultComboBoxModel model = (DefaultComboBoxModel) mainFrame.searchbox.tagsCombo.getModel();
-				model.removeAllElements();
-				for(String s:mainFrame.searchbox.tagsList){
-					model.addElement(s);
-				}
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			mainFrame.printErrorLog(e);
-		}
+		mainFrame.searchbox.updateData();
 	}
 
 	public void untag(boolean isExperiment, boolean isRightClick) {
@@ -331,28 +310,6 @@ public class BufferPanel extends JPanel{
 			JOptionPane.showMessageDialog(null, "No name was entered.","Error",JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		
-		try {
-			if(isExperiment){
-				mainFrame.searchbox.experimentsList = db.getExperimentsList();
-				DefaultComboBoxModel model = (DefaultComboBoxModel) mainFrame.searchbox.experimentCombo.getModel();
-				model.removeAllElements();
-				for(String s:mainFrame.searchbox.experimentsList){
-					model.addElement(s);
-				}
-			}
-			else{				
-				mainFrame.searchbox.tagsList = db.getTagsList();
-				DefaultComboBoxModel model = (DefaultComboBoxModel) mainFrame.searchbox.tagsCombo.getModel();
-				model.removeAllElements();
-				for(String s:mainFrame.searchbox.tagsList){
-					model.addElement(s);
-				}
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			mainFrame.printErrorLog(e);
-		}
+		mainFrame.searchbox.updateData();
 	}
 }

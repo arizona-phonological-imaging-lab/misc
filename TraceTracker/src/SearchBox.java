@@ -23,12 +23,15 @@ public class SearchBox extends JPanel{
 	String[] tagsList;
 	String[] experimentsList;
 	String[] tracersList;
+	String[] projectsList;
+	String[] languagesList;
 	private DBConnector db;
 	private JLabel lblTags;
 	public JTextField wordTextField;
 	public JTextField segmentTextField;
 	private JTextField marginSizeTextField;
 	public JComboBox representativeFramesCombo;
+	MainFrame mf;
 	
 	public SearchBox(MainFrame mainFrame) {
 		db = mainFrame.db;
@@ -39,7 +42,7 @@ public class SearchBox extends JPanel{
 			e.printStackTrace();
 			mainFrame.printErrorLog(e);
 		}
-		
+		mf = mainFrame;
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		setLayout(null);
 		
@@ -68,7 +71,7 @@ public class SearchBox extends JPanel{
 		add(imageTitleTextField);
 		imageTitleTextField.setColumns(10);
 		
-		String[] projectsList = new String[0];
+		projectsList = new String[0];
 		try {
 			projectsList = db.getProjectsList();
 		} catch (SQLException e) {
@@ -92,7 +95,7 @@ public class SearchBox extends JPanel{
 		tracerCombo.setBounds(348, 8, 138, 27);
 		add(tracerCombo);
 		
-		String[] languagesList = new String[0];
+		languagesList = new String[0];
 		try {
 			languagesList = db.getLanguagesList();
 		} catch (SQLException e) {
@@ -219,5 +222,47 @@ public class SearchBox extends JPanel{
 	    }
 	    // only got here if we didn't return false
 	    return true;
+	}
+
+	public void updateData() {
+		try {
+			experimentsList = db.getExperimentsList();
+			DefaultComboBoxModel model = (DefaultComboBoxModel) experimentCombo.getModel();
+			model.removeAllElements();
+			for(String s:experimentsList){
+				model.addElement(s);
+			}
+			
+			tagsList = db.getTagsList();
+			model = (DefaultComboBoxModel) tagsCombo.getModel();
+			model.removeAllElements();
+			for(String s:tagsList){
+				model.addElement(s);
+			}
+			
+			tracersList = db.getTracersList();
+			model = (DefaultComboBoxModel) tracerCombo.getModel();
+			model.removeAllElements();
+			for(String s:tracersList){
+				model.addElement(s);
+			}
+			
+			projectsList = db.getProjectsList();
+			model = (DefaultComboBoxModel) projectCombo.getModel();
+			model.removeAllElements();
+			for(String s:projectsList){
+				model.addElement(s);
+			}
+			
+			languagesList = db.getProjectsList();
+			model = (DefaultComboBoxModel) projectCombo.getModel();
+			model.removeAllElements();
+			for(String s:projectsList){
+				model.addElement(s);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			mf.printErrorLog(e);
+		}
 	}
 }
