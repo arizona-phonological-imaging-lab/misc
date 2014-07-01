@@ -932,25 +932,45 @@ public class DBConnector {
 		Statement stat = conn.createStatement();
 		String deleteTags = "DELETE FROM tag WHERE id IN (SELECT tag.id FROM tag JOIN image ON tag.image_id=image.id JOIN video ON video.id=image.video_id JOIN project ON project.id=video.project_id WHERE project.title='"+title+"');";
 		String deleteExps =  "DELETE FROM experiment WHERE id IN (SELECT experiment.id FROM experiment JOIN image ON experiment.image_id=image.id JOIN video ON video.id=image.video_id JOIN project ON project.id=video.project_id WHERE project.title='"+title+"');";
-		String deleteWords =  "DELETE FROM word WHERE id IN (SELECT image.id FROM word JOIN image ON (image.word_id=word.id OR image.start_word_id=word.id OR image.end_word_id=word.id) JOIN video ON video.id=image.video_id JOIN project ON project.id=video.project_id WHERE project.title='"+title+"');";
-		String deleteSegments =  "DELETE FROM segment WHERE id IN (SELECT segment.id FROM segment JOIN image ON (image.segment_id=segment.id OR image.end_segment_id=segment.id OR image.start_segment_id=segment.id) JOIN video ON video.id=image.video_id JOIN project ON project.id=video.project_id WHERE project.title='"+title+"');";
+		String deleteWords =  "DELETE FROM word WHERE id IN (SELECT word.id FROM project JOIN video ON project.id=video.project_id JOIN image ON video.id=image.video_id JOIN word ON word.id=image.word_id WHERE project.title='"+title+"');";
+		String deleteWordsStart =  "DELETE FROM word WHERE id IN (SELECT word.id FROM project JOIN video ON project.id=video.project_id JOIN image ON video.id=image.video_id JOIN word ON word.id=image.start_word_id WHERE project.title='"+title+"');";
+		String deleteWordsEnd =  "DELETE FROM word WHERE id IN (SELECT word.id FROM project JOIN video ON project.id=video.project_id JOIN image ON video.id=image.video_id JOIN word ON word.id=image.end_word_id WHERE project.title='"+title+"');";
+		String deleteSegments =  "DELETE FROM segment WHERE id IN (SELECT segment.id FROM project JOIN video ON project.id=video.project_id JOIN image ON video.id=image.video_id JOIN segment ON segment.id=image.segment_id WHERE project.title='"+title+"');";
+		String deleteSegmentsStart =  "DELETE FROM segment WHERE id IN (SELECT segment.id FROM project JOIN video ON project.id=video.project_id JOIN image ON video.id=image.video_id JOIN segment ON segment.id=image.start_segment_id WHERE project.title='"+title+"');";
+		String deleteSegmentsEnd =  "DELETE FROM segment WHERE id IN (SELECT segment.id FROM project JOIN video ON project.id=video.project_id JOIN image ON video.id=image.video_id JOIN segment ON segment.id=image.end_segment_id WHERE project.title='"+title+"');";
 		String deleteTraces =  "DELETE FROM trace WHERE id IN (SELECT trace.id FROM trace JOIN image ON trace.image_id=image.id JOIN video ON video.id=image.video_id JOIN project ON project.id=video.project_id WHERE project.title='"+title+"');";
 		String deleteTracers =  "DELETE FROM tracer WHERE tracer.id NOT IN (SELECT tracer_id FROM trace);";
 		String deleteImages = "DELETE FROM image WHERE id IN (SELECT image.id FROM image JOIN video ON video.id=image.video_id JOIN project ON project.id=video.project_id WHERE project.title='"+title+"');";
 		String deleteVideos = "DELETE FROM video WHERE id IN (SELECT video.id FROM video JOIN project ON project.id=video.project_id WHERE project.title='"+title+"');";
 		String deleteProject= "DELETE FROM project WHERE project.title='"+title+"';";
 		
-		stat.addBatch(deleteTags);
-		stat.addBatch(deleteExps);
-		stat.addBatch(deleteWords);
-		stat.addBatch(deleteSegments);
-		stat.addBatch(deleteTraces);
-		stat.addBatch(deleteTracers);
-		stat.addBatch(deleteImages);
-		stat.addBatch(deleteVideos);
-		stat.addBatch(deleteProject);
+		stat.execute(deleteTags);
+		System.out.println("Done deleteTags");
+		stat.execute(deleteExps);
+		System.out.println("Done deleteExps");
+		stat.execute(deleteWords);
+		System.out.println("Done deleteWords");
+		stat.execute(deleteWordsStart);
+		System.out.println("Done deleteWordsStart");
+		stat.execute(deleteWordsEnd);
+		System.out.println("Done deleteWordsEnd");
+		stat.execute(deleteSegments);
+		System.out.println("Done deleteSegments");
+		stat.execute(deleteSegmentsStart);
+		System.out.println("Done deleteSegmentsStart");
+		stat.execute(deleteSegmentsEnd);
+		System.out.println("Done deleteSegmentsEnd");
+		stat.execute(deleteTraces);
+		System.out.println("Done deleteTraces");
+		stat.execute(deleteTracers);
+		System.out.println("Done deleteTracers");
+		stat.execute(deleteImages);
+		System.out.println("Done deleteImages");
+		stat.execute(deleteVideos);
+		System.out.println("Done deleteVideos");
+		stat.execute(deleteProject);
+		System.out.println("Done deleteProject");
 		
-		stat.executeBatch();
 		stat.close();
 	}
 	
