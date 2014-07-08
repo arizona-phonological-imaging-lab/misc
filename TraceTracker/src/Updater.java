@@ -552,6 +552,15 @@ public class Updater implements PropertyChangeListener{
 			JOptionPane.showMessageDialog(null, "No name was entered.","Error",JOptionPane.ERROR_MESSAGE);
 		}
 		else if(userInput!=null){
+			
+			//Clear the table
+			mainFrame.tableData = new ArrayList<ImageData>();
+			mainFrame.numberOfPages = 1;
+			mainFrame.setCurrentPage(1);
+			MainFrame.resultSize = 0;
+			String text = MainFrame.resultSize+" results";
+			mainFrame.queryResultLabel.setText(text);
+			
 			try {
 				db.deleteProject(userInput);
 			} catch (SQLException e) {
@@ -563,6 +572,8 @@ public class Updater implements PropertyChangeListener{
 			mainFrame.searchbox.updateData();
 			
 			JOptionPane.showMessageDialog(null, "The project and its associated entries were deleted successfully.");
+		
+			
 			
 		}
 	}
