@@ -196,6 +196,8 @@ public class Updater implements PropertyChangeListener{
 				HashMap<String,ImageData> result = new HashMap<String,ImageData>();
 				progressCounter = 0;
 				System.out.println("Start reading the files");
+				
+				//Save the image files
 				for(File file:theFiles){
 					if(file.getName().endsWith("png") || file.getName().endsWith("jpg")){
 						if(file.getName().endsWith("png")){

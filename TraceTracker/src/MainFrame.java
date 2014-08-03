@@ -524,7 +524,7 @@ public class MainFrame extends JFrame{
 		((AbstractTableModel) table.getModel()).fireTableDataChanged();
 	}
 	
-	public void printErrorLog(Exception e){
+	public static void printErrorLog(Exception e){
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		e.printStackTrace(pw);
@@ -534,6 +534,22 @@ public class MainFrame extends JFrame{
 			String timeStamp = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
 			out.print(timeStamp+"\n");
 			out.print(error);
+			out.println("------------------------------------------------------------\n");
+			out.close();
+		} catch (Exception e1) {
+			System.err.println("begandad namak");
+			e1.printStackTrace();
+		}
+	}
+	
+	public static void printErrorLog(String s){
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		try {
+			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("error log.txt", true)));
+			String timeStamp = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
+			out.print(timeStamp+"\n");
+			out.print(s);
 			out.println("------------------------------------------------------------\n");
 			out.close();
 		} catch (Exception e1) {
