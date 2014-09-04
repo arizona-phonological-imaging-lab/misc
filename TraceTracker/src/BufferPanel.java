@@ -140,6 +140,7 @@ public class BufferPanel extends JPanel{
 			if(!source.exists()){
 				badAddresses[badAddressesCounter] = image.address;
 				badAddressesCounter++;
+				counter--;
 			}
 			int underscoreIndex = image.video.indexOf("_");
 			String shortVideoName = image.video.substring(0,underscoreIndex);
@@ -178,13 +179,15 @@ public class BufferPanel extends JPanel{
 					}
 				}
 			}
-			String errorMessage = badAddressesCounter+" addresses were incorrect:";
-			for(int i=0; i<badAddressesCounter & i<10; i++){
-				errorMessage += "\n"+badAddresses[i];
-			}
-			if(badAddressesCounter>=10){
-				errorMessage += "\n,...";
-			}
+		}
+		String errorMessage = badAddressesCounter+" addresses were incorrect:";
+		for(int i=0; i<badAddressesCounter & i<10; i++){
+			errorMessage += "\n"+badAddresses[i];
+		}
+		if(badAddressesCounter>=10){
+			errorMessage += "\n,...";
+		}
+		if(badAddressesCounter>0){			
 			JOptionPane.showMessageDialog(null, errorMessage,"Error",JOptionPane.ERROR_MESSAGE);
 		}
 
