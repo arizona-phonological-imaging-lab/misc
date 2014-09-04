@@ -619,13 +619,11 @@ public class DBConnector {
 			ResultSet rs6 = stat.executeQuery(query5);
 			int tracerID = -1;
 			tracerID = rs6.getInt(1);
-			boolean thereAreUnmatchedTraceFiles = false;
 			for(Trace trace:traces){
 				if(trace.tracer.equals(tracerNames[i])){
 					ImageData image = images.get(trace.imageName);
 					if(image==null){
 						MainFrame.printErrorLog("Unmatched trace file: "+trace.imageName);
-						thereAreUnmatchedTraceFiles = true;
 						continue;
 					}
 					boolean traceFileExists = false;

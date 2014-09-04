@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
-
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -40,7 +38,7 @@ public class Updater implements PropertyChangeListener{
 			db.initializeDB();
 		} catch (Exception e) {
 			e.printStackTrace();
-			mainFrame.printErrorLog(e);
+			MainFrame.printErrorLog(e);
 		}
 	}
 
@@ -54,6 +52,7 @@ public class Updater implements PropertyChangeListener{
 	
 	public static String getSegmentSpelling(String detailedSpelling){
 		detailedSpelling = detailedSpelling.replace("neutral", "neut");
+		detailedSpelling = detailedSpelling.trim();
 		if(detailedSpelling.contains(" ")){
 			String result = detailedSpelling.split("\\s+")[1];
 			if(result.matches(".*[ifpncv]") || result.endsWith("f") || result.matches(".*[0-9]")){
@@ -116,7 +115,7 @@ public class Updater implements PropertyChangeListener{
 				}
 			} catch (SQLException e1) {
 				e1.printStackTrace();
-				mainFrame.printErrorLog(e1);
+				MainFrame.printErrorLog(e1);
 				JOptionPane.showMessageDialog(null, "There was an error while checking whether the project is new.","Error",JOptionPane.ERROR_MESSAGE);
 				someError = true;
 				return;
@@ -135,7 +134,7 @@ public class Updater implements PropertyChangeListener{
 				}
 			} catch (SQLException e1) {
 				e1.printStackTrace();
-				mainFrame.printErrorLog(e1);
+				MainFrame.printErrorLog(e1);
 				JOptionPane.showMessageDialog(null, "There was some error while checking whether the project is new.","Error",JOptionPane.ERROR_MESSAGE);
 				someError = true;
 				return;
@@ -274,7 +273,7 @@ public class Updater implements PropertyChangeListener{
 					db.addImages(result, traceFiles, projectName, projectAddress, videoName, videoAddress, language, updateMode);
 				} catch (Exception e) {
 					e.printStackTrace();
-					mainFrame.printErrorLog(e);
+					MainFrame.printErrorLog(e);
 					System.out.println("Error in the update process!");
 					JOptionPane.showMessageDialog(null, "There was some error in the update process. Restarting the\napplication might solve the problem.","Error",JOptionPane.ERROR_MESSAGE);
 					someError = true;
@@ -321,7 +320,7 @@ public class Updater implements PropertyChangeListener{
 			}
 			catch (Exception e){
 				e.printStackTrace();
-				mainFrame.printErrorLog(e);
+				MainFrame.printErrorLog(e);
 			}
 		}
 		private void addTextGridData(HashMap<String, ImageData> result, File textGridFile) {
@@ -330,7 +329,7 @@ public class Updater implements PropertyChangeListener{
 				scanner = new Scanner(textGridFile,"UTF-8");
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
-				mainFrame.printErrorLog(e);
+				MainFrame.printErrorLog(e);
 			}
 			int tier = -1;
 			double duration = 0;
@@ -359,7 +358,7 @@ public class Updater implements PropertyChangeListener{
 				scanner = new Scanner(textGridFile,"UTF-8");
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
-				mainFrame.printErrorLog(e);
+				MainFrame.printErrorLog(e);
 			}
 			lineReaderloop:
 			while(scanner.hasNextLine()){
@@ -407,7 +406,7 @@ public class Updater implements PropertyChangeListener{
 							wordID = db.addWord(text);
 						} catch (SQLException e) {
 							e.printStackTrace();
-							mainFrame.printErrorLog(e);
+							MainFrame.printErrorLog(e);
 						}
 						if(wordsSize>=words.length){
 							System.err.println("The number of words in the TextGrid file exceeds the number of frames!");
@@ -425,7 +424,7 @@ public class Updater implements PropertyChangeListener{
 								segmentID = db.addSegment(text);
 							} catch (SQLException e) {
 								e.printStackTrace();
-								mainFrame.printErrorLog(e);
+								MainFrame.printErrorLog(e);
 							}
 						}
 						//In addition to adding the segment to the db and assigning it to the images,
@@ -493,7 +492,7 @@ public class Updater implements PropertyChangeListener{
 								}
 							} catch (SQLException e) {
 								e.printStackTrace();
-								mainFrame.printErrorLog(e);
+								MainFrame.printErrorLog(e);
 							}
 						}
 						if(tier==2 && text.length()>0){
@@ -510,7 +509,7 @@ public class Updater implements PropertyChangeListener{
 								}
 							} catch (SQLException e) {
 								e.printStackTrace();
-								mainFrame.printErrorLog(e);
+								MainFrame.printErrorLog(e);
 							}
 						}
 					}
@@ -524,7 +523,7 @@ public class Updater implements PropertyChangeListener{
 					db.updateSegmentSequences(word);
 				} catch (SQLException e) {
 					e.printStackTrace();
-					mainFrame.printErrorLog(e);
+					MainFrame.printErrorLog(e);
 				}
 			}
 			System.out.println("End of function addTextGridData");
@@ -567,7 +566,7 @@ public class Updater implements PropertyChangeListener{
 				db.deleteProject(userInput);
 			} catch (SQLException e) {
 				e.printStackTrace();
-				mainFrame.printErrorLog(e);
+				MainFrame.printErrorLog(e);
 			}
 			
 			//We should update the list of tags, experiments, and tracers after we are done.
