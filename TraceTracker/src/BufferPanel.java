@@ -39,7 +39,7 @@ public class BufferPanel extends JPanel{
 		db = mf.db;
 		mainFrame = mf;
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		setSize(190, 542);
+		setSize(190, 560);
 		setLayout(null);
 		
 		model = new DefaultListModel();

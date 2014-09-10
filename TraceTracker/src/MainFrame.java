@@ -74,6 +74,7 @@ public class MainFrame extends JFrame{
 	public ArrayList<String> columnNames;
 	
 	public MainFrame() {
+		setTitle("TraceTracker");
 		columnNames = new ArrayList<String>(Arrays.asList(columnNamesList));
 		fetchLimit = 10000;
 		getBackup();
