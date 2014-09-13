@@ -875,7 +875,7 @@ public class DBConnector {
 
 	public int addSegment(String text) throws SQLException {
 		Statement stat = conn.createStatement();
-		String update = "INSERT INTO segment(spelling, detailed_spelling) VALUES('"+Updater.getSegmentSpelling(text)+"','"+text+"');";
+		String update = "INSERT INTO segment(spelling, detailed_spelling) VALUES('"+TextGridReader.getSegmentSpelling(text)+"','"+text+"');";
 		stat.executeUpdate(update);
 		ResultSet rs = stat.getGeneratedKeys();
 		int id = -1;

@@ -297,8 +297,11 @@ public class MainFrame extends JFrame{
 		menuBar.add(updateMenu);
 		menuBar.add(deleteMenu);
 		menuBar.add(viewMenu);
-		JMenuItem addProject = new JMenuItem("Add new project...");
-		addProject.addActionListener(new ActionListener() {
+		
+		JMenu addProject = new JMenu("Add project");
+		
+		JMenuItem addStandardProject = new JMenuItem("Add new project...");
+		addStandardProject.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -306,9 +309,20 @@ public class MainFrame extends JFrame{
 				updater.updateDB("addProject");
 			}
 		});
+		JMenuItem addCustomProject = new JMenuItem("Add custom project...");
+		addCustomProject.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Updater updater = new Updater(MainFrame.this);
+				updater.updateDB("addCustomProject");
+			}
+		});
+		addProject.add(addStandardProject);
+		addProject.add(addCustomProject);
 		updateMenu.add(addProject);
-		JMenuItem updateProject = new JMenuItem("Update existing project...");
-		updateProject.addActionListener(new ActionListener() {
+		JMenuItem updateStandardProject = new JMenuItem("Update existing standard project...");
+		updateStandardProject.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -316,7 +330,7 @@ public class MainFrame extends JFrame{
 				updater.updateDB("updateProject");
 			}
 		});
-		updateMenu.add(updateProject);
+		updateMenu.add(updateStandardProject);
 		JMenuItem collectImages = new JMenuItem("Export buffer images...");
 		collectImages.addActionListener(new ActionListener() {
 			

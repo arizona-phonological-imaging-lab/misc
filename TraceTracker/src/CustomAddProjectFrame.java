@@ -2,11 +2,17 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
+import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 
 public class CustomAddProjectFrame extends JFrame{
@@ -17,7 +23,15 @@ public class CustomAddProjectFrame extends JFrame{
 	private JTextField imagesDirTextField;
 	private JTextField TracesDirTextField;
 	private JTextField textGridPathTextField;
+	private DefaultListModel model;
+	private JList list;
+	private JFileChooser jfc;
+	
 	public CustomAddProjectFrame() {
+		list = new JList();
+		model = new DefaultListModel();
+		list.setModel(model);
+		
 		setTitle("Add Custom Project");
 		getContentPane().setLayout(null);
 		
@@ -39,20 +53,36 @@ public class CustomAddProjectFrame extends JFrame{
 		languageTextField.setBounds(114, 40, 134, 28);
 		getContentPane().add(languageTextField);
 		
-		JLabel videosLabel = new JLabel("Videos:");
-		videosLabel.setBounds(16, 86, 61, 16);
+		JLabel videosLabel = new JLabel("Image sets:");
+		videosLabel.setBounds(16, 86, 99, 16);
 		getContentPane().add(videosLabel);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(16, 106, 227, 209);
 		getContentPane().add(scrollPane);
 		
-		JList list = new JList();
 		list.setBackground(new Color(255, 255, 204));
 		scrollPane.setViewportView(list);
 		
 		JButton addNewVideoButton = new JButton("Add New");
 		addNewVideoButton.setBounds(131, 327, 117, 29);
+		jfc = new JFileChooser();
+		jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		addNewVideoButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				jfc.setDialogTitle("Select image set folder");
+				int returnVal = jfc.showOpenDialog(null);
+				if(returnVal!=JFileChooser.APPROVE_OPTION){
+					System.out.println("Nothing chosen");
+					return;
+				}
+				File f = jfc.getSelectedFile();
+				model.addElement(f.getName());
+				
+			}
+		});
 		getContentPane().add(addNewVideoButton);
 		
 		JButton deleteButton = new JButton("Delete");
@@ -133,5 +163,9 @@ public class CustomAddProjectFrame extends JFrame{
 		JLabel lblTraceFiles = new JLabel("0 trace files");
 		lblTraceFiles.setBounds(6, 325, 108, 16);
 		panel.add(lblTraceFiles);
+		
+		JButton btnOk = new JButton("OK");
+		btnOk.setBounds(196, 368, 117, 29);
+		getContentPane().add(btnOk);
 	}
 }
