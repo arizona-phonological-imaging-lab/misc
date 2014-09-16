@@ -1,17 +1,17 @@
 #Version control with git
-As you've surmised by now, [Git](http://git-scm.com) is lab's version control system of choice.  Follow the steps below to get up and running with git and Github.
+As you've surmised by now, [Git](http://git-scm.com) is the lab's version control system of choice.  Follow the steps below to get up and running with git and Github.
 
-##Make a GitHub account 
+##Make a GitHub account
 - Register [here](https://github.com).  
 
-#Install git 
+#Install git
 ##Using a package manager...  
 ###Mac  
 
 &nbsp;&nbsp;~~`brew install git`~~  
 &nbsp;&nbsp;`sudo port install git-core +bash_completion`
 
-###Linux 
+###Linux
 &nbsp;&nbsp;It might already be installed
 
 #Configuring things
@@ -25,15 +25,15 @@ Now we'll change the default behavior for `push`:
 `git config --global push.default current`
 
 #Cloning a remote repository
-You can clone (i.e. copy) a remote repository from the command line with git.  Here we'll clone the [APIL repo](https://github.com/myedibleenso/APIL) hosted on GitHub. 
+You can clone (i.e. copy) a remote repository from the command line with git.  Here we'll clone the [APIL repo](https://github.com/myedibleenso/APIL) hosted on GitHub.
 
 First we'll want to change to the directory where our local copy of the repository will live...  
 
 `cd my/favorite/directory`  
 
-Clone the APIL repository...
- 
-`git clone https://github.com/myedibleenso/APIL.git`
+Clone the APIL repository and its submodules...
+
+`git clone --recursive https://github.com/myedibleenso/APIL.git`
 
 #Changing something  
 Now that we have a local copy of the repository, we can finally get to work.  You know what this repository is missing?  A meaningless text file!  Let's add one...  
@@ -82,11 +82,33 @@ That covers the basics!
 
 #Making a new branch
 
-*coming soon*
+If you want to develop a new feature or drastically revise the current bulk of the current code, it's probably a good idea to make these changes in a separate branch before merging the changes with the `master` branch.  This helps to keep the code in `master` stable.
+
+To make a new branch off of the current branch and switch to that branch:
+
+`git checkout -b my-awesome-new-branch`  
+
+*more coming soon*
 
 #Switching branches
 
-*coming soon*
+Switching branches is actually quite simple:  
+
+`git checkout somebranchname`
+
+If you checkout an existing branch, don't forget to pull in any changes that may have been pushed to the remote by your collaborators:
+
+`git pull`
+
+*more coming soon*
+
+#What branches exist?
+
+Sometimes you just want to see a list of all existing branches:  
+
+`git branch -a`  
+
+*more coming soon*
 
 #Merging branches
 
@@ -98,10 +120,11 @@ Are you tired of entering your username and password after every push?  Wouldn't
 Try [this](https://help.github.com/articles/generating-ssh-keys).
 >***Tips:***
 
- - *you may need to create the `.ssh` folder with `mkdir ~/.ssh`*
+You may need to...
+ - *create the `.ssh` folder with `mkdir ~/.ssh`*
  - *use `xclip` instead of `pbcopy` if you're on Linux*  
- - *alternatively, you can simply copy the output of `cat id_rsa.pub`*   
-	  
+    -  *alternatively, you can simply copy the output of `cat id_rsa.pub`*
+
 #Bells & Whistles
 
 - [git-completion.bash](http://git-scm.com/book/en/Git-Basics-Tips-and-Tricks) (makes life a little easier)
