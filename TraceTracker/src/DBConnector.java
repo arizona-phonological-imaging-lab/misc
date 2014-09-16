@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Properties;
@@ -84,7 +85,7 @@ public class DBConnector {
 			query += "AND (project.language = '' OR project.language is null) ";
 		}
 		if(experimentEntered != null && experimentEntered.length()>0){
-			query += "AND theid IN (SELECT image.id FROM image JOIN experiment_association ON image.id=experiment_association.image_id JOIN experiment ON experiment.id=experiment_association.experiment_id WHERE experiment.title='"+experimentEntered+"') ";
+			query += "AND (SELECT COUNT(*) FROM experiment WHERE experiment.content='"+experimentEntered+"' AND experiment.image_id=theid)>0 ";
 		}
 		if(corruptEntered==1){
 			query += "AND image.is_bad = 1 ";
@@ -124,8 +125,7 @@ public class DBConnector {
 		long t_beforeQuery = System.currentTimeMillis();
 		ResultSet rs = stat.executeQuery(query);
 		long t_med = System.currentTimeMillis();
-		System.out.println(query);
-		System.out.println("medTime: "+(t_med-t_beforeQuery));
+		System.out.println("Query time: "+(t_med-t_beforeQuery));
 		HashSet<Integer> segmentIDs = null;
 		if(segmentEntered.length()>0){
 			segmentIDs = findSegmentIDs(segmentEntered);
@@ -159,12 +159,14 @@ public class DBConnector {
 				result.add(image);
 			}
 		}
+
 		
+		long t_med2 = System.currentTimeMillis();
+//		System.out.println("First While: "+(t_med2-t_med));
 		//If we are limiting, we want to know the actual number of results too.
 		if(weAreLimiting){
-			int fromIndex = query.indexOf("FROM");
 			int orderIndex = query.indexOf("ORDER BY");
-			String countQuery = "SELECT COUNT(*) "+query.substring(fromIndex,orderIndex-1)+";";
+			String countQuery = "SELECT COUNT(*) FROM ("+query.substring(0,orderIndex-1)+");";
 			Statement countStat = conn.createStatement();
 			ResultSet rsCount = countStat.executeQuery(countQuery);
 			rsCount.next();
@@ -336,21 +338,37 @@ public class DBConnector {
 		
 		//First find the words that have the desired sequence
 		String searchTerm = segmentEntered;
+		boolean hasPrefix = false;
+		boolean hasSuffix = false;
 		if(searchTerm.startsWith("$")){
 			searchTerm = searchTerm.substring(1);
 		}
 		else{
-			searchTerm = "%"+searchTerm;
+			hasPrefix = true;
 		}
 		if(searchTerm.endsWith("$")){
 			searchTerm = searchTerm.substring(0,searchTerm.length()-1);
 		}
 		else{
-			searchTerm = searchTerm+"%";
+			hasSuffix = true;
 		}
 		searchTerm = searchTerm.replace("(", "");
 		searchTerm = searchTerm.replace(")", "");
-		String query1 = "SELECT segment_sequence,segment_id_sequence FROM word WHERE segment_sequence LIKE '"+searchTerm+"'";
+		String query1 = "";
+		if(!hasPrefix && !hasSuffix){
+			query1 = "SELECT segment_sequence,segment_id_sequence FROM word WHERE segment_sequence = '"+searchTerm+"'";
+		}
+		else if(!hasPrefix){
+			query1 = "SELECT segment_sequence,segment_id_sequence FROM word WHERE segment_sequence LIKE '"+searchTerm+" %' OR segment_sequence LIKE '"+searchTerm+"'";
+		}
+		else if(!hasSuffix){
+			query1 = "SELECT segment_sequence,segment_id_sequence FROM word WHERE segment_sequence LIKE '% "+searchTerm+"' OR segment_sequence LIKE '"+searchTerm+"'";
+		}
+		else{
+			//If it had to be like %searchTerm%:
+			query1 = "SELECT segment_sequence,segment_id_sequence FROM word WHERE segment_sequence LIKE '% "+searchTerm+" %' OR segment_sequence LIKE '% "+searchTerm+"' or segment_sequence LIKE '"+searchTerm+" %' or segment_sequence LIKE '"+searchTerm+"'";
+		}
+//		System.out.println(query1);
 		ResultSet rs = stat.executeQuery(query1);
 		//For each word that has such a pattern:
 		HashSet<Integer> resultIDs = new HashSet<Integer>();
@@ -370,6 +388,7 @@ public class DBConnector {
 			int closedBracketIndex = st2.indexOf(")");
 			st2 = "("+st2.substring(0,openBracketIndex)+")"+st2.substring(openBracketIndex,closedBracketIndex+1)+"("+st2.substring(closedBracketIndex+1)+")";
 			// st2 = ($a )(r)( o) 
+			st2 = st2.replace("%", ".+");
 			segments = segments.replaceAll(st2, "$1($2)$3");
 			// segments = m a (r) o n 0 z
 			
@@ -457,7 +476,7 @@ public class DBConnector {
 	
 	public String[] getExperimentsList() throws SQLException {
 		Statement stat = conn.createStatement();
-		String query = "SELECT title FROM experiment;";
+		String query = "SELECT DISTINCT content FROM experiment;";
 		ResultSet rs = stat.executeQuery(query);
 		ArrayList<String> titles = new ArrayList<String>();
 		while(rs.next()){
@@ -491,7 +510,7 @@ public class DBConnector {
 	
 	public String getExperiments(String id) throws SQLException{
 		Statement stat = conn.createStatement();
-		String query = "SELECT experiment.title FROM experiment_association JOIN image ON experiment_association.image_id=image.id JOIN experiment ON experiment.id=experiment_association.experiment_id WHERE image.id="+id+";";
+		String query = "SELECT experiment.content FROM experiment WHERE image_id="+id+";";
 		ResultSet rs = stat.executeQuery(query);
 		String result = "";
 		while(rs.next()){
@@ -604,8 +623,8 @@ public class DBConnector {
 				if(trace.tracer.equals(tracerNames[i])){
 					ImageData image = images.get(trace.imageName);
 					if(image==null){
-						System.err.println("The image and trace names do not match");
-						throw new Exception();
+						MainFrame.printErrorLog("Unmatched trace file: "+trace.imageName);
+						continue;
 					}
 					boolean traceFileExists = false;
 					if(updateMode){
@@ -676,19 +695,34 @@ public class DBConnector {
 		return addresses;
 	}
 
-	public int tagImages(HashMap<Integer, ImageData> buffer, String tagContent) throws SQLException {
+	public int tagImages(Collection<ImageData> images, String tagContent, boolean isExperiment) throws SQLException {
 		Statement stat = conn.createStatement();
 		int counter = 0;
-		for(ImageData image: buffer.values()){
+		for(ImageData image: images){
 			//Check if this image doesn't already have that tag
 			Statement stat2 = conn.createStatement();
-			String query = "SELECT id FROM tag WHERE image_id="+image.id+" AND content='"+tagContent+"';";
+			String query;
+			query = "SELECT id FROM";
+			if(isExperiment){
+				query += " experiment ";
+			}
+			else{
+				query += " tag ";
+			}
+			query+= "WHERE image_id="+image.id+" AND content='"+tagContent+"';";
 			ResultSet rs = stat2.executeQuery(query);
 			if(rs.next()){
 				continue;
 			}
 			//Now insert the tag
-			String update = "INSERT INTO tag(image_id,content) VALUES("+image.id+",'"+tagContent+"');";
+			String update = "INSERT INTO";
+			if(isExperiment){
+				update += " experiment";
+			}
+			else{
+				update += " tag";
+			}
+			update += "(image_id,content) VALUES("+image.id+",'"+tagContent+"');";
 			stat.addBatch(update);
 			counter++;
 		}
@@ -697,11 +731,18 @@ public class DBConnector {
 		return counter;
 	}
 
-	public void untagImages(HashMap<Integer, ImageData> buffer, String tagContent) throws SQLException {
+	public void untagImages(Collection<ImageData> images, String tagContent, boolean isExperiment) throws SQLException {
 		Statement stat = conn.createStatement();
-		for(ImageData image: buffer.values()){
+		for(ImageData image: images){
 			//Check if this image doesn't already have that tag
-			String update = "DELETE FROM tag WHERE image_id="+image.id+" AND content='"+tagContent+"';";
+			String update = "DELETE FROM";
+			if (isExperiment){
+				update += " experiment ";
+			}
+			else{
+				update += " tag ";
+			}
+			update += "WHERE image_id="+image.id+" AND content='"+tagContent+"';";
 			stat.addBatch(update);
 		}
 		stat.close();
@@ -834,7 +875,7 @@ public class DBConnector {
 
 	public int addSegment(String text) throws SQLException {
 		Statement stat = conn.createStatement();
-		String update = "INSERT INTO segment(spelling, detailed_spelling) VALUES('"+Updater.getSegmentSpelling(text)+"','"+text+"');";
+		String update = "INSERT INTO segment(spelling, detailed_spelling) VALUES('"+TextGridReader.getSegmentSpelling(text)+"','"+text+"');";
 		stat.executeUpdate(update);
 		ResultSet rs = stat.getGeneratedKeys();
 		int id = -1;
@@ -887,4 +928,50 @@ public class DBConnector {
 		stat.close();
 	}
 
+	public void deleteProject(String title) throws SQLException{
+		Statement stat = conn.createStatement();
+		String deleteTags = "DELETE FROM tag WHERE id IN (SELECT tag.id FROM tag JOIN image ON tag.image_id=image.id JOIN video ON video.id=image.video_id JOIN project ON project.id=video.project_id WHERE project.title='"+title+"');";
+		String deleteExps =  "DELETE FROM experiment WHERE id IN (SELECT experiment.id FROM experiment JOIN image ON experiment.image_id=image.id JOIN video ON video.id=image.video_id JOIN project ON project.id=video.project_id WHERE project.title='"+title+"');";
+		String deleteWords =  "DELETE FROM word WHERE id IN (SELECT word.id FROM project JOIN video ON project.id=video.project_id JOIN image ON video.id=image.video_id JOIN word ON word.id=image.word_id WHERE project.title='"+title+"');";
+		String deleteWordsStart =  "DELETE FROM word WHERE id IN (SELECT word.id FROM project JOIN video ON project.id=video.project_id JOIN image ON video.id=image.video_id JOIN word ON word.id=image.start_word_id WHERE project.title='"+title+"');";
+		String deleteWordsEnd =  "DELETE FROM word WHERE id IN (SELECT word.id FROM project JOIN video ON project.id=video.project_id JOIN image ON video.id=image.video_id JOIN word ON word.id=image.end_word_id WHERE project.title='"+title+"');";
+		String deleteSegments =  "DELETE FROM segment WHERE id IN (SELECT segment.id FROM project JOIN video ON project.id=video.project_id JOIN image ON video.id=image.video_id JOIN segment ON segment.id=image.segment_id WHERE project.title='"+title+"');";
+		String deleteSegmentsStart =  "DELETE FROM segment WHERE id IN (SELECT segment.id FROM project JOIN video ON project.id=video.project_id JOIN image ON video.id=image.video_id JOIN segment ON segment.id=image.start_segment_id WHERE project.title='"+title+"');";
+		String deleteSegmentsEnd =  "DELETE FROM segment WHERE id IN (SELECT segment.id FROM project JOIN video ON project.id=video.project_id JOIN image ON video.id=image.video_id JOIN segment ON segment.id=image.end_segment_id WHERE project.title='"+title+"');";
+		String deleteTraces =  "DELETE FROM trace WHERE id IN (SELECT trace.id FROM trace JOIN image ON trace.image_id=image.id JOIN video ON video.id=image.video_id JOIN project ON project.id=video.project_id WHERE project.title='"+title+"');";
+		String deleteTracers =  "DELETE FROM tracer WHERE tracer.id NOT IN (SELECT tracer_id FROM trace);";
+		String deleteImages = "DELETE FROM image WHERE id IN (SELECT image.id FROM image JOIN video ON video.id=image.video_id JOIN project ON project.id=video.project_id WHERE project.title='"+title+"');";
+		String deleteVideos = "DELETE FROM video WHERE id IN (SELECT video.id FROM video JOIN project ON project.id=video.project_id WHERE project.title='"+title+"');";
+		String deleteProject= "DELETE FROM project WHERE project.title='"+title+"';";
+		
+		stat.execute(deleteTags);
+		System.out.println("Done deleteTags");
+		stat.execute(deleteExps);
+		System.out.println("Done deleteExps");
+		stat.execute(deleteWords);
+		System.out.println("Done deleteWords");
+		stat.execute(deleteWordsStart);
+		System.out.println("Done deleteWordsStart");
+		stat.execute(deleteWordsEnd);
+		System.out.println("Done deleteWordsEnd");
+		stat.execute(deleteSegments);
+		System.out.println("Done deleteSegments");
+		stat.execute(deleteSegmentsStart);
+		System.out.println("Done deleteSegmentsStart");
+		stat.execute(deleteSegmentsEnd);
+		System.out.println("Done deleteSegmentsEnd");
+		stat.execute(deleteTraces);
+		System.out.println("Done deleteTraces");
+		stat.execute(deleteTracers);
+		System.out.println("Done deleteTracers");
+		stat.execute(deleteImages);
+		System.out.println("Done deleteImages");
+		stat.execute(deleteVideos);
+		System.out.println("Done deleteVideos");
+		stat.execute(deleteProject);
+		System.out.println("Done deleteProject");
+		
+		stat.close();
+	}
+	
 }

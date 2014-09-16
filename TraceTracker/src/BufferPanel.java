@@ -39,7 +39,7 @@ public class BufferPanel extends JPanel{
 		db = mf.db;
 		mainFrame = mf;
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		setSize(190, 542);
+		setSize(190, 560);
 		setLayout(null);
 		
 		model = new DefaultListModel();
@@ -55,6 +55,7 @@ public class BufferPanel extends JPanel{
 			public void actionPerformed(ActionEvent arg0) {
 				model.clear();
 				buffer.clear();
+				bufferSizeLabel.setText(String.valueOf(buffer.size()));
 			}
 		});
 		collectButton.setBounds(38, 507, 117, 29);
@@ -139,6 +140,7 @@ public class BufferPanel extends JPanel{
 			if(!source.exists()){
 				badAddresses[badAddressesCounter] = image.address;
 				badAddressesCounter++;
+				counter--;
 			}
 			int underscoreIndex = image.video.indexOf("_");
 			String shortVideoName = image.video.substring(0,underscoreIndex);
@@ -177,13 +179,15 @@ public class BufferPanel extends JPanel{
 					}
 				}
 			}
-			String errorMessage = badAddressesCounter+" addresses were incorrect:";
-			for(int i=0; i<badAddressesCounter & i<10; i++){
-				errorMessage += "\n"+badAddresses[i];
-			}
-			if(badAddressesCounter>=10){
-				errorMessage += "\n,...";
-			}
+		}
+		String errorMessage = badAddressesCounter+" addresses were incorrect:";
+		for(int i=0; i<badAddressesCounter & i<10; i++){
+			errorMessage += "\n"+badAddresses[i];
+		}
+		if(badAddressesCounter>=10){
+			errorMessage += "\n,...";
+		}
+		if(badAddressesCounter>0){			
 			JOptionPane.showMessageDialog(null, errorMessage,"Error",JOptionPane.ERROR_MESSAGE);
 		}
 
@@ -203,72 +207,112 @@ public class BufferPanel extends JPanel{
 	    out.close();
 	}
 
-	public void tag() {
-		if(buffer.isEmpty()){
-			JOptionPane.showMessageDialog(null, "The buffer is empty","Error",JOptionPane.ERROR_MESSAGE);
+	public void tag(boolean isExperiment, boolean isRightClick) {
+		ArrayList<ImageData> images = new ArrayList<ImageData>();
+		if(!isRightClick){
+			images = new ArrayList<ImageData>(buffer.values());
+		}
+		else{
+			//Find a list of selected images (rows)
+			int[] selectedIndices = mainFrame.table.getSelectedRows();
+			for(int i=0; i<selectedIndices.length; i++){
+				int index = selectedIndices[i];
+				int realIndex = (mainFrame.currentPage-1)*mainFrame.pageLength+index;
+				ImageData image = mainFrame.tableData.get(realIndex);
+				images.add(image);
+			}
+		}
+		if(!isRightClick && images.isEmpty()){
+			JOptionPane.showMessageDialog(null, "The buffer is empty!","Error",JOptionPane.ERROR_MESSAGE);
 			return;
 		}
+		if(isRightClick && images.isEmpty()){
+			JOptionPane.showMessageDialog(null, "No rows are selected!","Error",JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
 		String tagContent = (String) JOptionPane.showInputDialog(null, "Please write the content of the tag.");
 		if(tagContent==null){
 			return;
 		}
 		if(tagContent.length()==0){
-			JOptionPane.showMessageDialog(null, "No tag name was entered.","Error",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "No name was entered.","Error",JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		int tagged = 0;
+		int taggedCounter = 0;
 		try {
-			tagged = db.tagImages(buffer, tagContent);
+			taggedCounter = db.tagImages(images, tagContent, isExperiment);
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "There was an error. See the log file.","Error",JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 			mainFrame.printErrorLog(e);
 		}
-		JOptionPane.showMessageDialog(null,tagged+" images were tagged '"+tagContent+"'.");
-		try {
-			mainFrame.searchbox.tagsList = db.getTagsList();
-			DefaultComboBoxModel model = (DefaultComboBoxModel) mainFrame.searchbox.tagsCombo.getModel();
-			model.removeAllElements();
-			for(String s:mainFrame.searchbox.tagsList){
-				model.addElement(s);
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			mainFrame.printErrorLog(e);
-		}
+		JOptionPane.showMessageDialog(null,taggedCounter+" images were tagged '"+tagContent+"'.");
+		mainFrame.searchbox.updateData();
 	}
 
-	public void untag() {
-		if(buffer.isEmpty()){
-			JOptionPane.showMessageDialog(null, "The buffer is empty","Error",JOptionPane.ERROR_MESSAGE);
+	public void untag(boolean isExperiment, boolean isRightClick) {
+		ArrayList<ImageData> images = new ArrayList<ImageData>();
+		if(!isRightClick){
+			images = new ArrayList<ImageData>(buffer.values());
+		}
+		else{
+			//Find a list of selected images (rows)
+			int[] selectedIndices = mainFrame.table.getSelectedRows();
+			for(int i=0; i<selectedIndices.length; i++){
+				int index = selectedIndices[i];
+				int realIndex = (mainFrame.currentPage-1)*mainFrame.pageLength+index;
+				ImageData image = mainFrame.tableData.get(realIndex);
+				images.add(image);
+			}
+		}
+		if(!isRightClick && images.isEmpty()){
+			JOptionPane.showMessageDialog(null, "The buffer is empty!","Error",JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		if(isRightClick && images.isEmpty()){
+			JOptionPane.showMessageDialog(null, "No rows are selected!","Error",JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		String[] tagsList = mainFrame.searchbox.tagsList;
-		String userInput = (String)JOptionPane.showInputDialog(
-		                    null,
-		                    "Choose the tag you want to remove.",
-		                    "Choose tag", JOptionPane.PLAIN_MESSAGE,
-		                    null,
-		                    tagsList,
-		                    tagsList[0]);
+		String title;
+		String message;
+		if(isExperiment){
+			title = "Choose the experiment you want to remove";
+			message = "Choose experiment";
+		}
+		else{
+			title = "Choose the tag you want to remove";
+			message = "Choose tag";
+		}
+		String[] theAppropriateList = tagsList;
+		if(isExperiment){
+			theAppropriateList = mainFrame.searchbox.experimentsList; 
+		}
+		
+		String userInput = (String)JOptionPane.showInputDialog(null,message,title, JOptionPane.PLAIN_MESSAGE, null, theAppropriateList, theAppropriateList[0]);
 
 		//If a string was returned, say so.
 		if ((userInput != null) && (userInput.length() > 0)) {
 			try {
-				db.untagImages(buffer, userInput);
+				db.untagImages(images, userInput, isExperiment);
 			} catch (SQLException e) {
 				JOptionPane.showMessageDialog(null, "There was an error. See the log file.","Error",JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 				mainFrame.printErrorLog(e);
 			}
-			JOptionPane.showMessageDialog(null,"The images were successfully untagged.");
+			if(isExperiment){
+				JOptionPane.showMessageDialog(null,"The experiment was successfully removed from the images.");
+			}
+			else{
+				JOptionPane.showMessageDialog(null,"The images were successfully untagged.");
+			}
 		}
 
-		//If you're here, the return value was null/empty.
-		if(userInput==null || userInput.length()==0){
-			JOptionPane.showMessageDialog(null, "No tag name was entered.","Error",JOptionPane.ERROR_MESSAGE);
+		if(userInput!=null && userInput.length()==0){
+			JOptionPane.showMessageDialog(null, "No name was entered.","Error",JOptionPane.ERROR_MESSAGE);
 			return;
 		}
+		mainFrame.searchbox.updateData();
 	}
 }

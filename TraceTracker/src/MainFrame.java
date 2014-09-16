@@ -8,9 +8,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -20,6 +22,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -29,10 +33,13 @@ import java.io.StringWriter;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JScrollPane;
 import javax.swing.JMenuBar;
+
+import com.sun.tools.javac.tree.JCTree.JCMethodInvocation;
 
 
 @SuppressWarnings("serial")
@@ -52,7 +59,7 @@ public class MainFrame extends JFrame{
 	DBConnector db;
 	ArrayList<ImageData> tableData;
 	JLabel queryResultLabel;
-	String[] columnNames = {"Image","Video","Subject","Project","Traced","Experiment","Tags","Segment","Word"};
+	String[] columnNamesList = {"Image","Video","Subject","Project","Traced","Experiment","Tags","Segment","Word"};
 	final int pageLength = 20;
 	public int currentPage;
 	public int numberOfPages;
@@ -64,7 +71,11 @@ public class MainFrame extends JFrame{
 	public static String targetSegmentDisplayMode;
 	public static int fetchLimit;
 	public static int resultSize;	//This is the number we will tell the user when we are showing only the first "fetchLimit" results.
+	public ArrayList<String> columnNames;
+	
 	public MainFrame() {
+		setTitle("TraceTracker");
+		columnNames = new ArrayList<String>(Arrays.asList(columnNamesList));
 		fetchLimit = 10000;
 		getBackup();
 		currentPage = 1;
@@ -176,6 +187,77 @@ public class MainFrame extends JFrame{
 		table.getColumnModel().getColumn(4).setPreferredWidth(100);
 		table.getColumnModel().getColumn(5).setPreferredWidth(100);
 		
+		class PopUpMenu extends JPopupMenu{
+			JMenuItem tagItem;
+			JMenuItem untagItem;
+			JMenuItem addExpItem;
+			JMenuItem removeExpItem;
+		    public PopUpMenu(){
+		        tagItem = new JMenuItem("Tag selected images");
+		        tagItem.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						bufferPanel.tag(false, true);
+					}
+				});
+		        untagItem = new JMenuItem("Untag selected images");
+		        untagItem.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						bufferPanel.untag(false, true);
+					}
+				});
+		        addExpItem = new JMenuItem("Add experiment to selected images");
+		        addExpItem.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						bufferPanel.tag(true, true);
+					}
+				});
+		        removeExpItem = new JMenuItem("Remove experiment from selected images");
+		        removeExpItem.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						bufferPanel.untag(true, true);
+					}
+				});
+		        add(tagItem);
+		        add(untagItem);
+		        add(addExpItem);
+		        add(removeExpItem);
+		    }
+		}
+		table.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (SwingUtilities.isRightMouseButton(e)){
+					PopUpMenu p = new PopUpMenu();
+					p.show(e.getComponent(),e.getX(), e.getY());
+				}
+			}
+		});
+		
 		JButton btnSearch = new JButton("Search");
 		btnSearch.setBounds(630, 142, 117, 29);
 		btnSearch.addActionListener(new ActionListener(){
@@ -201,19 +283,25 @@ public class MainFrame extends JFrame{
 			
 		});
 		getContentPane().add(btnSearch);
+		getRootPane().setDefaultButton(btnSearch);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		JMenu collectMenu = new JMenu("Export");
 		JMenu tagMenu = new JMenu("Tag");
 		JMenu updateMenu = new JMenu("Add data");
+		JMenu deleteMenu = new JMenu("Remove data");
 		JMenu viewMenu = new JMenu("View");
 		menuBar.add(collectMenu);
 		menuBar.add(tagMenu);
 		menuBar.add(updateMenu);
+		menuBar.add(deleteMenu);
 		menuBar.add(viewMenu);
-		JMenuItem addProject = new JMenuItem("Add new project...");
-		addProject.addActionListener(new ActionListener() {
+		
+		JMenu addProject = new JMenu("Add project");
+		
+		JMenuItem addStandardProject = new JMenuItem("Add new project...");
+		addStandardProject.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -221,9 +309,20 @@ public class MainFrame extends JFrame{
 				updater.updateDB("addProject");
 			}
 		});
+		JMenuItem addCustomProject = new JMenuItem("Add custom project...");
+		addCustomProject.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Updater updater = new Updater(MainFrame.this);
+				updater.updateDB("addCustomProject");
+			}
+		});
+		addProject.add(addStandardProject);
+		addProject.add(addCustomProject);
 		updateMenu.add(addProject);
-		JMenuItem updateProject = new JMenuItem("Update existing project...");
-		updateProject.addActionListener(new ActionListener() {
+		JMenuItem updateStandardProject = new JMenuItem("Update existing standard project...");
+		updateStandardProject.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -231,7 +330,7 @@ public class MainFrame extends JFrame{
 				updater.updateDB("updateProject");
 			}
 		});
-		updateMenu.add(updateProject);
+		updateMenu.add(updateStandardProject);
 		JMenuItem collectImages = new JMenuItem("Export buffer images...");
 		collectImages.addActionListener(new ActionListener() {
 			
@@ -252,25 +351,56 @@ public class MainFrame extends JFrame{
 		});
 		collectMenu.add(collectImagesWithTraces);
 		
-		JMenuItem tagImages = new JMenuItem("Add tag to buffer images...");
+		JMenuItem tagImages = new JMenuItem("Tag buffer images...");
 		tagImages.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				bufferPanel.tag();
+				bufferPanel.tag(false, false);
 			}
 		});
 		tagMenu.add(tagImages);
 		
-		JMenuItem untagImages = new JMenuItem("Remove tag from buffer images...");
+		JMenuItem untagImages = new JMenuItem("Untag buffer images...");
 		untagImages.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				bufferPanel.untag();
+				bufferPanel.untag(false, false);
 			}
 		});
 		tagMenu.add(untagImages);
+		
+		JMenuItem addExperiment = new JMenuItem("Assign experiment to buffer images...");
+		addExperiment.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				bufferPanel.tag(true, false);
+			}
+		});
+		tagMenu.add(addExperiment);
+		
+		JMenuItem removeExperiment = new JMenuItem("Remove experiment from buffer images...");
+		removeExperiment.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				bufferPanel.untag(true, false);
+			}
+		});
+		tagMenu.add(removeExperiment);
+		
+		JMenuItem removeProject = new JMenuItem("Remove a project...");
+		removeProject.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Updater updater = new Updater(MainFrame.this);
+				updater.removeProject();
+			}
+		});
+		deleteMenu.add(removeProject);
 		
 		
 		JMenuItem segmentDisplayMenuItem = new JMenu("Segment display method");
@@ -300,8 +430,62 @@ public class MainFrame extends JFrame{
 		});
 		
 		//The columns view
+		ActionListener columnViewChangeListener = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JCheckBoxMenuItem source = (JCheckBoxMenuItem) e.getSource();
+				String text = source.getText();
+				if(source.isSelected()){
+					columnNames.add(text);
+				}
+				else{
+					columnNames.remove(text);
+				}
+				((AbstractTableModel) table.getModel()).fireTableStructureChanged();
+			}
+		};
+
 		JMenu columnDisplayMenu = new JMenu("Columns");
-		JCheckBoxMenuItem videoMenuItem = new JCheckBoxMenuItem("video");
+		
+		JCheckBoxMenuItem imageMenuItem = new JCheckBoxMenuItem("Image", true);
+		imageMenuItem.addActionListener(columnViewChangeListener);
+		columnDisplayMenu.add(imageMenuItem);
+		
+		JCheckBoxMenuItem videoMenuItem = new JCheckBoxMenuItem("Video", true);
+		videoMenuItem.addActionListener(columnViewChangeListener);
+		columnDisplayMenu.add(videoMenuItem);
+		
+		JCheckBoxMenuItem subjectMenuItem = new JCheckBoxMenuItem("Subject", true);
+		subjectMenuItem.addActionListener(columnViewChangeListener);
+		columnDisplayMenu.add(subjectMenuItem);
+		
+		JCheckBoxMenuItem projectMenuItem = new JCheckBoxMenuItem("Project", true);
+		projectMenuItem.addActionListener(columnViewChangeListener);
+		columnDisplayMenu.add(projectMenuItem);
+		
+		JCheckBoxMenuItem tracedMenuItem = new JCheckBoxMenuItem("Traced", true);
+		tracedMenuItem.addActionListener(columnViewChangeListener);
+		columnDisplayMenu.add(tracedMenuItem);
+		
+		JCheckBoxMenuItem experimentMenuItem = new JCheckBoxMenuItem("Experiment", true);
+		experimentMenuItem.addActionListener(columnViewChangeListener);
+		columnDisplayMenu.add(experimentMenuItem);
+		
+		JCheckBoxMenuItem tagsMenuItem = new JCheckBoxMenuItem("Tags", true);
+		tagsMenuItem.addActionListener(columnViewChangeListener);
+		columnDisplayMenu.add(tagsMenuItem);
+		
+		JCheckBoxMenuItem segmentMenuItem = new JCheckBoxMenuItem("Segment", true);
+		segmentMenuItem.addActionListener(columnViewChangeListener);
+		columnDisplayMenu.add(segmentMenuItem);
+		
+		JCheckBoxMenuItem wordMenuItem = new JCheckBoxMenuItem("Word", true);
+		wordMenuItem.addActionListener(columnViewChangeListener);
+		columnDisplayMenu.add(wordMenuItem);
+		
+		viewMenu.add(columnDisplayMenu);
+		
 		
 	}
 
@@ -355,7 +539,7 @@ public class MainFrame extends JFrame{
 		((AbstractTableModel) table.getModel()).fireTableDataChanged();
 	}
 	
-	public void printErrorLog(Exception e){
+	public static void printErrorLog(Exception e){
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		e.printStackTrace(pw);
@@ -373,9 +557,25 @@ public class MainFrame extends JFrame{
 		}
 	}
 	
+	public static void printErrorLog(String s){
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		try {
+			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("error log.txt", true)));
+			String timeStamp = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
+			out.print(timeStamp+"\n");
+			out.print(s);
+			out.println("------------------------------------------------------------\n");
+			out.close();
+		} catch (Exception e1) {
+			System.err.println("begandad namak");
+			e1.printStackTrace();
+		}
+	}
+	
 	public class MyTableModel extends DefaultTableModel{
 		public int getColumnCount() {
-			return 9;
+			return columnNames.size();
 		}
 		
 		public int getRowCount() {
@@ -383,7 +583,7 @@ public class MainFrame extends JFrame{
 		}
 		
 		public String getColumnName(int col) {
-			return columnNames[col];
+			return columnNames.get(col);
 		}
 		
 		public Object getValueAt(int row, int col) {
@@ -392,16 +592,17 @@ public class MainFrame extends JFrame{
 				return " ";
 			}
 			ImageData image = tableData.get(index);
-			switch(col){
-			case 0:
+			String colName = columnNames.get(col);
+			if("Image".equals(colName)){
 				return image.title;
-			case 1:
+			}
+			else if("Video".equals(colName)){
 				return image.video;
-			case 2:
-				return image.subject;
-			case 3:
+			}
+			else if("Project".equals(colName)){
 				return image.project;
-			case 4:
+			}
+			else if("Traced".equals(colName)){
 				try {
 					return db.getTracers(image.id);
 				} catch (SQLException e) {
@@ -409,7 +610,11 @@ public class MainFrame extends JFrame{
 					printErrorLog(e);
 					return "";
 				}
-			case 5:
+			}
+			else if("Subject".equals(colName)){
+				return image.subject;
+			}
+			else if("Experiment".equals(colName)){
 				try {
 					return db.getExperiments(image.id);
 				} catch (SQLException e) {
@@ -417,7 +622,8 @@ public class MainFrame extends JFrame{
 					printErrorLog(e);
 					return "";
 				}
-			case 6:
+			}
+			else if("Tags".equals(colName)){
 				try {
 					return db.getTags(image.id);
 				} catch (Exception e) {
@@ -425,7 +631,8 @@ public class MainFrame extends JFrame{
 					printErrorLog(e);
 					return "";
 				}
-			case 7:
+			}
+			else if("Segment".equals(colName)){
 				try {
 					return db.getEnvironment(image.id);
 				} catch (Exception e) {
@@ -433,7 +640,8 @@ public class MainFrame extends JFrame{
 					printErrorLog(e);
 					return "";
 				}
-			case 8:
+			}
+			else if("Word".equals(colName)){
 				try {
 					return db.getWord(image.id);
 				} catch (Exception e) {
@@ -442,7 +650,9 @@ public class MainFrame extends JFrame{
 					return "";
 				}
 			}
-			
+			else if("Subject".equals(colName)){
+				return image.subject;
+			}
 			return " ";
 		}
 		
