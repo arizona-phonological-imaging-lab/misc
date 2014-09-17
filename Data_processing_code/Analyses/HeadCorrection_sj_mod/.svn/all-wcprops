@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/seeingspeech/!svn/ver/75/LabTools/HeadCorrection
+END
+tongue_matcher2.m
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/seeingspeech/!svn/ver/75/LabTools/HeadCorrection/tongue_matcher2.m
+END
+head_correction.m
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/seeingspeech/!svn/ver/75/LabTools/HeadCorrection/head_correction.m
+END
+README_headcorrection.txt
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/seeingspeech/!svn/ver/75/LabTools/HeadCorrection/README_headcorrection.txt
+END
+curve_avg_distance.m
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/seeingspeech/!svn/ver/75/LabTools/HeadCorrection/curve_avg_distance.m
+END
+transform_tongue.m
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/seeingspeech/!svn/ver/75/LabTools/HeadCorrection/transform_tongue.m
+END
+tongue_parabola.m
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/seeingspeech/!svn/ver/75/LabTools/HeadCorrection/tongue_parabola.m
+END
