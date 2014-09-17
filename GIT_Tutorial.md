@@ -55,6 +55,17 @@ Adding a file to a repository is pretty simple.
 
 `git add poop.txt`  
 
+#Removing files
+If you remove a tracked file from a repository without telling git about it, you might run into problems.  There are two ways of removing files with git.
+
+1. If you want to safely __delete__ a file so that git knows about the change:
+
+  `git rm /path/to/the/tracked/file/you/want/to/delete`  
+
+2.  If you want to keep a file but simply tell git to stop tracking it:
+
+  `git rm --cached forget/about/this/file`
+
 #Committing changes
 A commit is a record of what we've done.  Whenever we publish our changes, we'll need to leave a succinct description of work.  Let's try adding a message (designated below with the option **-m**)...
 
