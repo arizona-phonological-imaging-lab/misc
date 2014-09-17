@@ -1,0 +1,107 @@
+function parabs = tongue_parabola(C1,C2) 
+
+% C1 and C2 must be matrices in which the first
+% column contains x-values and the second y-values.
+
+
+% Fit both curves to parabolas.
+P1 = polyfit(C1(:,1),C1(:,2),2); % These are (1,3) coefficient matrices. 
+P2 = polyfit(C2(:,1),C2(:,2),2);
+
+% Find the translation that puts the vertex of the C2 parabola on the 
+% vertex of the C1 parabola.  Vertex formula:  (-b/(2a),c-(b^2/4a)).
+a1 = P1(1);
+b1 = P1(2);
+c1 = P1(3);
+
+a2 = P2(1);
+b2 = P2(2);
+c2 = P2(3);
+
+vertex1 = [-b1/(2*a1),c1-(b1^2/(4*a1))];
+vertex2 = [-b2/(2*a2),c2-(b2^2/(4*a2))];
+
+vertdiffx = vertex1(1)-vertex2(1);
+vertdiffy = vertex1(2)-vertex2(2);
+
+% Find the rotation that puts the focus of C2 closest to the focus of
+% C1.  Focus formula:  (-b/(2a),c-(b^2-1)/4a)).
+focusP1 = [-b1/(2*a1),c1-(b1^2-1)/(4*a1)];
+fP1x = focusP1(1);
+fP1y = focusP1(2);
+
+focusP2 = [-b2/(2*a2),c2-(b2^2-1)/(4*a2)];
+fP2x = focusP2(1);
+fP2y = focusP2(2);
+
+% syms t; % I think this declares the variable I'd like to use.
+% theta = solve(cos(t)*fP2x-sin(t)*fP2y-fP1x,t)
+% psi = solve(sin(t)*fP2x+cos(t)*fP2y-fP1y,t)
+% if theta == psi
+%     display 'Theta and psi are the same.'
+% elseif theta(1) == psi(2) & theta(2) == psi(1)
+%     display 'Theta and psi have opposite responses.'
+% else
+%     display 'The answers for the two equations are all different.'
+% theta = theta(2)
+
+% Translate the focus of parabola 2.
+focusP2_trans = focusP2 - [vertdiffx,vertdiffy];
+fP2x_trans = focusP2_trans(1);
+fP2y_trans = focusP2_trans(2);
+
+theta = atan(fP1y/fP1x) - atan(fP2y_trans/fP2x_trans);
+
+% Plot the C1 and C2 data and the three parabolas.
+% plot(C1(:,1),C1(:,2), 'ob'); % C1 in blue dots.
+% hold on;
+% plot(C2(:,1),C2(:,2),'or'); % C2 in red dots.
+x1 = C1(:,1);
+y1 = [];
+i = 1;
+for i = 1:length(x1) % Find y-values for the parabola corresponding to C1.
+    y1 = [y1;P1(1)*x1(i,1)^2+P1(2)*x1(i,1)+P1(3)];
+    i = i + 1;
+end
+% plot(x1,y1, '-b');
+% 
+x2 = C2(:,1);
+y2 = [];
+i = 1;
+for i = 1:length(x2) % Find y-values for the parabola corresponding to C2.
+    y2 = [y2;P2(1)*x2(i,1)^2+P2(2)*x2(i,1)+P2(3)];
+    i = i + 1;
+end
+% plot(x2,y2,'-r');
+
+C1_P1 = [x1,y1];
+C2_P2 = [x2,y2];
+parabs.P1 = C1_P1;
+parabs.P2 = C2_P2;
+parabs.theta = theta;
+parabs.xs = vertdiffx;
+parabs.ys = vertdiffy;
+
+
+% For all the points on C2.  Transform them by translating and rotating
+% them.  Check to ensure that they equal the points with the same x-values
+% on C1.
+% [r,c] = size(C2)
+% parab2_trans = zeros(r,c)
+% rotmat = [cos(theta),-sin(theta);sin(theta),cos(theta)]
+% i = 1
+% for i = 1:r
+%     parab2_trans(i,1) = x2(i,1) + vertdiffx;
+%     parab2_trans(i,2) = y2(i,1) + vertdiffy;
+%     i = i + 1;
+% end
+% parab2_trans
+% 
+% parab2_trans = rotmat*parab2_trans'
+% size(parab2_trans)
+% parab2_trans = parab2_trans'
+% 
+% plot(parab2_trans(:,1),parab2_trans(:,2),'--g')
+% hold off;
+end
+
