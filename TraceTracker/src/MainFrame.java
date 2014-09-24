@@ -314,8 +314,9 @@ public class MainFrame extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Updater updater = new Updater(MainFrame.this);
-				updater.updateDB("addCustomProject");
+				CustomAddProjectFrame customAddProjFrame = new CustomAddProjectFrame(MainFrame.this);
+				customAddProjFrame.setBounds(500, 200, 555, 462);
+				customAddProjFrame.setVisible(true);
 			}
 		});
 		addProject.add(addStandardProject);

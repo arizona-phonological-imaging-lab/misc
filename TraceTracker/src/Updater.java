@@ -31,6 +31,7 @@ public class Updater implements PropertyChangeListener{
 	String command;
 	public Task backgroundTask;
 	public int numberOfVideos;
+	ArrayList<Video> videosFromCAPF;
 
 	public Updater(MainFrame mf){
 		mainFrame = mf;
@@ -71,10 +72,8 @@ public class Updater implements PropertyChangeListener{
 			someError = false;
 			boolean updateMode = "updateProject".equals(command);
 			boolean customMode = "addCustomProject".equals(command);
-			if(customMode){				
-				CustomAddProjectFrame customAddProjFrame = new CustomAddProjectFrame();
-				customAddProjFrame.setBounds(500, 200, 518, 423);
-				customAddProjFrame.setVisible(true);
+			if(customMode){
+				//TODO
 			}
 			else{
 				int returnVal = fc.showOpenDialog(null);
@@ -365,4 +364,10 @@ public class Updater implements PropertyChangeListener{
 
 		}
 	}
+
+	public void updateDB(String string, ArrayList<Video> videos) {
+		videosFromCAPF = videos;
+		updateDB(string);
+	}
+
 }
