@@ -288,6 +288,7 @@ public class CustomAddProjectFrame extends JFrame{
 					JOptionPane.showMessageDialog(null, "Please enter a title for the project.","Error",JOptionPane.ERROR_MESSAGE);
 				}
 				Updater updater = new Updater(mainFrame);
+				setVideosLanguageAndProject(videos);
 				updater.updateDB("addCustomProject",videos);
 			}
 		});
@@ -336,5 +337,16 @@ public class CustomAddProjectFrame extends JFrame{
 		video.setTracesDirectory(new File(tracesDirTextField.getText()));
 		video.textGridFile = new File(textGridPathTextField.getText());
 		list.repaint();
+	}
+	
+	private void setVideosLanguageAndProject(){
+		//Reads the project title and language textboxes the moment the user presses OK
+		//and adds the data to all of the videos.
+		String title = projectTitleTextField.getText();
+		String lang = languageTextField.getText();
+		for(Video v: videos){
+			v.project = title;
+			v.language = lang;
+		}
 	}
 }

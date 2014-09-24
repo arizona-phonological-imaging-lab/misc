@@ -7,8 +7,10 @@ public class Video {
 	private File tracesDirectory;
 	private File imagesDirectory;
 	private int numberOfImages;
-	private boolean	ispng;
+	public boolean	ispng;
 	public String subject;
+	public String project;
+	public String language;
 	
 	public Video(){
 		numberOfImages = 0;
@@ -32,10 +34,10 @@ public class Video {
 		int pngCounter = 0;
 		int jpgCounter = 0;
 		for(File f:theFiles){
-			if(f.getName().endsWith("png")){
+			if(f.getName().toLowerCase().endsWith("png")){
 				pngCounter++;
 			}
-			else if(f.getName().endsWith("jpg")){
+			else if(f.getName().toLowerCase().endsWith("jpg")){
 				pngCounter++;
 			}
 		}

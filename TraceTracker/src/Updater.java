@@ -88,6 +88,65 @@ public class Updater implements PropertyChangeListener{
 			somePanel.add(loadingLabel);
 			somePanel.add(progressBar);
 			progressFrame.setVisible(true);
+			
+			//We do customAddProject inside an if here only because we want to do it in the doTheUpdate function.
+			//Otherwise this had to be a separate function
+			if(customMode){
+				int videoCounter = 0;
+				for(Video video:videosFromCAPF){
+					HashMap<String, ImageData> result = new HashMap<String, ImageData>();
+					ArrayList<Trace> traceFiles = new ArrayList<Trace>();
+					//Get the set of images for this video
+					File[] possibleImages = video.getImagesDirectory().listFiles();
+					File[] possibleTraces = video.getTracesDirectory().listFiles();
+					for(File f:possibleImages){
+						String extension = f.getName().substring(f.getName().lastIndexOf(".")+1).toLowerCase();
+						if(extension.equals("jpg") && !video.ispng){
+							ImageData image = new ImageData();
+							image.address = f.getAbsolutePath();
+							image.title = f.getName();
+							result.put(image.title, image);
+						}
+					}
+					for(File f: possibleTraces){
+						String extension = f.getName().substring(f.getName().lastIndexOf(".")+1).toLowerCase();
+						String imageName = getRelevantImage(f.getName(), result);
+						if(extension.equals("txt") && imageName!=null){
+							Trace trace = new Trace();
+							trace.address = f.getAbsolutePath();
+							trace.imageName = imageName;
+							trace.tracer = extractTracerName(f.getName());
+							traceFiles.add(trace);
+						}
+					}
+					try {
+						db.addImages(result, traceFiles, projectName, projectAddress, video.title, "", video.language, false);
+					} catch (Exception e) {
+						e.printStackTrace();
+						MainFrame.printErrorLog(e);
+						System.out.println("Error in the update process!");
+						JOptionPane.showMessageDialog(null, "There was some error in the update process. Restarting the\napplication might solve the problem.","Error",JOptionPane.ERROR_MESSAGE);
+						someError = true;
+						return;
+					}
+					//The textgrid
+					//This part should be done after adding the images to the db because we should know the IDs
+					System.out.println("Start the textGrid");
+					File textGridFile = video.textGridFile;
+					if(textGridFile!=null){
+						TextGridReader tgr = new TextGridReader(Updater.this);
+						tgr.addTextGridData(result, textGridFile);
+					}
+					videoCounter++;
+					System.out.println("Finished with one video file");
+					progressResult = 100*videoCounter/videosFromCAPF.size();
+					setProgress(progressResult);
+				}
+			}
+			
+			
+			
+			//Now this is the version for non-custom project loading:
 			File[] videos = null;
 			videos = getProjectVideos();
 			String language = "";
@@ -275,6 +334,16 @@ public class Updater implements PropertyChangeListener{
 			progressFrame.validate();
 
 		}
+	}
+
+	public String extractTracerName(String name) {
+		// TODO Auto-generated method stub
+		return "";
+	}
+
+	public String getRelevantImage(String name, HashMap<String, ImageData> result) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public void removeProject() {
