@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -13,6 +14,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import javax.swing.ListSelectionModel;
 
+import com.sun.org.apache.xml.internal.serializer.utils.Utils;
+
 import sun.tools.asm.Cover;
 
 import java.awt.Color;
@@ -21,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -60,7 +64,8 @@ public class CustomAddProjectFrame extends JFrame{
 			}
 		});
 		videos = new ArrayList<Video>();
-		
+		jfc = new JFileChooser();
+		jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		setTitle("Add Custom Project");
 		getContentPane().setLayout(null);
 		
@@ -82,8 +87,8 @@ public class CustomAddProjectFrame extends JFrame{
 		languageTextField.setBounds(119, 46, 134, 28);
 		getContentPane().add(languageTextField);
 		
-		JLabel videosLabel = new JLabel("Image sets:");
-		videosLabel.setBounds(21, 92, 99, 16);
+		JLabel videosLabel = new JLabel("Image sequences:");
+		videosLabel.setBounds(21, 92, 130, 16);
 		getContentPane().add(videosLabel);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -95,13 +100,12 @@ public class CustomAddProjectFrame extends JFrame{
 		
 		JButton addNewVideoButton = new JButton("Add New");
 		addNewVideoButton.setBounds(136, 346, 117, 29);
-		jfc = new JFileChooser();
-		jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		addNewVideoButton.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				jfc.setDialogTitle("Select image set folder");
+				
+				jfc.setDialogTitle("Select image sequence folder");
 				int returnVal = jfc.showOpenDialog(null);
 				if(returnVal!=JFileChooser.APPROVE_OPTION){
 					System.out.println("Nothing chosen");
@@ -123,11 +127,11 @@ public class CustomAddProjectFrame extends JFrame{
 		getContentPane().add(panel);
 		panel.setLayout(null);
 		
-		lblVideoOf = new JLabel("Video 0 of 0");
-		lblVideoOf.setBounds(88, 6, 108, 16);
+		lblVideoOf = new JLabel("Sequence 0 of 0");
+		lblVideoOf.setBounds(80, 6, 108, 16);
 		panel.add(lblVideoOf);
 		
-		JLabel lblVideoTitle = new JLabel("Video Title:");
+		JLabel lblVideoTitle = new JLabel("Sequence Title:");
 		lblVideoTitle.setBounds(17, 40, 99, 16);
 		panel.add(lblVideoTitle);
 		
@@ -154,13 +158,41 @@ public class CustomAddProjectFrame extends JFrame{
 		panel.add(imagesDirTextField);
 		imagesDirTextField.setColumns(10);
 		
-		JButton btnChoose = new JButton("Browse...");
-		btnChoose.setBounds(159, 133, 94, 29);
-		panel.add(btnChoose);
+		JButton browseImageButton = new JButton("Browse...");
+		browseImageButton.setBounds(159, 133, 94, 29);
+		browseImageButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				jfc.setDialogTitle("Select image folder");
+				int returnVal = jfc.showOpenDialog(null);
+				if(returnVal!=JFileChooser.APPROVE_OPTION){
+					System.out.println("Nothing chosen");
+					return;
+				}
+				File f = jfc.getSelectedFile();
+				imagesDirTextField.setText(f.getAbsolutePath());
+			}
+		});
+		panel.add(browseImageButton);
 		
-		JButton button = new JButton("Browse...");
-		button.setBounds(159, 197, 94, 29);
-		panel.add(button);
+		JButton browseTraceButton = new JButton("Browse...");
+		browseTraceButton.setBounds(159, 197, 94, 29);
+		browseTraceButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				jfc.setDialogTitle("Select traces folder");
+				int returnVal = jfc.showOpenDialog(null);
+				if(returnVal!=JFileChooser.APPROVE_OPTION){
+					System.out.println("Nothing chosen");
+					return;
+				}
+				File f = jfc.getSelectedFile();
+				tracesDirTextField.setText(f.getAbsolutePath());
+			}
+		});
+		panel.add(browseTraceButton);
 		
 		tracesDirTextField = new JTextField();
 		tracesDirTextField.setColumns(10);
@@ -171,9 +203,43 @@ public class CustomAddProjectFrame extends JFrame{
 		lblTracesDirectory.setBounds(17, 172, 127, 16);
 		panel.add(lblTracesDirectory);
 		
-		JButton button_1 = new JButton("Browse...");
-		button_1.setBounds(159, 264, 94, 29);
-		panel.add(button_1);
+		JButton browseTextgridButton = new JButton("Browse...");
+		browseTextgridButton.setBounds(159, 264, 94, 29);
+		browseTextgridButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser jfc2 = new JFileChooser();
+				jfc2.setFileFilter(new FileFilter() {
+					
+					@Override
+					public String getDescription() {
+						// TODO Auto-generated method stub
+						return null;
+					}
+					
+					@Override
+					public boolean accept(File f) {
+						String extension = f.getName().substring(f.getName().lastIndexOf(".")+1);
+						if("textgrid".equals(extension.toLowerCase())){
+							return true;
+						}
+						else{
+							return false;
+						}
+					}
+				});
+				jfc2.setDialogTitle("Select TextGrid file");
+				int returnVal = jfc2.showOpenDialog(null);
+				if(returnVal!=JFileChooser.APPROVE_OPTION){
+					System.out.println("Nothing chosen");
+					return;
+				}
+				File f = jfc2.getSelectedFile();
+				imagesDirTextField.setText(f.getAbsolutePath());
+			}
+		});
+		panel.add(browseTextgridButton);
 		
 		textGridPathTextField = new JTextField();
 		textGridPathTextField.setColumns(10);
@@ -206,8 +272,8 @@ public class CustomAddProjectFrame extends JFrame{
 		coverPanel.setOpaque(true);
 		coverPanel.setLayout(null);
 		
-		JLabel lblSelectVideoTo = new JLabel("Select video to view properties");
-		lblSelectVideoTo.setBounds(33, 165, 203, 16);
+		JLabel lblSelectVideoTo = new JLabel("<html><p align=center>Select image sequence to view\nproperties</p></html>");
+		lblSelectVideoTo.setBounds(33, 165, 203, 32);
 		coverPanel.add(lblSelectVideoTo);
 		coverPanel.setVisible(true);
 		panel.setVisible(false);
@@ -218,6 +284,9 @@ public class CustomAddProjectFrame extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				if(projectTitleTextField.getText().length()==0){
+					JOptionPane.showMessageDialog(null, "Please enter a title for the project.","Error",JOptionPane.ERROR_MESSAGE);
+				}
 				Updater updater = new Updater(mainFrame);
 				updater.updateDB("addCustomProject",videos);
 			}
@@ -235,14 +304,14 @@ public class CustomAddProjectFrame extends JFrame{
 	
 	private void updateVideoFrame(Video video, int index){
 		//Updates the left hand frame to show the information of the video that was just selected by the user
-		lblVideoOf.setText("Video "+(index+1)+" of "+(videos.size()));
+		lblVideoOf.setText("Sequence "+(index+1)+" of "+(videos.size()));
 		videoTitleTextField.setText(video.title);
 		subjectTextField.setText(video.subject);
 		imagesDirTextField.setText(video.getImagesDirectory().getAbsolutePath());
-		if(video.getTracesDirectory()!=null){
+		if(video.getTracesDirectory()!=null && video.getTracesDirectory().length()>0){
 			tracesDirTextField.setText(video.getTracesDirectory().getAbsolutePath());
 		}
-		if(video.textGridFile!=null){
+		if(video.textGridFile!=null && video.textGridFile.length()>0){
 			textGridPathTextField.setText(video.textGridFile.getAbsolutePath());
 		}
 		lblImages.setText(video.getNumberOfImages()+" images");
@@ -252,11 +321,20 @@ public class CustomAddProjectFrame extends JFrame{
 	
 	private void updateVideoInfo(){
 		//Updates the information of the Video object based on the changes the user has made in the GUI
+		if(imagesDirTextField.getText().length()==0){
+			JOptionPane.showMessageDialog(null, "The image directory cannot be empty.","Error",JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		if(videoTitleTextField.getText().length()==0){
+			JOptionPane.showMessageDialog(null, "Please enter a title for the image sequence.","Error",JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 		Video video = (Video) list.getSelectedValue();
 		video.title = videoTitleTextField.getText();
 		video.subject = subjectTextField.getText();
 		video.setImagesDirectory(new File(imagesDirTextField.getText()));
 		video.setTracesDirectory(new File(tracesDirTextField.getText()));
 		video.textGridFile = new File(textGridPathTextField.getText());
+		list.repaint();
 	}
 }
