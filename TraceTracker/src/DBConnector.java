@@ -523,7 +523,7 @@ public class DBConnector {
 		return result;
 	}
 	
-	public void addImages(HashMap<String, ImageData> images, ArrayList<Trace> traces, String projectName, String projectAddress, String videoName, String videoAddress, String language, boolean updateMode) throws Exception{
+	public void addImages(HashMap<String, ImageData> images, ArrayList<Trace> traces, String projectName, String projectAddress, String videoName, String videoAddress, String language, String subj, boolean updateMode) throws Exception{
 		Statement stat = conn.createStatement();
 		int projectID = -1;
 		String query = "SELECT id FROM project WHERE title='"+projectName+"';";
@@ -542,8 +542,7 @@ public class DBConnector {
 			projectID = rs.getInt(1);
 		}
 		//The project is taken care of. Now add the video.
-		int underscoreIndex = videoName.indexOf("_");
-		String subject = videoName.substring(0, underscoreIndex-1); 
+		String subject = subj; 
 		Statement stat3 = conn.createStatement();
 		int videoID = -1;
 		if(updateMode){

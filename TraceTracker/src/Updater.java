@@ -1,13 +1,9 @@
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
-
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -93,15 +89,20 @@ public class Updater implements PropertyChangeListener{
 			//Otherwise this had to be a separate function
 			if(customMode){
 				int videoCounter = 0;
+				projectName = videosFromCAPF.get(0).project;
+				projectAddress = "";
 				for(Video video:videosFromCAPF){
 					HashMap<String, ImageData> result = new HashMap<String, ImageData>();
 					ArrayList<Trace> traceFiles = new ArrayList<Trace>();
 					//Get the set of images for this video
 					File[] possibleImages = video.getImagesDirectory().listFiles();
-					File[] possibleTraces = video.getTracesDirectory().listFiles();
+					File[] possibleTraces = new File[0];
+					if(video.getTracesDirectory()!=null){
+						possibleTraces = video.getTracesDirectory().listFiles();
+					}
 					for(File f:possibleImages){
 						String extension = f.getName().substring(f.getName().lastIndexOf(".")+1).toLowerCase();
-						if(extension.equals("jpg") && !video.ispng){
+						if((extension.equals("jpg") && !video.ispng) || extension.equals("png") && video.ispng){
 							ImageData image = new ImageData();
 							image.address = f.getAbsolutePath();
 							image.title = f.getName();
@@ -120,7 +121,7 @@ public class Updater implements PropertyChangeListener{
 						}
 					}
 					try {
-						db.addImages(result, traceFiles, projectName, projectAddress, video.title, "", video.language, false);
+						db.addImages(result, traceFiles, projectName, projectAddress, video.title, "", video.language, video.subject, false);
 					} catch (Exception e) {
 						e.printStackTrace();
 						MainFrame.printErrorLog(e);
@@ -142,6 +143,7 @@ public class Updater implements PropertyChangeListener{
 					progressResult = 100*videoCounter/videosFromCAPF.size();
 					setProgress(progressResult);
 				}
+				return;
 			}
 			
 			
@@ -265,7 +267,9 @@ public class Updater implements PropertyChangeListener{
 
 				System.out.println("Done with the images");
 				try {
-					db.addImages(result, traceFiles, projectName, projectAddress, videoName, videoAddress, language, updateMode);
+					int underscoreIndex = videoName.indexOf("_");
+					String subj = videoName.substring(0, underscoreIndex-1);
+					db.addImages(result, traceFiles, projectName, projectAddress, videoName, videoAddress, language, subj, updateMode);
 				} catch (Exception e) {
 					e.printStackTrace();
 					MainFrame.printErrorLog(e);

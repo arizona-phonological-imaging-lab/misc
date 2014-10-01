@@ -57,7 +57,6 @@ public class CustomAddProjectFrame extends JFrame{
 			
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				int selectionIndex = list.getSelectedIndex();
 				Video selectedVideo = (Video)list.getSelectedValue();
 				int selectedIndex = list.getSelectedIndex();
 				updateVideoFrame(selectedVideo, selectedIndex);
@@ -286,9 +285,10 @@ public class CustomAddProjectFrame extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				if(projectTitleTextField.getText().length()==0){
 					JOptionPane.showMessageDialog(null, "Please enter a title for the project.","Error",JOptionPane.ERROR_MESSAGE);
+					return;
 				}
 				Updater updater = new Updater(mainFrame);
-				setVideosLanguageAndProject(videos);
+				setVideosLanguageAndProject();
 				updater.updateDB("addCustomProject",videos);
 			}
 		});
