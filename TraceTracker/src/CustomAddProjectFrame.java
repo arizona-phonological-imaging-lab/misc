@@ -235,7 +235,7 @@ public class CustomAddProjectFrame extends JFrame{
 					return;
 				}
 				File f = jfc2.getSelectedFile();
-				imagesDirTextField.setText(f.getAbsolutePath());
+				textGridPathTextField.setText(f.getAbsolutePath());
 			}
 		});
 		panel.add(browseTextgridButton);
@@ -290,6 +290,7 @@ public class CustomAddProjectFrame extends JFrame{
 				Updater updater = new Updater(mainFrame);
 				setVideosLanguageAndProject();
 				updater.updateDB("addCustomProject",videos);
+				CustomAddProjectFrame.this.setVisible(false);
 			}
 		});
 		getContentPane().add(btnOk);
@@ -298,6 +299,7 @@ public class CustomAddProjectFrame extends JFrame{
 	private void createNewVideo(File f){
 		Video video = new Video();
 		video.title = f.getName();
+		video.subject = "";
 		video.setImagesDirectory(f);
 		videos.add(video);
 		model.addElement(video);
@@ -331,8 +333,18 @@ public class CustomAddProjectFrame extends JFrame{
 			return;
 		}
 		Video video = (Video) list.getSelectedValue();
-		video.title = videoTitleTextField.getText();
-		video.subject = subjectTextField.getText();
+		if(videoTitleTextField.getText().length()==0){
+			video.title = "";
+		}
+		else{
+			video.title = videoTitleTextField.getText();
+		}
+		if(subjectTextField.getText().length()==0){
+			video.subject = "";
+		}
+		else{
+			video.subject = subjectTextField.getText();
+		}
 		video.setImagesDirectory(new File(imagesDirTextField.getText()));
 		video.setTracesDirectory(new File(tracesDirTextField.getText()));
 		video.textGridFile = new File(textGridPathTextField.getText());

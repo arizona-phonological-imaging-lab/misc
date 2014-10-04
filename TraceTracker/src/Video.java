@@ -38,7 +38,7 @@ public class Video {
 				pngCounter++;
 			}
 			else if(f.getName().toLowerCase().endsWith("jpg")){
-				pngCounter++;
+				jpgCounter++;
 			}
 		}
 		if(pngCounter>jpgCounter){

@@ -100,8 +100,11 @@ public class Updater implements PropertyChangeListener{
 					if(video.getTracesDirectory()!=null){
 						possibleTraces = video.getTracesDirectory().listFiles();
 					}
+					System.out.println("possibleImages size: "+possibleImages.length);
 					for(File f:possibleImages){
 						String extension = f.getName().substring(f.getName().lastIndexOf(".")+1).toLowerCase();
+						System.out.println("extension: "+extension);
+						System.out.println("ispng: "+video.ispng);
 						if((extension.equals("jpg") && !video.ispng) || extension.equals("png") && video.ispng){
 							ImageData image = new ImageData();
 							image.address = f.getAbsolutePath();
