@@ -45,6 +45,9 @@ public class CustomAddProjectFrame extends JFrame{
 	private JPanel panel;
 	private JLabel lblVideoOf;
 	private JLabel lblImages;
+	//These three are used when we don't want to change the selection of the user in the list because she has unapplied changes:
+	public boolean listForceSelectionFlag = false;
+	public int lastSelectedIndex, secondToLastSelectedIndex;			 
 	
 	public CustomAddProjectFrame(MainFrame mf) {
 		mainFrame = mf;
@@ -59,6 +62,12 @@ public class CustomAddProjectFrame extends JFrame{
 			public void valueChanged(ListSelectionEvent e) {
 				Video selectedVideo = (Video)list.getSelectedValue();
 				int selectedIndex = list.getSelectedIndex();
+				secondToLastSelectedIndex = lastSelectedIndex;
+				lastSelectedIndex = selectedIndex; 
+				if(listForceSelectionFlag){
+					listForceSelectionFlag = false;
+					return;
+				}
 				updateVideoFrame(selectedVideo, selectedIndex);
 			}
 		});
@@ -127,8 +136,8 @@ public class CustomAddProjectFrame extends JFrame{
 		panel.setLayout(null);
 
 		
-		lblVideoOf = new JLabel("Sequence 0 of 0");
-		lblVideoOf.setBounds(80, 6, 108, 16);
+		lblVideoOf = new JLabel("Image Sequence 0 of 0");
+		lblVideoOf.setBounds(62, 6, 166, 16);
 		panel.add(lblVideoOf);
 		
 		JLabel lblVideoTitle = new JLabel("Sequence Title:");
@@ -284,7 +293,7 @@ public class CustomAddProjectFrame extends JFrame{
 		coverPanel.setVisible(true);
 		panel.setVisible(false);
 		
-		JButton btnOk = new JButton("OK");
+		JButton btnOk = new JButton("Load Project");
 		btnOk.setBounds(215, 400, 117, 29);
 		btnOk.addActionListener(new ActionListener() {
 			
@@ -292,6 +301,10 @@ public class CustomAddProjectFrame extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				if(projectTitleTextField.getText().length()==0){
 					JOptionPane.showMessageDialog(null, "Please enter a title for the project.","Error",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				int reply = JOptionPane.showConfirmDialog(null,"Are you sure you want to discard the changes you have\nmande in the selected video?","Message",JOptionPane.YES_NO_OPTION);
+				if(reply != JOptionPane.YES_OPTION){
 					return;
 				}
 				Updater updater = new Updater(mainFrame);
@@ -316,13 +329,27 @@ public class CustomAddProjectFrame extends JFrame{
 		video.title = f.getName();
 		video.subject = "";
 		video.setImagesDirectory(f);
+		if(video.getNumberOfImages()==0){
+			JOptionPane.showMessageDialog(null, "The folder you selected does not contain any images.","Error",JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 		videos.add(video);
 		model.addElement(video);
 	}
 	
 	private void updateVideoFrame(Video video, int index){
 		//Updates the left hand frame to show the information of the video that was just selected by the user
-		lblVideoOf.setText("Sequence "+(index+1)+" of "+(videos.size()));
+		
+		//First we might want to ask the user if she wants to discard changes
+		if(btnApplyChanges.isEnabled()){
+			int reply = JOptionPane.showConfirmDialog(null,"Are you sure you want to discard the changes you have\nmande in the selected video?","Message",JOptionPane.YES_NO_OPTION);
+			if(reply != JOptionPane.YES_OPTION){
+				listForceSelectionFlag = true;
+				list.setSelectedIndex(secondToLastSelectedIndex);
+				return;
+			}
+		}
+		lblVideoOf.setText("Image Sequence "+(index+1)+" of "+(videos.size()));
 		videoTitleTextField.setText(video.title);
 		subjectTextField.setText(video.subject);
 		if(video.getImagesDirectory()!=null && video.getImagesDirectory().length()>0){

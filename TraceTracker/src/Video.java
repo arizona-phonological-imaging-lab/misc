@@ -33,7 +33,6 @@ public class Video {
 		if(imagesDirectory.getAbsolutePath().length()==0){
 			return;
 		}
-		System.out.println(imagesDirectory.getAbsolutePath());
 		File[] theFiles = imagesDirectory.listFiles();
 		int pngCounter = 0;
 		int jpgCounter = 0;
