@@ -314,6 +314,7 @@ public class MainFrame extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null,"Please make sure all image frames for each recording\nare stored in a separate folder before proceeding.");
 				CustomAddProjectFrame customAddProjFrame = new CustomAddProjectFrame(MainFrame.this);
 				customAddProjFrame.setBounds(500, 200, 555, 462);
 				customAddProjFrame.setVisible(true);

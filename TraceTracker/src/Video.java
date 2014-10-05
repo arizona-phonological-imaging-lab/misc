@@ -30,6 +30,10 @@ public class Video {
 		//For finding the number of images it should be careful that the valid frames are either
 		//all jpg or all png.
 		this.imagesDirectory = imagesDirectory;
+		if(imagesDirectory.getAbsolutePath().length()==0){
+			return;
+		}
+		System.out.println(imagesDirectory.getAbsolutePath());
 		File[] theFiles = imagesDirectory.listFiles();
 		int pngCounter = 0;
 		int jpgCounter = 0;

@@ -97,7 +97,7 @@ public class Updater implements PropertyChangeListener{
 					//Get the set of images for this video
 					File[] possibleImages = video.getImagesDirectory().listFiles();
 					File[] possibleTraces = new File[0];
-					if(video.getTracesDirectory()!=null){
+					if(video.getTracesDirectory()!=null && video.getTracesDirectory().getAbsolutePath().length()!=0){
 						possibleTraces = video.getTracesDirectory().listFiles();
 					}
 					System.out.println("possibleImages size: "+possibleImages.length);

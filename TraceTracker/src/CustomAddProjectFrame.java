@@ -2,9 +2,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -13,31 +17,27 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import javax.swing.ListSelectionModel;
-
-import com.sun.org.apache.xml.internal.serializer.utils.Utils;
-
-import sun.tools.asm.Cover;
-
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.InputMethodListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 
 public class CustomAddProjectFrame extends JFrame{
-	private JTextField projectTitleTextField;
-	private JTextField languageTextField;
-	private JTextField videoTitleTextField;
-	private JTextField subjectTextField;
-	private JTextField imagesDirTextField;
-	private JTextField tracesDirTextField;
-	private JTextField textGridPathTextField;
+	public JTextField projectTitleTextField;
+	public JTextField languageTextField;
+	public JTextField videoTitleTextField;
+	public JTextField subjectTextField;
+	public JTextField imagesDirTextField;
+	public JTextField tracesDirTextField;
+	public JTextField textGridPathTextField;
+	public JButton btnApplyChanges;
 	private DefaultListModel model;
-	private JList list;
+	public JList list;
 	private JFileChooser jfc;
 	private ArrayList<Video> videos;
 	private MainFrame mainFrame;
@@ -125,6 +125,7 @@ public class CustomAddProjectFrame extends JFrame{
 		panel.setBounds(274, 12, 266, 367);
 		getContentPane().add(panel);
 		panel.setLayout(null);
+
 		
 		lblVideoOf = new JLabel("Sequence 0 of 0");
 		lblVideoOf.setBounds(80, 6, 108, 16);
@@ -137,6 +138,8 @@ public class CustomAddProjectFrame extends JFrame{
 		videoTitleTextField = new JTextField();
 		videoTitleTextField.setColumns(10);
 		videoTitleTextField.setBounds(115, 34, 134, 28);
+		//We name the documents so that we can keep track of them in the event handler
+		videoTitleTextField.getDocument().putProperty("name", "title");
 		panel.add(videoTitleTextField);
 		
 		JLabel lblSubject = new JLabel("Subject:");
@@ -146,6 +149,7 @@ public class CustomAddProjectFrame extends JFrame{
 		subjectTextField = new JTextField();
 		subjectTextField.setColumns(10);
 		subjectTextField.setBounds(115, 68, 134, 28);
+		subjectTextField.getDocument().putProperty("name", "subject");
 		panel.add(subjectTextField);
 		
 		JLabel lblImagesFolder = new JLabel("Images Directory:");
@@ -156,6 +160,7 @@ public class CustomAddProjectFrame extends JFrame{
 		imagesDirTextField.setBounds(17, 132, 143, 28);
 		panel.add(imagesDirTextField);
 		imagesDirTextField.setColumns(10);
+		imagesDirTextField.getDocument().putProperty("name", "imagesDir");
 		
 		JButton browseImageButton = new JButton("Browse...");
 		browseImageButton.setBounds(159, 133, 94, 29);
@@ -196,6 +201,7 @@ public class CustomAddProjectFrame extends JFrame{
 		tracesDirTextField = new JTextField();
 		tracesDirTextField.setColumns(10);
 		tracesDirTextField.setBounds(17, 196, 143, 28);
+		tracesDirTextField.getDocument().putProperty("name", "tracesDir");
 		panel.add(tracesDirTextField);
 		
 		JLabel lblTracesDirectory = new JLabel("Traces Directory:");
@@ -213,7 +219,6 @@ public class CustomAddProjectFrame extends JFrame{
 					
 					@Override
 					public String getDescription() {
-						// TODO Auto-generated method stub
 						return null;
 					}
 					
@@ -243,6 +248,7 @@ public class CustomAddProjectFrame extends JFrame{
 		textGridPathTextField = new JTextField();
 		textGridPathTextField.setColumns(10);
 		textGridPathTextField.setBounds(17, 263, 143, 28);
+		textGridPathTextField.getDocument().putProperty("name", "textGrid");
 		panel.add(textGridPathTextField);
 		
 		JLabel lblTextgridFile = new JLabel("TextGrid File:");
@@ -253,7 +259,7 @@ public class CustomAddProjectFrame extends JFrame{
 		lblImages.setBounds(17, 305, 108, 16);
 		panel.add(lblImages);
 		
-		JButton btnApplyChanges = new JButton("Apply changes");
+		btnApplyChanges = new JButton("Apply changes");
 		btnApplyChanges.setBounds(69, 332, 127, 29);
 		btnApplyChanges.addActionListener(new ActionListener() {
 			
@@ -262,6 +268,7 @@ public class CustomAddProjectFrame extends JFrame{
 				updateVideoInfo();
 			}
 		});
+		btnApplyChanges.setEnabled(false);
 		panel.add(btnApplyChanges);
 		
 		coverPanel = new JPanel();
@@ -294,6 +301,14 @@ public class CustomAddProjectFrame extends JFrame{
 			}
 		});
 		getContentPane().add(btnOk);
+		
+		//For each component of the right hand panel if it was a textField add an myKeyListener to it.
+		for(Component c: panel.getComponents()){
+			if(c.getClass().equals(imagesDirTextField.getClass())){
+				JTextField tf = (JTextField) c;
+				tf.getDocument().addDocumentListener(new MyKeyListener());
+			}
+		}
 	}
 	
 	private void createNewVideo(File f){
@@ -310,7 +325,9 @@ public class CustomAddProjectFrame extends JFrame{
 		lblVideoOf.setText("Sequence "+(index+1)+" of "+(videos.size()));
 		videoTitleTextField.setText(video.title);
 		subjectTextField.setText(video.subject);
-		imagesDirTextField.setText(video.getImagesDirectory().getAbsolutePath());
+		if(video.getImagesDirectory()!=null && video.getImagesDirectory().length()>0){
+			imagesDirTextField.setText(video.getImagesDirectory().getAbsolutePath());
+		}
 		if(video.getTracesDirectory()!=null && video.getTracesDirectory().length()>0){
 			tracesDirTextField.setText(video.getTracesDirectory().getAbsolutePath());
 		}
@@ -360,5 +377,86 @@ public class CustomAddProjectFrame extends JFrame{
 			v.project = title;
 			v.language = lang;
 		}
+	}
+	
+	private class MyKeyListener implements DocumentListener{
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			//
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			Document doc = e.getDocument();
+			String imagesDirectory = "";
+			String tracesDirectory = "";
+			String textGrid = "";
+			String text = "";
+			try {
+				text = doc.getText(0, doc.getLength());
+			} catch (BadLocationException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			Video selectedVideo = (Video) list.getSelectedValue();
+			if(selectedVideo.getImagesDirectory()!=null){
+				imagesDirectory = selectedVideo.getImagesDirectory().getAbsolutePath();
+			}
+			if(selectedVideo.getTracesDirectory()!=null){
+				tracesDirectory = selectedVideo.getTracesDirectory().getAbsolutePath();
+			}
+			if(selectedVideo.textGridFile!=null){
+				textGrid = selectedVideo.textGridFile.getAbsolutePath();
+			}
+			if(doc.getProperty("name").equals("title")){
+				if(text.equals(selectedVideo.title)){
+					btnApplyChanges.setEnabled(false);
+				}
+				else{
+					btnApplyChanges.setEnabled(true);
+				}
+			}
+			else if(doc.getProperty("name").equals("subject")){
+				if(text.equals(selectedVideo.subject)){
+					btnApplyChanges.setEnabled(false);
+				}
+				else{
+					btnApplyChanges.setEnabled(true);
+				}
+			}
+			else if(doc.getProperty("name").equals("imagesDir")){
+				if(text.equals(imagesDirectory)){
+					btnApplyChanges.setEnabled(false);
+				}
+				else{
+					btnApplyChanges.setEnabled(true);
+				}
+			}
+			else if(doc.getProperty("name").equals("tracesDir")){
+				if(text.equals(tracesDirectory)){
+					btnApplyChanges.setEnabled(false);
+				}
+				else{
+					btnApplyChanges.setEnabled(true);
+				}
+			}
+			else if(doc.getProperty("name").equals("textGrid")){
+				if(text.equals(textGrid)){
+					btnApplyChanges.setEnabled(false);
+				}
+				else{
+					btnApplyChanges.setEnabled(true);
+				}
+			}
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			insertUpdate(e);
+		}
+
+
+		
 	}
 }
