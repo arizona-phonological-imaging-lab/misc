@@ -944,33 +944,44 @@ public class DBConnector {
 		String deleteProject= "DELETE FROM project WHERE project.title='"+title+"';";
 		
 		stat.execute(deleteTags);
-		System.out.println("Done deleteTags");
 		stat.execute(deleteExps);
-		System.out.println("Done deleteExps");
 		stat.execute(deleteWords);
-		System.out.println("Done deleteWords");
 		stat.execute(deleteWordsStart);
-		System.out.println("Done deleteWordsStart");
 		stat.execute(deleteWordsEnd);
-		System.out.println("Done deleteWordsEnd");
 		stat.execute(deleteSegments);
-		System.out.println("Done deleteSegments");
 		stat.execute(deleteSegmentsStart);
-		System.out.println("Done deleteSegmentsStart");
 		stat.execute(deleteSegmentsEnd);
-		System.out.println("Done deleteSegmentsEnd");
 		stat.execute(deleteTraces);
-		System.out.println("Done deleteTraces");
 		stat.execute(deleteTracers);
-		System.out.println("Done deleteTracers");
 		stat.execute(deleteImages);
-		System.out.println("Done deleteImages");
 		stat.execute(deleteVideos);
-		System.out.println("Done deleteVideos");
 		stat.execute(deleteProject);
-		System.out.println("Done deleteProject");
 		
 		stat.close();
+	}
+
+	public void setCAPWarningOn() throws SQLException {
+		Statement stat = conn.createStatement();
+		String command = "UPDATE settings SET value='0' WHERE parameter='showCAPWarning'";
+		stat.execute(command);
+		stat.close();
+	}
+	
+	public boolean isCAPWarningOn() throws SQLException {
+		Statement stat = conn.createStatement();
+		String command = "SELECT value FROM settings WHERE parameter='showCAPWarning'";
+		ResultSet rs = stat.executeQuery(command);
+		rs.next();
+		String result = rs.getString(1);
+		if(result.equals("1")){
+			return true;
+		}
+		else{
+			if(!result.equals("0")){
+				System.err.println("Settings value is neither 1 nor 0!");
+			}
+			return false;
+		}
 	}
 	
 }

@@ -1,5 +1,6 @@
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -20,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -314,7 +316,28 @@ public class MainFrame extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null,"Please make sure all image frames for each recording\nare stored in a separate folder before proceeding.");
+				JCheckBox checkBox = new JCheckBox("Don't show this message again.");
+				checkBox.getFont().deriveFont(8);
+				boolean mustWarn = false;
+				try {
+					mustWarn = db.isCAPWarningOn();
+				} catch (SQLException e2) {
+					e2.printStackTrace();
+					printErrorLog(e2);
+				}
+				if(mustWarn){
+					Object[] params = {"Please make sure all image frames for each recording\nare stored in a separate folder before proceeding.", checkBox};
+					JOptionPane.showMessageDialog(null,params);
+				}
+				if(checkBox.isSelected()){
+					try {
+						db.setCAPWarningOn();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						printErrorLog(e1);
+					}
+				}
 				CustomAddProjectFrame customAddProjFrame = new CustomAddProjectFrame(MainFrame.this);
 				customAddProjFrame.setBounds(500, 200, 555, 462);
 				customAddProjFrame.setVisible(true);

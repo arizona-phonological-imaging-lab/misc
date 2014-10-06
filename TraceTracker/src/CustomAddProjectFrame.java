@@ -127,6 +127,20 @@ public class CustomAddProjectFrame extends JFrame{
 		
 		JButton deleteButton = new JButton("Delete");
 		deleteButton.setBounds(17, 346, 117, 29);
+		deleteButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int index = list.getSelectedIndex();
+				listForceSelectionFlag = true;
+				lastSelectedIndex = 0;
+				secondToLastSelectedIndex = 0;
+				model.remove(index);
+				videos.remove(index);
+				coverPanel.setVisible(true);
+				panel.setVisible(false);
+			}
+		});
 		getContentPane().add(deleteButton);
 		
 		panel = new JPanel();
@@ -275,6 +289,7 @@ public class CustomAddProjectFrame extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				updateVideoInfo();
+				btnApplyChanges.setEnabled(false);
 			}
 		});
 		btnApplyChanges.setEnabled(false);
@@ -425,6 +440,7 @@ public class CustomAddProjectFrame extends JFrame{
 			} catch (BadLocationException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+				MainFrame.printErrorLog(e1);
 			}
 			Video selectedVideo = (Video) list.getSelectedValue();
 			if(selectedVideo.getImagesDirectory()!=null){
