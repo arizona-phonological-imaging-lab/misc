@@ -60,6 +60,9 @@ public class CustomAddProjectFrame extends JFrame{
 			
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
+				if(e.getValueIsAdjusting()){
+					return;
+				}
 				Video selectedVideo = (Video)list.getSelectedValue();
 				int selectedIndex = list.getSelectedIndex();
 				secondToLastSelectedIndex = lastSelectedIndex;
@@ -139,6 +142,7 @@ public class CustomAddProjectFrame extends JFrame{
 				videos.remove(index);
 				coverPanel.setVisible(true);
 				panel.setVisible(false);
+				btnApplyChanges.setEnabled(false);
 			}
 		});
 		getContentPane().add(deleteButton);
@@ -318,9 +322,11 @@ public class CustomAddProjectFrame extends JFrame{
 					JOptionPane.showMessageDialog(null, "Please enter a title for the project.","Error",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				int reply = JOptionPane.showConfirmDialog(null,"Are you sure you want to discard the changes you have\nmande in the selected video?","Message",JOptionPane.YES_NO_OPTION);
-				if(reply != JOptionPane.YES_OPTION){
-					return;
+				if(btnApplyChanges.isEnabled()){					
+					int reply = JOptionPane.showConfirmDialog(null,"Are you sure you want to discard the changes you have\nmande in the selected video?","Message",JOptionPane.YES_NO_OPTION);
+					if(reply != JOptionPane.YES_OPTION){
+						return;
+					}
 				}
 				Updater updater = new Updater(mainFrame);
 				setVideosLanguageAndProject();
@@ -370,11 +376,20 @@ public class CustomAddProjectFrame extends JFrame{
 		if(video.getImagesDirectory()!=null && video.getImagesDirectory().length()>0){
 			imagesDirTextField.setText(video.getImagesDirectory().getAbsolutePath());
 		}
+		else{
+			imagesDirTextField.setText("");
+		}
 		if(video.getTracesDirectory()!=null && video.getTracesDirectory().length()>0){
 			tracesDirTextField.setText(video.getTracesDirectory().getAbsolutePath());
 		}
+		else{
+			tracesDirTextField.setText("");
+		}
 		if(video.textGridFile!=null && video.textGridFile.length()>0){
 			textGridPathTextField.setText(video.textGridFile.getAbsolutePath());
+		}
+		else{
+			textGridPathTextField.setText("");
 		}
 		lblImages.setText(video.getNumberOfImages()+" images");
 		coverPanel.setVisible(false);
@@ -404,9 +419,25 @@ public class CustomAddProjectFrame extends JFrame{
 		else{
 			video.subject = subjectTextField.getText();
 		}
-		video.setImagesDirectory(new File(imagesDirTextField.getText()));
-		video.setTracesDirectory(new File(tracesDirTextField.getText()));
-		video.textGridFile = new File(textGridPathTextField.getText());
+		if(video.getImagesDirectory()!=null && video.getImagesDirectory().length()>0){
+			video.setImagesDirectory(new File(imagesDirTextField.getText()));
+		}
+		else{
+			video.setImagesDirectory(null);
+		}
+		if(video.getTracesDirectory()!=null && video.getTracesDirectory().length()>0){
+			video.setTracesDirectory(new File(tracesDirTextField.getText()));
+		}
+		else{
+			video.setTracesDirectory(null);
+		}
+		if(video.textGridFile!=null && video.textGridFile.length()>0){
+			video.textGridFile = new File(textGridPathTextField.getText());
+		}
+		else{
+			video.textGridFile = null;
+		}
+		
 		list.repaint();
 	}
 	
@@ -443,6 +474,7 @@ public class CustomAddProjectFrame extends JFrame{
 				MainFrame.printErrorLog(e1);
 			}
 			Video selectedVideo = (Video) list.getSelectedValue();
+			System.out.println(selectedVideo.title+", "+selectedVideo.getTracesDirectory());
 			if(selectedVideo.getImagesDirectory()!=null){
 				imagesDirectory = selectedVideo.getImagesDirectory().getAbsolutePath();
 			}
@@ -465,6 +497,7 @@ public class CustomAddProjectFrame extends JFrame{
 					btnApplyChanges.setEnabled(false);
 				}
 				else{
+					System.out.println("subject: \""+text+"\""+" \""+selectedVideo.subject+"\"");
 					btnApplyChanges.setEnabled(true);
 				}
 			}
@@ -481,6 +514,7 @@ public class CustomAddProjectFrame extends JFrame{
 					btnApplyChanges.setEnabled(false);
 				}
 				else{
+					System.out.println("tracesDir: \""+text+"\""+" \""+tracesDirectory+"\"");
 					btnApplyChanges.setEnabled(true);
 				}
 			}
@@ -489,6 +523,7 @@ public class CustomAddProjectFrame extends JFrame{
 					btnApplyChanges.setEnabled(false);
 				}
 				else{
+					System.out.println("textGrid: \""+text+"\""+" \""+textGrid+"\"");
 					btnApplyChanges.setEnabled(true);
 				}
 			}
