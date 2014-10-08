@@ -21,7 +21,6 @@ import javax.swing.JLabel;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -40,8 +39,6 @@ import java.util.Calendar;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JScrollPane;
 import javax.swing.JMenuBar;
-
-import com.sun.tools.javac.tree.JCTree.JCMethodInvocation;
 
 
 @SuppressWarnings("serial")
@@ -583,8 +580,6 @@ public class MainFrame extends JFrame{
 	}
 	
 	public static void printErrorLog(String s){
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
 		try {
 			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("error log.txt", true)));
 			String timeStamp = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
@@ -681,6 +676,7 @@ public class MainFrame extends JFrame{
 			return " ";
 		}
 		
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		public Class getColumnClass(int c) {
 			return "salam".getClass();	
 		}

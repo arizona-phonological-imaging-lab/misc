@@ -161,8 +161,6 @@ public class DBConnector {
 		}
 
 		
-		long t_med2 = System.currentTimeMillis();
-//		System.out.println("First While: "+(t_med2-t_med));
 		//If we are limiting, we want to know the actual number of results too.
 		if(weAreLimiting){
 			int orderIndex = query.indexOf("ORDER BY");
