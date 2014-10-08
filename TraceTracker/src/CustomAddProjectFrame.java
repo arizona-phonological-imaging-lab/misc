@@ -22,7 +22,9 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class CustomAddProjectFrame extends JFrame{
@@ -47,12 +49,20 @@ public class CustomAddProjectFrame extends JFrame{
 	private JPanel panel;
 	private JLabel lblVideoOf;
 	private JLabel lblImages;
+	private DBConnector db;
 	//These three are used when we don't want to change the selection of the user in the list because she has unapplied changes:
 	public boolean listForceSelectionFlag = false;
 	public int lastSelectedIndex, secondToLastSelectedIndex;			 
 	
 	public CustomAddProjectFrame(MainFrame mf) {
 		mainFrame = mf;
+		db = new DBConnector();
+		try {
+			db.initializeDB();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		list = new JList();
 		model = new DefaultListModel();
 		list.setModel(model);
@@ -301,6 +311,10 @@ public class CustomAddProjectFrame extends JFrame{
 		btnApplyChanges.setEnabled(false);
 		panel.add(btnApplyChanges);
 		
+		imagesDirTextField.setEditable(false);
+		tracesDirTextField.setEditable(false);
+		textGridPathTextField.setEditable(false);
+		
 		coverPanel = new JPanel();
 		coverPanel.setBounds(274, 12, 266, 367);
 		getContentPane().add(coverPanel);
@@ -324,11 +338,27 @@ public class CustomAddProjectFrame extends JFrame{
 					JOptionPane.showMessageDialog(null, "Please enter a title for the project.","Error",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
+				String[] projects = {};
+				try {
+					projects = db.getProjectsList();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				ArrayList<String> projectsArray = new ArrayList<String>(Arrays.asList(projects));
+				if(projectsArray.contains(projectTitleTextField.getText())){
+					JOptionPane.showMessageDialog(null, "A project with this title already exists.","Error",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				if(btnApplyChanges.isEnabled()){					
-					int reply = JOptionPane.showConfirmDialog(null,"Are you sure you want to discard the changes you have\nmande in the selected video?","Message",JOptionPane.YES_NO_OPTION);
+					int reply = JOptionPane.showConfirmDialog(null,"Are you sure you want to discard the changes you have\nmade in the selected video?","Message",JOptionPane.YES_NO_OPTION);
 					if(reply != JOptionPane.YES_OPTION){
 						return;
 					}
+				}
+				if(videos.size()<1){
+					JOptionPane.showMessageDialog(null, "There are no videos in this project.","Error",JOptionPane.ERROR_MESSAGE);
+					return;
 				}
 				Updater updater = new Updater(mainFrame);
 				setVideosLanguageAndProject();

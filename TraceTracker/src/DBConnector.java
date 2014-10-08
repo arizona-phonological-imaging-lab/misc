@@ -90,17 +90,11 @@ public class DBConnector {
 		if(corruptEntered==1){
 			query += "AND image.is_bad = 1 ";
 		}
-		if(howManyTracersEntered==1){
-			query += "AND (SELECT COUNT(*) FROM image JOIN trace ON image.id=trace.image_id WHERE image.id = theid)=0 ";
-		}
-		else if(howManyTracersEntered==2){
-			query += "AND (SELECT COUNT(*) FROM image JOIN trace ON image.id=trace.image_id WHERE image.id = theid)=1 ";
-		}
-		else if(howManyTracersEntered==3){
-			query += "AND (SELECT COUNT(*) FROM image JOIN trace ON image.id=trace.image_id WHERE image.id = theid)=2 ";
+		if(howManyTracersEntered>0 && howManyTracersEntered<4){
+			query += "AND image.trace_count="+howManyTracersEntered+" ";
 		}
 		else if(howManyTracersEntered==4){
-			query += "AND (SELECT COUNT(*) FROM image JOIN trace ON image.id=trace.image_id WHERE image.id = theid)>2 ";
+			query += "AND image.trace_count>2 ";
 		}
 		if(tag != null && tag.length()>0){
 			query += "AND (SELECT COUNT(*) FROM tag WHERE tag.content='"+tag+"' AND tag.image_id=theid)>0 "; 
@@ -120,7 +114,7 @@ public class DBConnector {
 			query += "LIMIT "+MainFrame.fetchLimit;
 		}
 		query += ";";
-		
+		System.out.println(query);
 		Statement stat = conn.createStatement();
 		long t_beforeQuery = System.currentTimeMillis();
 		ResultSet rs = stat.executeQuery(query);
@@ -153,14 +147,9 @@ public class DBConnector {
 				if(!segmentIDs.contains(segid)){
 					continue;
 				}
-				result.add(image);
 			}
-			else{
-				result.add(image);
-			}
+			result.add(image);
 		}
-
-		
 		//If we are limiting, we want to know the actual number of results too.
 		if(weAreLimiting){
 			int orderIndex = query.indexOf("ORDER BY");
@@ -243,7 +232,6 @@ public class DBConnector {
 		if(marginSizeAfter!=null && marginSizeAfter>0){			
 			addPeripheralImageToResult(result,lastVideoID, lastTitle,marginSizeAfter);
 		}
-		
 		
 		stat.close();
 		long t2 = System.currentTimeMillis();
@@ -569,7 +557,7 @@ public class DBConnector {
 				}
 			}
 			if("-1".equals(image.id)){
-				String query4 = "INSERT INTO image(video_id, title, address, sorting_code) VALUES("+videoID+",'"+image.title+"','"+image.address+"','"+(projectName+videoName+image.title)+"');";
+				String query4 = "INSERT INTO image(video_id, title, address, sorting_code, trace_count) VALUES("+videoID+",'"+image.title+"','"+image.address+"','"+(projectName+videoName+image.title)+"', 0);";
 				stat4.executeUpdate(query4);
 				//Save the db id of the image we just added. We need it when associating trace files with images in the next loop
 				ResultSet rs5 = stat4.getGeneratedKeys();
@@ -609,7 +597,7 @@ public class DBConnector {
 			}
 		}
 		
-		//Because db queries are time-consuming we batch trace files of the same tracer together, so that we
+		//Because db queries are time-consuming. we batch trace files of the same tracer together, so that we
 		//we won't need to check the id of the tracer every time.
 		for(int i=1; i<tracerNames.length; i++){
 			String query5 = "SELECT id FROM tracer WHERE first_name='"+tracerNames[i]+"';";
@@ -640,6 +628,14 @@ public class DBConnector {
 							String query8 = "UPDATE image SET autotraced=1 WHERE id="+image.id+";";
 							stat.executeUpdate(query8);
 						}
+						//Also increment the number of traces for the corresponding image
+						String query8 = "SELECT trace_count FROM image WHERE image_id='"+image.id+"';";
+						ResultSet rsb = stat.executeQuery(query8);
+						rsb.next();
+						int traceCount = rsb.getInt(1);
+						traceCount++;
+						String query9 = "UPDATE image SET trace_count='"+traceCount+"' WHERE image_id='"+image.id+"'";
+						stat.execute(query9);
 					}
 				}
 			}
@@ -971,6 +967,7 @@ public class DBConnector {
 		ResultSet rs = stat.executeQuery(command);
 		rs.next();
 		String result = rs.getString(1);
+		stat.close();
 		if(result.equals("1")){
 			return true;
 		}
