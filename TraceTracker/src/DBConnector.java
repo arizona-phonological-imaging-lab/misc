@@ -963,18 +963,20 @@ public class DBConnector {
 	
 	public boolean isCAPWarningOn() throws SQLException {
 		Statement stat = conn.createStatement();
-		String command = "SELECT value FROM settings WHERE parameter='showCAPWarning'";
+		String command = "SELECTs value FROM settings WHERE parameter='showCAPWarning'";
 		ResultSet rs = stat.executeQuery(command);
 		rs.next();
 		String result = rs.getString(1);
 		stat.close();
 		if(result.equals("1")){
+			stat.close();
 			return true;
 		}
 		else{
 			if(!result.equals("0")){
 				System.err.println("Settings value is neither 1 nor 0!");
 			}
+			stat.close();
 			return false;
 		}
 	}
