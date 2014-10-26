@@ -1,5 +1,6 @@
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -38,8 +39,6 @@ import java.util.Calendar;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JScrollPane;
 import javax.swing.JMenuBar;
-
-import com.sun.tools.javac.tree.JCTree.JCMethodInvocation;
 
 
 @SuppressWarnings("serial")
@@ -314,8 +313,31 @@ public class MainFrame extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Updater updater = new Updater(MainFrame.this);
-				updater.updateDB("addCustomProject");
+				JCheckBox checkBox = new JCheckBox("Don't show this message again.");
+				checkBox.getFont().deriveFont(8);
+				boolean mustWarn = false;
+				try {
+					mustWarn = db.isCAPWarningOn();
+				} catch (SQLException e2) {
+					e2.printStackTrace();
+					printErrorLog(e2);
+				}
+				if(mustWarn){
+					Object[] params = {"Please make sure all image frames for each recording\nare stored in a separate folder before proceeding.", checkBox};
+					JOptionPane.showMessageDialog(null,params);
+				}
+				if(checkBox.isSelected()){
+					try {
+						db.setCAPWarningOn();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						printErrorLog(e1);
+					}
+				}
+				CustomAddProjectFrame customAddProjFrame = new CustomAddProjectFrame(MainFrame.this);
+				customAddProjFrame.setBounds(500, 200, 555, 462);
+				customAddProjFrame.setVisible(true);
 			}
 		});
 		addProject.add(addStandardProject);
@@ -558,8 +580,6 @@ public class MainFrame extends JFrame{
 	}
 	
 	public static void printErrorLog(String s){
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
 		try {
 			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("error log.txt", true)));
 			String timeStamp = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
@@ -656,6 +676,7 @@ public class MainFrame extends JFrame{
 			return " ";
 		}
 		
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		public Class getColumnClass(int c) {
 			return "salam".getClass();	
 		}

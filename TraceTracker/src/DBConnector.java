@@ -90,17 +90,11 @@ public class DBConnector {
 		if(corruptEntered==1){
 			query += "AND image.is_bad = 1 ";
 		}
-		if(howManyTracersEntered==1){
-			query += "AND (SELECT COUNT(*) FROM image JOIN trace ON image.id=trace.image_id WHERE image.id = theid)=0 ";
-		}
-		else if(howManyTracersEntered==2){
-			query += "AND (SELECT COUNT(*) FROM image JOIN trace ON image.id=trace.image_id WHERE image.id = theid)=1 ";
-		}
-		else if(howManyTracersEntered==3){
-			query += "AND (SELECT COUNT(*) FROM image JOIN trace ON image.id=trace.image_id WHERE image.id = theid)=2 ";
+		if(howManyTracersEntered>0 && howManyTracersEntered<4){
+			query += "AND image.trace_count="+howManyTracersEntered+" ";
 		}
 		else if(howManyTracersEntered==4){
-			query += "AND (SELECT COUNT(*) FROM image JOIN trace ON image.id=trace.image_id WHERE image.id = theid)>2 ";
+			query += "AND image.trace_count>2 ";
 		}
 		if(tag != null && tag.length()>0){
 			query += "AND (SELECT COUNT(*) FROM tag WHERE tag.content='"+tag+"' AND tag.image_id=theid)>0 "; 
@@ -120,7 +114,7 @@ public class DBConnector {
 			query += "LIMIT "+MainFrame.fetchLimit;
 		}
 		query += ";";
-		
+		System.out.println(query);
 		Statement stat = conn.createStatement();
 		long t_beforeQuery = System.currentTimeMillis();
 		ResultSet rs = stat.executeQuery(query);
@@ -153,16 +147,9 @@ public class DBConnector {
 				if(!segmentIDs.contains(segid)){
 					continue;
 				}
-				result.add(image);
 			}
-			else{
-				result.add(image);
-			}
+			result.add(image);
 		}
-
-		
-		long t_med2 = System.currentTimeMillis();
-//		System.out.println("First While: "+(t_med2-t_med));
 		//If we are limiting, we want to know the actual number of results too.
 		if(weAreLimiting){
 			int orderIndex = query.indexOf("ORDER BY");
@@ -245,7 +232,6 @@ public class DBConnector {
 		if(marginSizeAfter!=null && marginSizeAfter>0){			
 			addPeripheralImageToResult(result,lastVideoID, lastTitle,marginSizeAfter);
 		}
-		
 		
 		stat.close();
 		long t2 = System.currentTimeMillis();
@@ -523,7 +509,7 @@ public class DBConnector {
 		return result;
 	}
 	
-	public void addImages(HashMap<String, ImageData> images, ArrayList<Trace> traces, String projectName, String projectAddress, String videoName, String videoAddress, String language, boolean updateMode) throws Exception{
+	public void addImages(HashMap<String, ImageData> images, ArrayList<Trace> traces, String projectName, String projectAddress, String videoName, String videoAddress, String language, String subj, boolean updateMode) throws Exception{
 		Statement stat = conn.createStatement();
 		int projectID = -1;
 		String query = "SELECT id FROM project WHERE title='"+projectName+"';";
@@ -542,8 +528,7 @@ public class DBConnector {
 			projectID = rs.getInt(1);
 		}
 		//The project is taken care of. Now add the video.
-		int underscoreIndex = videoName.indexOf("_");
-		String subject = videoName.substring(0, underscoreIndex-1); 
+		String subject = subj; 
 		Statement stat3 = conn.createStatement();
 		int videoID = -1;
 		if(updateMode){
@@ -572,7 +557,7 @@ public class DBConnector {
 				}
 			}
 			if("-1".equals(image.id)){
-				String query4 = "INSERT INTO image(video_id, title, address, sorting_code) VALUES("+videoID+",'"+image.title+"','"+image.address+"','"+(projectName+videoName+image.title)+"');";
+				String query4 = "INSERT INTO image(video_id, title, address, sorting_code, trace_count) VALUES("+videoID+",'"+image.title+"','"+image.address+"','"+(projectName+videoName+image.title)+"', 0);";
 				stat4.executeUpdate(query4);
 				//Save the db id of the image we just added. We need it when associating trace files with images in the next loop
 				ResultSet rs5 = stat4.getGeneratedKeys();
@@ -612,7 +597,7 @@ public class DBConnector {
 			}
 		}
 		
-		//Because db queries are time-consuming we batch trace files of the same tracer together, so that we
+		//Because db queries are time-consuming. we batch trace files of the same tracer together, so that we
 		//we won't need to check the id of the tracer every time.
 		for(int i=1; i<tracerNames.length; i++){
 			String query5 = "SELECT id FROM tracer WHERE first_name='"+tracerNames[i]+"';";
@@ -643,6 +628,14 @@ public class DBConnector {
 							String query8 = "UPDATE image SET autotraced=1 WHERE id="+image.id+";";
 							stat.executeUpdate(query8);
 						}
+						//Also increment the number of traces for the corresponding image
+						String query8 = "SELECT trace_count FROM image WHERE image_id='"+image.id+"';";
+						ResultSet rsb = stat.executeQuery(query8);
+						rsb.next();
+						int traceCount = rsb.getInt(1);
+						traceCount++;
+						String query9 = "UPDATE image SET trace_count='"+traceCount+"' WHERE image_id='"+image.id+"'";
+						stat.execute(query9);
 					}
 				}
 			}
@@ -945,33 +938,45 @@ public class DBConnector {
 		String deleteProject= "DELETE FROM project WHERE project.title='"+title+"';";
 		
 		stat.execute(deleteTags);
-		System.out.println("Done deleteTags");
 		stat.execute(deleteExps);
-		System.out.println("Done deleteExps");
 		stat.execute(deleteWords);
-		System.out.println("Done deleteWords");
 		stat.execute(deleteWordsStart);
-		System.out.println("Done deleteWordsStart");
 		stat.execute(deleteWordsEnd);
-		System.out.println("Done deleteWordsEnd");
 		stat.execute(deleteSegments);
-		System.out.println("Done deleteSegments");
 		stat.execute(deleteSegmentsStart);
-		System.out.println("Done deleteSegmentsStart");
 		stat.execute(deleteSegmentsEnd);
-		System.out.println("Done deleteSegmentsEnd");
 		stat.execute(deleteTraces);
-		System.out.println("Done deleteTraces");
 		stat.execute(deleteTracers);
-		System.out.println("Done deleteTracers");
 		stat.execute(deleteImages);
-		System.out.println("Done deleteImages");
 		stat.execute(deleteVideos);
-		System.out.println("Done deleteVideos");
 		stat.execute(deleteProject);
-		System.out.println("Done deleteProject");
 		
 		stat.close();
+	}
+
+	public void setCAPWarningOn() throws SQLException {
+		Statement stat = conn.createStatement();
+		String command = "UPDATE settings SET value='0' WHERE parameter='showCAPWarning'";
+		stat.execute(command);
+		stat.close();
+	}
+	
+	public boolean isCAPWarningOn() throws SQLException {
+		Statement stat = conn.createStatement();
+		String command = "SELECT value FROM settings WHERE parameter='showCAPWarning'";
+		ResultSet rs = stat.executeQuery(command);
+		rs.next();
+		String result = rs.getString(1);
+		stat.close();
+		if(result.equals("1")){
+			return true;
+		}
+		else{
+			if(!result.equals("0")){
+				System.err.println("Settings value is neither 1 nor 0!");
+			}
+			return false;
+		}
 	}
 	
 }

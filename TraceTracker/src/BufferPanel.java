@@ -8,24 +8,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ListModel;
 import javax.swing.border.EtchedBorder;
-import javax.swing.event.ListDataListener;
 import javax.swing.JLabel;
 
 
+@SuppressWarnings("serial")
 public class BufferPanel extends JPanel{
 	MainFrame mainFrame;
 	JList bufferList;
@@ -150,7 +145,7 @@ public class BufferPanel extends JPanel{
 			} catch (IOException e) {
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(null, "There was some problem in copying the image files.\nSee the log file.","Error",JOptionPane.ERROR_MESSAGE);
-				mainFrame.printErrorLog(e);
+				MainFrame.printErrorLog(e);
 				return;
 			}
 			//Now copy the trace files too if necessary
@@ -161,7 +156,7 @@ public class BufferPanel extends JPanel{
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 					JOptionPane.showMessageDialog(null, "There was an error in retrieving the trace files. See the log file.","Error",JOptionPane.ERROR_MESSAGE);
-					mainFrame.printErrorLog(e1);
+					MainFrame.printErrorLog(e1);
 					return;
 				}
 				for(String address : traceAddresses){
@@ -174,7 +169,7 @@ public class BufferPanel extends JPanel{
 					} catch (IOException e) {
 						e.printStackTrace();
 						JOptionPane.showMessageDialog(null, "There was some problem in copying the trace files. See the log file.","Error",JOptionPane.ERROR_MESSAGE);
-						mainFrame.printErrorLog(e);
+						MainFrame.printErrorLog(e);
 						return;
 					}
 				}
@@ -245,7 +240,7 @@ public class BufferPanel extends JPanel{
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "There was an error. See the log file.","Error",JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
-			mainFrame.printErrorLog(e);
+			MainFrame.printErrorLog(e);
 		}
 		JOptionPane.showMessageDialog(null,taggedCounter+" images were tagged '"+tagContent+"'.");
 		mainFrame.searchbox.updateData();
@@ -299,7 +294,7 @@ public class BufferPanel extends JPanel{
 			} catch (SQLException e) {
 				JOptionPane.showMessageDialog(null, "There was an error. See the log file.","Error",JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
-				mainFrame.printErrorLog(e);
+				MainFrame.printErrorLog(e);
 			}
 			if(isExperiment){
 				JOptionPane.showMessageDialog(null,"The experiment was successfully removed from the images.");

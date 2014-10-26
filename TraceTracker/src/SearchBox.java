@@ -10,6 +10,7 @@ import javax.swing.JCheckBox;
 import javax.swing.ToolTipManager;
 
 
+@SuppressWarnings("serial")
 public class SearchBox extends JPanel{
 	public JTextField imageTitleTextField;
 	public JComboBox projectCombo;
@@ -40,7 +41,7 @@ public class SearchBox extends JPanel{
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			mainFrame.printErrorLog(e);
+			MainFrame.printErrorLog(e);
 		}
 		mf = mainFrame;
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -77,7 +78,7 @@ public class SearchBox extends JPanel{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			mainFrame.printErrorLog(e);
+			MainFrame.printErrorLog(e);
 		}
 		projectCombo = new JComboBox(projectsList);
 		projectCombo.setBounds(103, 38, 138, 27);
@@ -89,7 +90,7 @@ public class SearchBox extends JPanel{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			mainFrame.printErrorLog(e);
+			MainFrame.printErrorLog(e);
 		}
 		tracerCombo = new JComboBox(tracersList);
 		tracerCombo.setBounds(348, 8, 138, 27);
@@ -101,7 +102,7 @@ public class SearchBox extends JPanel{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			mainFrame.printErrorLog(e);
+			MainFrame.printErrorLog(e);
 		}
 		languageCombo = new JComboBox(languagesList);
 		languageCombo.setBounds(103, 68, 138, 27);
@@ -113,7 +114,7 @@ public class SearchBox extends JPanel{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			mainFrame.printErrorLog(e);
+			MainFrame.printErrorLog(e);
 		}
 		experimentCombo = new JComboBox(experimentsList);
 		experimentCombo.setBounds(103, 98, 138, 27);
@@ -148,7 +149,7 @@ public class SearchBox extends JPanel{
 			tagsList = db.getTagsList();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			mainFrame.printErrorLog(e);
+			MainFrame.printErrorLog(e);
 		}
 		final DefaultComboBoxModel model = new DefaultComboBoxModel();
 		tagsCombo = new JComboBox(model);
@@ -262,7 +263,7 @@ public class SearchBox extends JPanel{
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			mf.printErrorLog(e);
+			MainFrame.printErrorLog(e);
 		}
 	}
 }
