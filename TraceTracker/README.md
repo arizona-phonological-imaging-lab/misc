@@ -5,4 +5,4 @@ Software for managing ultrasound images and their metadata.
 
 For downloading the latest version, click on the link below:
 
-http://persiandee.com/uatracker/ATFM-v1.jar
+http://persiandee.com/uatracker/UATracker.jar
