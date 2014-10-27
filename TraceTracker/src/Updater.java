@@ -233,7 +233,7 @@ public class Updater implements PropertyChangeListener{
 				ArrayList<Trace> traceFiles = new ArrayList<Trace>();
 
 				//Also look in the possibly existent folder "completedTraces"
-				File tracesDirectory = new File(video.getAbsolutePath()+"/completedTraces");
+				File tracesDirectory = new File(video.getAbsolutePath()+"/Completed_traces");
 				File[] theTraceFolderFiles = null;
 				if(tracesDirectory.exists()){
 					theTraceFolderFiles = tracesDirectory.listFiles();

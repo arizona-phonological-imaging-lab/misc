@@ -45,6 +45,7 @@ public class DBConnector {
 		String wordEntered = sb.wordTextField.getText().trim();
 		String segmentEntered = sb.segmentTextField.getText().trim();
 		String targetSegment = findTargetSegment(segmentEntered);
+		System.out.println(targetSegment);
 		if(segmentEntered.length()>0 && targetSegment.length()==0){
 			JOptionPane.showMessageDialog(null, "Segment sequence not valid. Use brackets to indicate target segment.","Error",JOptionPane.ERROR_MESSAGE);
 			return result;
@@ -59,7 +60,15 @@ public class DBConnector {
 		//Do a preliminary segment filtering here to speed up the segment search (part 1)
 		if(segmentEntered.length()>0){
 			query += "JOIN segment ON image.segment_id=segment.id ";
-		}		
+		}
+		
+		if(tag != null && tag.length()>0){
+			query += "JOIN tag ON image.id=tag.image_id "; 
+		}
+		
+		if(experimentEntered != null && experimentEntered.length()>0){
+			query += "JOIN experiment ON image.id=experiment.image_id ";
+		}
 		
 		query +="WHERE 1=1 "; //This last thing after "where" is a dummy condition
 		
@@ -85,19 +94,20 @@ public class DBConnector {
 			query += "AND (project.language = '' OR project.language is null) ";
 		}
 		if(experimentEntered != null && experimentEntered.length()>0){
-			query += "AND (SELECT COUNT(*) FROM experiment WHERE experiment.content='"+experimentEntered+"' AND experiment.image_id=theid)>0 ";
+			query += "AND experiment.content='"+experimentEntered+"' ";
 		}
 		if(corruptEntered==1){
 			query += "AND image.is_bad = 1 ";
 		}
 		if(howManyTracersEntered>0 && howManyTracersEntered<4){
-			query += "AND image.trace_count="+howManyTracersEntered+" ";
+			int actualRequiredNumber = howManyTracersEntered-1;
+			query += "AND image.trace_count="+actualRequiredNumber+" ";
 		}
 		else if(howManyTracersEntered==4){
 			query += "AND image.trace_count>2 ";
 		}
 		if(tag != null && tag.length()>0){
-			query += "AND (SELECT COUNT(*) FROM tag WHERE tag.content='"+tag+"' AND tag.image_id=theid)>0 "; 
+			query += "AND tag.content='"+tag+"' "; 
 		}
 		if(wordEntered != null && wordEntered.length()>0){
 			query += "AND theid IN (SELECT image.id FROM image JOIN word ON image.word_id=word.id WHERE word.spelling='"+wordEntered+"') "; 
@@ -126,6 +136,7 @@ public class DBConnector {
 		}
 		int lastVideoID = 0;
 		ImageData image = new ImageData();
+		int prevSegId = -1;
 		while(rs.next()){
 			image = new ImageData();
 			image.id = rs.getString("theid");
@@ -148,6 +159,10 @@ public class DBConnector {
 					continue;
 				}
 			}
+			if(image.segment_id!=prevSegId && marginSizeAfter==0 && prevSegId!=-1){
+				result.get(result.size()-1).isLastInSet = true;
+			}
+			prevSegId = image.segment_id;
 			result.add(image);
 		}
 		//If we are limiting, we want to know the actual number of results too.
@@ -206,7 +221,7 @@ public class DBConnector {
 		}
 		refinedResult = new ArrayList<ImageData>();
 		String lastTitle = null;
-		//We may want the marginal frames too:
+		//We may want the peripheral frames too:
 		if( segmentEntered.length()>0 && (marginSizeBefore>0 || marginSizeAfter>0) ){
 			int lastSegmentID = -1;
 			for(int i=0; i<result.size(); i++){
@@ -229,10 +244,9 @@ public class DBConnector {
 			result = refinedResult;
 		}
 		//Add the ending peripherals for the last frame set
-		if(marginSizeAfter!=null && marginSizeAfter>0){			
+		if(marginSizeAfter!=null && marginSizeAfter>0 && result.size()>0){			
 			addPeripheralImageToResult(result,lastVideoID, lastTitle,marginSizeAfter);
 		}
-		
 		stat.close();
 		long t2 = System.currentTimeMillis();
 		System.out.println("Time: "+(t2-t1));
@@ -243,15 +257,18 @@ public class DBConnector {
 	}
 
 	private String findTargetSegment(String input) {
-		if(input.contains("[") && input.contains("]")){
+		//Gets an input segment search string like "$ a [r] ch m" and reutrns "r" as the segment that is the main target
+		//of the search
+		
+		if(input.matches(".*\\[\\w+\\].*")){
 			String result = input.replaceAll(".*\\[(.*)\\].*", "$1");
 			return result;
 		}
 		else{
-			if(input.contains(" ")){
-				return "";
+			if(input.matches("^(\\W)*(\\w)+(\\W)*$")){
+				return input.replaceAll("\\W", "");
 			}
-			return input;
+			return "";
 		}
 	}
 
@@ -311,6 +328,7 @@ public class DBConnector {
 			image.subject = rs.getString("subject");
 			image.project = rs.getString("project_title");
 			image.address = rs.getString("address");
+			image.isPeripheral = true;
 			result.add(image);
 		}
 		stat.close();
@@ -340,6 +358,7 @@ public class DBConnector {
 		}
 		searchTerm = searchTerm.replace("(", "");
 		searchTerm = searchTerm.replace(")", "");
+		searchTerm = searchTerm.trim();
 		String query1 = "";
 		if(!hasPrefix && !hasSuffix){
 			query1 = "SELECT segment_sequence,segment_id_sequence FROM word WHERE segment_sequence = '"+searchTerm+"'";
@@ -354,7 +373,7 @@ public class DBConnector {
 			//If it had to be like %searchTerm%:
 			query1 = "SELECT segment_sequence,segment_id_sequence FROM word WHERE segment_sequence LIKE '% "+searchTerm+" %' OR segment_sequence LIKE '% "+searchTerm+"' or segment_sequence LIKE '"+searchTerm+" %' or segment_sequence LIKE '"+searchTerm+"'";
 		}
-//		System.out.println(query1);
+//		System.out.println("***"+query1);
 		ResultSet rs = stat.executeQuery(query1);
 		//For each word that has such a pattern:
 		HashSet<Integer> resultIDs = new HashSet<Integer>();
@@ -368,18 +387,25 @@ public class DBConnector {
 				st2 = "^"+st2.substring(1);
 			}
 			if(!st2.contains("(")){
-				st2 = "("+st2+")";
+				st2 = st2.replaceAll("(\\w+)", "\\($1\\)");
 			}
 			int openBracketIndex = st2.indexOf("(");
 			int closedBracketIndex = st2.indexOf(")");
 			st2 = "("+st2.substring(0,openBracketIndex)+")"+st2.substring(openBracketIndex,closedBracketIndex+1)+"("+st2.substring(closedBracketIndex+1)+")";
 			// st2 = ($a )(r)( o) 
-			st2 = st2.replace("%", ".+");
+			st2 = st2.replaceAll("\\%", "\\.\\+");
+			//Replace "(^ )" with "^"
+			st2 = st2.replaceAll("\\(\\^ \\)", "\\^()");
+			//Replace "( $)" with "$"
+			st2 = st2.replaceAll("\\(\\ $\\)", "\\()$");
 			segments = segments.replaceAll(st2, "$1($2)$3");
 			// segments = m a (r) o n 0 z
-			
 			//Since we don't want "sh" when we search for "s":
-			if(segments.matches(".*\\w[()]\\w.*")){
+			//(c) m (c)h ea r V		$1:"(c) m "		$2:"("		$3:"c"		$4:")"		$5:"h ea r V" 
+			segments = segments.replaceAll("(.*)(\\()(\\w)(\\))(\\w.*)", "$1$3$5");
+			//Similarly:
+			segments = segments.replaceAll("(.*\\w)(\\()(\\w)(\\))(.*)", "$1$3$5");
+			if(!segments.matches(".*\\(.+\\).*")){
 				continue;
 			}
 			//
@@ -629,12 +655,12 @@ public class DBConnector {
 							stat.executeUpdate(query8);
 						}
 						//Also increment the number of traces for the corresponding image
-						String query8 = "SELECT trace_count FROM image WHERE image_id='"+image.id+"';";
+						String query8 = "SELECT trace_count FROM image WHERE id='"+image.id+"';";
 						ResultSet rsb = stat.executeQuery(query8);
 						rsb.next();
 						int traceCount = rsb.getInt(1);
 						traceCount++;
-						String query9 = "UPDATE image SET trace_count='"+traceCount+"' WHERE image_id='"+image.id+"'";
+						String query9 = "UPDATE image SET trace_count='"+traceCount+"' WHERE id='"+image.id+"'";
 						stat.execute(query9);
 					}
 				}
@@ -963,7 +989,7 @@ public class DBConnector {
 	
 	public boolean isCAPWarningOn() throws SQLException {
 		Statement stat = conn.createStatement();
-		String command = "SELECTs value FROM settings WHERE parameter='showCAPWarning'";
+		String command = "SELECT value FROM settings WHERE parameter='showCAPWarning'";
 		ResultSet rs = stat.executeQuery(command);
 		rs.next();
 		String result = rs.getString(1);
