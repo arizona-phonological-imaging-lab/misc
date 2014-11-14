@@ -12,4 +12,5 @@ public class ImageData {
 	public int segment_id;
 	public boolean isLastInSet;
 	public int video_id;
+	public boolean isPeripheral = false;
 }

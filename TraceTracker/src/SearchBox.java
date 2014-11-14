@@ -266,4 +266,20 @@ public class SearchBox extends JPanel{
 			MainFrame.printErrorLog(e);
 		}
 	}
+
+	public void clearAllFields() {
+		imageTitleTextField.setText("");
+		projectCombo.setSelectedIndex(0);
+		languageCombo.setSelectedIndex(0);
+		experimentCombo.setSelectedIndex(0);
+		tracerCombo.setSelectedIndex(0);
+		howManyTracersCombo.setSelectedIndex(0);
+		autotraceCombo.setSelectedIndex(0);
+		tagsCombo.setSelectedIndex(0);
+		wordTextField.setText("");
+		segmentTextField.setText("");
+		marginSizeTextField.setText("");
+		representativeFramesCombo.setSelectedIndex(0);
+		corruptCheckbox.setSelected(false);
+	}
 }

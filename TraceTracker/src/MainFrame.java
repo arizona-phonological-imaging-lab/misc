@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
@@ -164,12 +165,24 @@ public class MainFrame extends JFrame{
 		        Component comp = super.prepareRenderer(renderer, index_row, index_col);
 		        JComponent jc = (JComponent) comp;
 		        int index = (currentPage-1)*pageLength+index_row;
+		        int modelRow=convertRowIndexToModel(index_row);
 				if(tableData == null || tableData.size()<index+1){
 					return jc;
 				}
 				ImageData image = tableData.get(index);
 				if(image !=null && image.isLastInSet){					
 					jc.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0,Color.decode("#aabbff")));
+				}
+				if(isRowSelected(modelRow)){
+					return jc;
+				}
+				if(image.isPeripheral){
+					jc.setBackground(Color.decode("#eeeeee"));
+					jc.setForeground(Color.GRAY);
+				}
+				else{
+					jc.setBackground(Color.WHITE);
+					jc.setForeground(Color.BLACK);
 				}
 		        return jc;
 		    }
@@ -284,6 +297,17 @@ public class MainFrame extends JFrame{
 		getContentPane().add(btnSearch);
 		getRootPane().setDefaultButton(btnSearch);
 		
+		JButton btnClear = new JButton("Clear");
+		btnClear.setBounds(16, 142, 117, 29);
+		getContentPane().add(btnClear);
+		btnClear.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				searchbox.clearAllFields();
+			}
+		});
+		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		JMenu collectMenu = new JMenu("Export");
@@ -313,7 +337,7 @@ public class MainFrame extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JCheckBox checkBox = new JCheckBox("Don't show this message again.");
+				JCheckBox checkBox = new JCheckBox("Don't show this message again");
 				checkBox.getFont().deriveFont(8);
 				boolean mustWarn = false;
 				try {

@@ -83,11 +83,12 @@ public class Updater implements PropertyChangeListener{
 			somePanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 			somePanel.add(loadingLabel);
 			somePanel.add(progressBar);
-			progressFrame.setVisible(true);
+			
 			
 			//We do customAddProject inside an if here only because we want to do it in the doTheUpdate function.
 			//Otherwise this had to be a separate function
 			if(customMode){
+				progressFrame.setVisible(true);
 				int videoCounter = 0;
 				projectName = videosFromCAPF.get(0).project;
 				projectAddress = "";
@@ -154,6 +155,12 @@ public class Updater implements PropertyChangeListener{
 			//Now this is the version for non-custom project loading:
 			File[] videos = null;
 			videos = getProjectVideos();
+			if(videos==null){
+				someError = true;
+				return;
+			}
+			
+			progressFrame.setVisible(true);
 			String language = "";
 			if(!updateMode){
 				language = (String) JOptionPane.showInputDialog(null, "Please insert the language for this project.");
@@ -226,7 +233,7 @@ public class Updater implements PropertyChangeListener{
 				ArrayList<Trace> traceFiles = new ArrayList<Trace>();
 
 				//Also look in the possibly existent folder "completedTraces"
-				File tracesDirectory = new File(video.getAbsolutePath()+"/completedTraces");
+				File tracesDirectory = new File(video.getAbsolutePath()+"/Completed_traces");
 				File[] theTraceFolderFiles = null;
 				if(tracesDirectory.exists()){
 					theTraceFolderFiles = tracesDirectory.listFiles();
