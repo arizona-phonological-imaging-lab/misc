@@ -27,17 +27,17 @@ A list of things the lab needs to accomplish.
 ##Analysis  
 1.  ~~"Traces from Hell" bug~~ (*Switched to SSANOVA code from Lisa Davidson*)
 
-##Head tracking
+##Head tracking (Sam)
 1. Determine whether or not Kinect can be used for head tracking
 2. Determine whether image correction (and what kind) can be performed with the current data
 
-##Documentation  
+##Documentation (Trevor)  
 1. Revise existing documentation
 2. Complete documentation for Database tool
 3. Complete [documentation for AutoTrace](https://github.com/jjberry/Autotrace/tree/master/documentation)
 4. Develop `Github` wiki for project
 
-##Mohsen's Database tool
+##uA Tracker (Mohsen)
 1. Interact with Praat
 2.  Interact with AutoTrace
 
