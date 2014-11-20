@@ -35,6 +35,7 @@ A list of things the lab needs to accomplish.
 1. Revise existing documentation
 2. Complete documentation for Database tool
 3. Complete [documentation for AutoTrace](https://github.com/jjberry/Autotrace/tree/master/documentation)
+4. Develop `Github` wiki for project
 
 ##Mohsen's Database tool
 1. Interact with Praat
