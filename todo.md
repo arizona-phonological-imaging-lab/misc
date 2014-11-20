@@ -24,7 +24,8 @@ A list of things the lab needs to accomplish.
 6.  Adapt `image_diversity.py` to select diverse set *automagically* using diversity scores distribution  
 7.  Complete `matlab`-free version
 
-##Analysis
+##Analysis  
+1.  ~~"Traces from Hell" bug~~ (*Switched to SSANOVA code from Lisa Davidson*)
 
 ##Head tracking
 1. Determine whether or not Kinect can be used for head tracking
@@ -36,7 +37,11 @@ A list of things the lab needs to accomplish.
 3. Complete documentation for AutoTrace
 
 ##Mohsen's Database tool
-1. ???
+1. Interact with Praat
+2.  Interact with AutoTrace
+
+##UltraPraat
+1.  Include java<->Praat add-on
 
 ##Data Collection  
 1. Recollect Harvard Sentences data
