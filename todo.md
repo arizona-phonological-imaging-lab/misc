@@ -10,9 +10,10 @@ A list of things the lab needs to accomplish.
      - [`AutoTrace.py`](https://github.com/jjberry/Autotrace/blob/master/matlab-version/AutoTrace.py)
      - [`FileRename.py`](https://github.com/jjberry/Autotrace/blob/master/matlab-version/FileRename.py)
      - [`TrackDots.py`](https://github.com/jjberry/Autotrace/blob/master/matlab-version/TrackDots.py) (This is the one with the disappearing points bug)
-     - [`fixImages.py`](https://github.com/jjberry/Autotrace/blob/master/matlab-version/fixImages.py) ~~[`configdir.py`](https://github.com/jjberry/Autotrace/blob/master/matlab-version/configdir.py)~~(*Completed by Gus using* `Tkinter`)
-     - ~~`TrainNetwork.py`~~(*Jeff's new version is* [`TrainNetworkQt.py`](https://github.com/jjberry/Autotrace/blob/master/under-development/TrainNetworkQt.py))
+     - [`fixImages.py`](https://github.com/jjberry/Autotrace/blob/master/matlab-version/fixImages.py)
      - [`selectROI.py`](https://github.com/jjberry/Autotrace/blob/master/matlab-version/SelectROI.py)
+     -  ~~[`configdir.py`](https://github.com/jjberry/Autotrace/blob/master/matlab-version/configdir.py)~~(*Completed by Gus using* `Tkinter`)
+     - ~~`TrainNetwork.py`~~(*Jeff's new version is* [`TrainNetworkQt.py`](https://github.com/jjberry/Autotrace/blob/master/under-development/TrainNetworkQt.py))
 2.  Fix disappearing points bug
      - (see [`TrackDots.py`](https://github.com/jjberry/Autotrace/blob/master/matlab-version/TrackDots.py))
 3.  Complete Wonky Trace Finder(/Correcter/etc)
@@ -42,7 +43,7 @@ A list of things the lab needs to accomplish.
 2.  Interact with AutoTrace
 
 ##UltraPraat
-1.  Include java<->Praat add-on
+1.  Include java&harr;Praat add-on
 
 ##Data Collection  
 1. Recollect Harvard Sentences data
