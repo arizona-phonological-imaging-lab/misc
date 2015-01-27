@@ -30,11 +30,22 @@ public class Video {
 		//For finding the number of images it should be careful that the valid frames are either
 		//all jpg or all png.
 		this.imagesDirectory = imagesDirectory;
-		if(imagesDirectory==null || imagesDirectory.getAbsolutePath().length()==0){
-			numberOfImages = 0;
-			return;
+		numberOfImages = findNumberOfImages(imagesDirectory);
+	}
+	public int getNumberOfImages(){
+		return numberOfImages;
+	}
+	
+	@Override
+	public String toString() {
+		return title;
+	}
+	
+	public int findNumberOfImages(File input){
+		if(input==null || input.getAbsolutePath().length()==0){
+			return 0;
 		}
-		File[] theFiles = imagesDirectory.listFiles();
+		File[] theFiles = input.listFiles();
 		int pngCounter = 0;
 		int jpgCounter = 0;
 		for(File f:theFiles){
@@ -51,14 +62,6 @@ public class Video {
 		else{
 			ispng = false;
 		}
-		numberOfImages = Math.max(pngCounter, jpgCounter);
-	}
-	public int getNumberOfImages(){
-		return numberOfImages;
-	}
-	
-	@Override
-	public String toString() {
-		return title;
+		return Math.max(pngCounter, jpgCounter);
 	}
 }

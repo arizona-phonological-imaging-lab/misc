@@ -22,8 +22,10 @@ import javax.swing.JLabel;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Robot;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedWriter;
@@ -204,7 +206,17 @@ public class MainFrame extends JFrame{
 			JMenuItem untagItem;
 			JMenuItem addExpItem;
 			JMenuItem removeExpItem;
-		    public PopUpMenu(){
+			JMenuItem praatItem;
+		    public PopUpMenu(boolean showPraatOption){
+		    	praatItem = new JMenuItem("Show selected images in UltraPraat");
+		    	praatItem.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						showPraat();
+					}
+				});
+		    	
 		        tagItem = new JMenuItem("Tag selected images");
 		        tagItem.addActionListener(new ActionListener() {
 					
@@ -237,6 +249,9 @@ public class MainFrame extends JFrame{
 						bufferPanel.untag(true, true);
 					}
 				});
+		        if(showPraatOption){
+		        	add(praatItem);
+		        }
 		        add(tagItem);
 		        add(untagItem);
 		        add(addExpItem);
@@ -264,7 +279,7 @@ public class MainFrame extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (SwingUtilities.isRightMouseButton(e)){
-					PopUpMenu p = new PopUpMenu();
+					PopUpMenu p = new PopUpMenu(true);
 					p.show(e.getComponent(),e.getX(), e.getY());
 				}
 			}
@@ -583,6 +598,16 @@ public class MainFrame extends JFrame{
 		}
 		pageLabel.setText("Page "+currentPage+" of "+numberOfPages);
 		((AbstractTableModel) table.getModel()).fireTableDataChanged();
+	}
+	
+	public void showPraat(){
+		//We will find the index of the first selected image only. Then send this image to PraatConnector
+		int[] selectedIndices = table.getSelectedRows();
+		int firstIndex = selectedIndices[0];
+		int realIndex = (currentPage-1)*pageLength+firstIndex;
+		ImageData image = tableData.get(realIndex);
+		PraatConnector pc = new PraatConnector(image, this);
+		pc.run();		
 	}
 	
 	public static void printErrorLog(Exception e){
