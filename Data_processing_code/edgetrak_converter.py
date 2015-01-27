@@ -1,29 +1,30 @@
 #!/usr/bin/python
-# Concatenates .con files from EdgeTrak to a csv or tsv format that
-# is the input of the SSANOVA script used at NYU.
-# Daniel Szeredi 2014
+# Converts .con files from EdgeTrak
 
-import argparse
 import os
 import re
 import string
 
 def readCon(fileName):
 	"""Reads in a .con file, returns..."""
-	f = open(fileName,"rt")
+	f = open(fileName, 'r')
 	numFiles = ((len(f.readline().strip().split()))/2)
-	splitCoords = [[]]*numFiles
+	splitCoords = [[] for i in range(numFiles)]
 
 	for line in f:
+		i=0
 		coords = line.strip().split()
-		for i in range(numFiles):
-			splitCoords[i].append((coords[(2*i)], coords[(2*i)+1]))	
+		for sublist in splitCoords:
+			sublist.append((coords[(2*i)], coords[(2*i)+1]))
+			i+=1
 	f.close()
 
-	print len(splitCoords)
-	outFile= open('output.txt', 'w')
-	for item in splitCoords[0]:
-		outFile.write("%s\n" % str(item))
+	for frameNum in range(numFiles):
+		outFile= open('output_' + str(frameNum) + '.txt' , 'w')
+		i=0
+		for item in splitCoords[frameNum]:
+			i+=1
+			outFile.write(str(i) + '\t'  + str(item[0]) + '\t' + str(item[1]) + '\n')
 
 
 def main(fileName):
