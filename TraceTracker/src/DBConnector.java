@@ -45,7 +45,7 @@ public class DBConnector {
 		String wordEntered = sb.wordTextField.getText().trim();
 		String segmentEntered = sb.segmentTextField.getText().trim();
 		String targetSegment = findTargetSegment(segmentEntered);
-		System.out.println(targetSegment);
+//		System.out.println(targetSegment);
 		if(segmentEntered.length()>0 && targetSegment.length()==0){
 			JOptionPane.showMessageDialog(null, "Segment sequence not valid. Use brackets to indicate target segment.","Error",JOptionPane.ERROR_MESSAGE);
 			return result;
@@ -124,12 +124,12 @@ public class DBConnector {
 			query += "LIMIT "+MainFrame.fetchLimit;
 		}
 		query += ";";
-		System.out.println(query);
+//		System.out.println(query);
 		Statement stat = conn.createStatement();
 		long t_beforeQuery = System.currentTimeMillis();
 		ResultSet rs = stat.executeQuery(query);
 		long t_med = System.currentTimeMillis();
-		System.out.println("Query time: "+(t_med-t_beforeQuery));
+//		System.out.println("Query time: "+(t_med-t_beforeQuery));
 		HashSet<Integer> segmentIDs = null;
 		if(segmentEntered.length()>0){
 			segmentIDs = findSegmentIDs(segmentEntered);
@@ -249,7 +249,7 @@ public class DBConnector {
 		}
 		stat.close();
 		long t2 = System.currentTimeMillis();
-		System.out.println("Time: "+(t2-t1));
+//		System.out.println("Time: "+(t2-t1));
 		if(!weAreLimiting){
 			MainFrame.resultSize = result.size();
 		}
@@ -1005,6 +1005,17 @@ public class DBConnector {
 			stat.close();
 			return false;
 		}
+	}
+
+	public String getAudioAddressForVideoID(String id) throws SQLException {
+		Statement stat = conn.createStatement();
+		System.out.println(id);
+		String command = "SELECT audio_address FROM video WHERE id="+id+";";
+		ResultSet rs = stat.executeQuery(command);
+		rs.next();
+		String result = rs.getString(1);
+		stat.close();
+		return result;
 	}
 	
 }
