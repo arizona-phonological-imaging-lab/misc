@@ -18,8 +18,9 @@ A list of things the lab needs to accomplish.
      - (see [`TrackDots.py`](https://github.com/jjberry/Autotrace/blob/master/matlab-version/TrackDots.py))
 3.  Complete Wonky Trace Finder(/Correcter/etc)
      - *Assigned to Gus*
-4.  EdgeTrak to AutoTrace trace converter
-     -  *Needs GUI*
+4.  EdgeTrak to AutoTrace trace converter 
+     - ~~*Needs to be written*~~ (completed by josh in python)
+     -  ~~*Needs GUI*~~ (completed by josh using pyqt4)
 5.  Write `trace_diversity.py`  
      - *Assigned to Gus*
 6.  Adapt `image_diversity.py` to select diverse set *automagically* using diversity scores distribution  
