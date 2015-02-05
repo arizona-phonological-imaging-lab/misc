@@ -19,7 +19,8 @@ A list of things the lab needs to accomplish.
 3.  Complete Wonky Trace Finder(/Correcter/etc)
      - *Assigned to Gus*
 4.  EdgeTrak to AutoTrace trace converter 
-     - ~~*Needs to be written*~~ (completed by josh in python)
+     - We need to decide on a downsampling algorithm 
+     - ~~*Needs to be written*~~ (completed by josh)
      -  ~~*Needs GUI*~~ (completed by josh using pyqt4)
 5.  Write `trace_diversity.py`  
      - *Assigned to Gus*
