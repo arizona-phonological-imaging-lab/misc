@@ -62,6 +62,8 @@ if __name__ == "__main__":
     import sys
     import readline
     rich_img = RichImage(cv2.imread("test.jpg"))
+    exit_cmds = ["q", "exit"]
+    help_cmds = ["?", "help"]
 
     def display_image(somedeg):
         deg = 0
@@ -72,18 +74,23 @@ if __name__ == "__main__":
         cv2.destroyAllWindows()
         rich_img.side_by_side(rich_img.rotate_fan(deg)).show("rotated {} degrees".format(deg))
 
-    if len(sys.argv) != 2:
-        print "python imaging.py <degree of rotation>"
-        sys.exit(1)
-
     # run loop
+    help_msg = """\nEnter an angle (positive or negative)
+
+    COMMANDS:
+    \t{0} => quit
+    \thelp OR ? => help\n""".format(" OR ".join(exit_cmds))
+
+    print(help_msg)
     display_image(sys.argv[-1])
 
     readline.set_pre_input_hook(readline.redisplay())
     while True:
-        key = raw_input("Enter another angle (q to quit)\n  ?> ")
-        if key == "q":
+        key = raw_input("  ?> ")
+        if key in exit_cmds or not key:
             sys.exit(1)
+        elif key in help_cmds:
+            print help_msg
         display_image(key)
 
 
