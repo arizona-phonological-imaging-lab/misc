@@ -124,7 +124,7 @@ if __name__ == "__main__":
         if key in displayer.exit_cmds or not key:
             sys.exit(1)
         elif key in displayer.help_cmds:
-            print help_msg
+            print displayer.help_msg
         elif key in displayer.save_cmds:
             try:
                 displayer.save()
