@@ -60,38 +60,78 @@ class RichImage(np.ndarray):
 
 if __name__ == "__main__":
     import sys
-    import readline
-    rich_img = RichImage(cv2.imread("test.jpg"))
-    exit_cmds = ["q", "exit"]
-    help_cmds = ["?", "help"]
+    from platform import system
+    import os
 
-    def display_image(somedeg):
-        deg = 0
+
+    # make sure we're not dealing with windows...
+    if system() != 'Windows':
         try:
-            deg = int(somedeg)
+            print "using readline tools..."
+            import readline
+            readline.set_pre_input_hook(readline.redisplay())
         except:
             pass
-        cv2.destroyAllWindows()
-        rich_img.side_by_side(rich_img.rotate_fan(deg)).show("rotated {} degrees".format(deg))
 
-    # run loop
-    help_msg = """\nEnter an angle (positive or negative)
 
-    COMMANDS:
-    \t{0} => quit
-    \thelp OR ? => help\n""".format(" OR ".join(exit_cmds))
+    class Displayer(object):
 
-    print(help_msg)
-    display_image(sys.argv[-1])
+        def __init__(self, img):
+            self.exit_cmds = ["q", "exit"]
+            self.help_cmds = ["?", "help"]
+            self.save_cmds = ["s", "save"]
 
-    readline.set_pre_input_hook(readline.redisplay())
+            self.help_msg = """\nEnter an angle (positive or negative)
+
+            COMMANDS:
+            \t{0} => quit
+            \t{1} => help
+            \t{2} => save\n""".format(" OR ".join(self.exit_cmds),
+                                      " OR ".join(self.help_cmds),
+                                      " OR ".join(self.save_cmds))
+
+            self.current_img = img
+            self.current_deg = None
+
+
+        def display_image(self, somedeg):
+            deg = 0
+            try:
+                deg = int(somedeg)
+            except:
+                pass
+
+            cv2.destroyAllWindows()
+            self.current_img = rich_img.side_by_side(rich_img.rotate_fan(deg))
+            self.current_deg = deg
+            self.current_img.show("rotated {} degrees".format(self.current_deg))
+
+        def save(self):
+            img_name = "{0}-deg.jpg".format(self.current_deg)
+            cv2.imwrite(img_name, self.current_img)
+            print("\n{0} saved to {1}\n".format(img_name, os.getcwd()))
+
+
+    rich_img = RichImage(cv2.imread("test.jpg"))
+    displayer = Displayer(rich_img)
+
+    print(displayer.help_msg)
+    displayer.display_image(sys.argv[-1])
+
     while True:
         key = raw_input("  ?> ")
-        if key in exit_cmds or not key:
+
+        if key in displayer.exit_cmds or not key:
             sys.exit(1)
-        elif key in help_cmds:
+        elif key in displayer.help_cmds:
             print help_msg
-        display_image(key)
+        elif key in displayer.save_cmds:
+            try:
+                displayer.save()
+            except:
+                pass
+        else:
+            displayer.display_image(key)
 
 
 # rich_img = RichImage(cv2.imread('test.jpg'))
