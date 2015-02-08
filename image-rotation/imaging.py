@@ -77,6 +77,12 @@ class RichImage(np.ndarray):
       vis = np.concatenate((self.copy(), other.copy()), axis=direction_int)
       return RichImage(vis)
 
+  def set_to(self, lessthan, new_value=0):
+      thresholded_img = self.copy()
+      thresholded_img[np.where(thresholded_img < lessthan)] = new_value
+      return RichImage(thresholded_img)
+
+  def default_threshold(self): return self.set_to(10,0) #set any pixel <= 10 to black (0)
 
 if __name__ == "__main__":
     import sys
