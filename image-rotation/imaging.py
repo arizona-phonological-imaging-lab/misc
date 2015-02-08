@@ -4,21 +4,34 @@ import numpy as np
 class RichImage(np.ndarray):
 
   # ndarrays are funky creatures...
-  def __new__(cls, input_array, attrs=None):
-    obj = np.asarray(input_array).view(cls)
-    obj.windows = set()
+  def __new__(cls, data, attrs=None):
+    # optionally construct a RichImage from a path/to/image
+    if type(data) is str:
+        data = cv2.imread(data)
+
+    obj = np.asarray(data).view(cls)
+    obj.array = np.asarray(data)
     obj.height, obj.width = obj.shape[:2]
     obj.fan = obj[60:-80, 100:-50]
     return obj[::]
 
   def __array_finalize__(self, obj):
-    self.windows = getattr(obj, 'windows', None)
+    self.windows = set()
+    self.compare = "horizontal"
+
+    self.array = getattr(obj, 'array', None)
     self.height = getattr(obj, 'height', None)
     self.width = getattr(obj, 'width', None)
     self.fan = getattr(obj, 'fan', None)
 
   def __str__(self):
-    return "{0} of dimensions {1} x {2}".format(self.__class__.__name__, self.w, self.h)
+    return "{0} of dimensions {1} x {2}".format(self.__class__.__name__, self.width, self.height)
+
+  def save(self, fname):
+    try:
+        cv2.imwrite(fname, self[::])
+    except:
+        print "Couldn't save {0}".format(fname)
 
   def rotate(self, angle, image=None):
     if image is None:
