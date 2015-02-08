@@ -52,22 +52,29 @@ class RichImage(np.ndarray):
       return RichImage(new_img)
 
   def show(self, window_name="default"):
-    self.windows.add(window_name)
     try:
         self.destroy_window(window_name)
+        self.windows.add(window_name)
     except:
         print "No window named {0}".format(window_name)
     cv2.imshow(window_name, self)
 
   def destroy_window(self, window_name="default"):
     try:
-      self.windows.remove(window_name)
       cv2.destroyWindow(window_name)
+      self.windows.remove(window_name)
     except:
-      print "No window named {0}".format(window_name)
+      pass
 
-  def side_by_side(self, other):
-      vis = np.concatenate((self.copy(), other.copy()), axis=1)
+  def compare_with(self, other, direction=None):
+      direction = direction.lower() if direction else self.compare.lower()
+
+      if direction.startswith("v"):
+          direction_int = 0
+      else: #horizontal is default
+          direction_int = 1
+
+      vis = np.concatenate((self.copy(), other.copy()), axis=direction_int)
       return RichImage(vis)
 
 
@@ -90,18 +97,26 @@ if __name__ == "__main__":
     class Displayer(object):
 
         def __init__(self, img):
+
+            self.direction = "h"
             self.exit_cmds = ["q", "exit"]
             self.help_cmds = ["?", "help"]
             self.save_cmds = ["s", "save"]
+            self.horizontal_cmds = ["horizontal"]
+            self.vertical_cmds = ["v", "vertical"]
 
             self.help_msg = """\nEnter an angle (positive or negative)
 
             COMMANDS:
-            \t{0} => quit
-            \t{1} => help
-            \t{2} => save\n""".format(" OR ".join(self.exit_cmds),
-                                      " OR ".join(self.help_cmds),
-                                      " OR ".join(self.save_cmds))
+            \t{0}\t=> quit
+            \t{1}\t=> help
+            \t{2}\t=> save
+            \t{3}\t=> change to horizontal view (default)
+            \t{4}\t=> change to vertical view\n""".format(" OR ".join(self.exit_cmds),
+                                                         " OR ".join(self.help_cmds),
+                                                         " OR ".join(self.save_cmds),
+                                                         " OR ".join(self.horizontal_cmds),
+                                                         " OR ".join(self.vertical_cmds))
 
             self.current_img = img
             self.current_deg = None
@@ -115,13 +130,14 @@ if __name__ == "__main__":
                 pass
 
             cv2.destroyAllWindows()
-            self.current_img = rich_img.side_by_side(rich_img.rotate_fan(deg))
+            #self.current_img = rich_img.horizontal_comparison(rich_img.rotate_fan(deg))
+            self.current_img = rich_img.compare_with(rich_img.rotate_fan(deg), self.direction)
             self.current_deg = deg
             self.current_img.show("rotated {} degrees".format(self.current_deg))
 
         def save(self):
             img_name = "{0}-deg.jpg".format(self.current_deg)
-            cv2.imwrite(img_name, self.current_img)
+            self.current_img.save(img_name)
             print("\n{0} saved to {1}\n".format(img_name, os.getcwd()))
 
 
@@ -143,9 +159,12 @@ if __name__ == "__main__":
                 displayer.save()
             except:
                 pass
+        elif key in displayer.horizontal_cmds:
+            displayer.direction = "h"
+        elif key in displayer.vertical_cmds:
+            displayer.direction = "v"
         else:
             displayer.display_image(key)
-
 
 # rich_img = RichImage(cv2.imread('test.jpg'))
 # imgray = cv2.cvtColor(rich_img, cv2.COLOR_BGR2GRAY)
