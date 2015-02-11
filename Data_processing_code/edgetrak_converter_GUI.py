@@ -1,54 +1,26 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from edgetrak_converter import Converter
+import edgetrak_converter    # this script (edgetrak_converter.py) should be in same dir as GUI script (edgetrak_converter_GUI.py)
 import sys
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtGui
 
-class Converter_GUI(QtGui.QWidget):
+class edgetrak_converter_GUI(QtGui.QMainWindow):
+    ''' This script (1) generates a GUI dialog to ask for a user's local existing directory,
+        and then (2) converts the contents of that dir to output usable by AutoTrace. 
+        The dir contents are assumed to be one *.con file and multiple images (tongue frames).'''
+
     def __init__(self):
-        self.createMasterWidget()
-        self.createButton()                                 # create button
-        self.createTextbox()                                # create textbox
-        self.centerOnScreen()
-        self.show()
+        super(edgetrak_converter_GUI, self).__init__()                                                                            # make main window
+        self.dirOfInterest = str(QtGui.QFileDialog.getExistingDirectory(self, "Select folder containing *.con file + images"))    # make dialog and select dir
+        edgetrak_converter.Converter().main(folder=self.dirOfInterest)                                                            # convert contents of dir
+        self.close()                                                                                                              # shut it all down
 
-    def createMasterWidget(self):
-        super(Converter_GUI, self).__init__()                   # create master widget
-        self.setGeometry(300, 600, 900, 150)
-        self.setWindowTitle('EdgeTrak File Conversion')
-        self.label = QtGui.QLabel(self)
-        self.label.setText('Path to Folder:')
-        self.label.move(20,25)
-
-    def createButton(self):
-        myButton = QtGui.QPushButton('Convert', self)       # create the button with text 'Convert'
-        myButton.clicked.connect(self.buttonCommand)        # what to do if button gets clicked
-        myButton.move(100, 80)                              # place the textbox x,y pixels from center
-
-    def buttonCommand(self):
-        Converter().main(folder=str(self.folderPath))
-        self.close()
-
-    def createTextbox(self):
-        myTextbox = QtGui.QLineEdit(self)                # editable textbox (user can undo, redo, cut, paste, and drag and drop text)
-        myTextbox.textChanged[str].connect(self.textboxCommand)    # detect when the user enters text
-        myTextbox.resize(300,30)
-        myTextbox.move(150, 20)                                   # place the textbox x,y pixels from center
-
-    def textboxCommand(self, text):
-        self.folderPath = text
-
-    def centerOnScreen(self):
-        resolution = QtGui.QDesktopWidget().screenGeometry()
-        self.move((resolution.width() / 2) - (self.frameSize().width() / 2),
-                  (resolution.height() / 2) - (self.frameSize().height() / 2))
 def main():
-    app = QtGui.QApplication(sys.argv)      # create app
-    conv = Converter_GUI()
-    conv.show()
-    sys.exit(app.exec_())
+    app = QtGui.QApplication(sys.argv)
+    conversionGUI = edgetrak_converter_GUI()
+    conversionGUI.destroy()
+    sys.exit()
 
 if __name__ == '__main__':
     main()
-
