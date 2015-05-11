@@ -6,15 +6,18 @@ Using AutoTrace
 Locating AutoTrace Program
 ----
  + Open Program
+
  ![Image1](images/Image1.png)
 
 [Open AutoTrace](../AutoTrace.py) by navigating to the matlab-version folder and typing the command `python AutoTrace.py`
 
+<a name="manual" ></a>
 Using Autotrace to trace manually
 =====
 Locating AutoTrace Program
 ----
  + Open Program
+
  ![Image1](images/Image1.png)
 
 [Open AutoTrace](../AutoTrace.py) by navigating to the matlab-version folder and typing the command `python AutoTrace.py`
@@ -27,6 +30,19 @@ Adding Images to Autotrace
  + To import multiple images: select first image, hold _shift_, and select last desired image
 
  + Once images are selected, click __open__
+
+Viewing Images in Autotrace
+----
+
+ + Ensure that there is a trace file with the format `.traced.txt` in the same folder as the images
+
+ + Import the images you want to view
+
+ + Click the arrow pointing to the right, next to the "open network" button. 
+
+ + You will be prompted to "Enter Tracer Information". Anything you enter will change the name on the tracing files, but will not change the content of the files. Click __OK__.
+
+ + Use the arrow buttons at the top of the screen to navigate between images
 
 Beginning Tracing
 ----
@@ -97,9 +113,11 @@ Checking Output
 ![Image4](images/Image4.png)
 Desired result
 
+<a name="automatic"></a>
 Using Autotrace to Trace Automatically
 =====
-  + Click the second icon from the left, "Load Network"
+ + Ensure that the ROI_config.txt file is in the same directory as the one containing your test images. 
+ + Click the second icon from the left, "Load Network"
  ![Autotrace2](images/Autotrace2.png)
  + Select the _network.mat_ file in the _savefiles_ directory in your Autotrace folder and click _open_. 
 ![Autotrace3](images/Autotrace3.png) 

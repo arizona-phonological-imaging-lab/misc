@@ -5,7 +5,7 @@ AutoTrace Walkthrough.
 Tracing Manually
 ----
 
-+ Open [Autotrace](autotrace.md) and follow the manual instructions. 
++ Open [Autotrace](autotrace.md#manual) and follow the manual instructions. 
 	+ If you do not already have traced data, it is recommended that you use this manual method to generate a __training set__ upon which to construct the deep belief network as explained below. 
 
 Tracing Automatically

@@ -1,6 +1,8 @@
 AutoTrace FAQ
 ===
 
+Autotrace is a set of tools to help phonological imaging labs handle large quantities of data by tracing the surface of the tongue on ultrasound images. Our package contains tools for tracing, both manually and automatically, and tools for tracing, both manually and automatically, and tools for analyzing the traced data. 
+
 Instructions for use of Autotrace
 ---
 
