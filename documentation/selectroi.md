@@ -18,7 +18,7 @@ Select ROI
 + Start [SelectROI.py](../SelectROI.py) by typing `python SelectROI.py`
 + The terminal will open followed by an __Open Image Files__ screen.
 ![Image1SR](images/Image1SR.png)
-+ Select the images you would like to average and click __open__
++ Select the images by boxing them or shift-clicking to make sure that they are all highlighted and click __open__
 + Once the window is open, box the area you are interested in investigating, select the machine you are using, and click __save__.
 + Then select a location to put the ROI_config.txt and click __save__.
 + When finished, click __Exit Program__

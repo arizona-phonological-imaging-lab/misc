@@ -17,4 +17,4 @@ Train Network Manual
 
  > For further information on this program and the other programs mentioned above, you should refer to the dissertation by Jeff Berry.
 
-
++ When the program finishes running, it will not close automatically. After you see "Saving trained network...done" or the gsmtp code used to send you an email, use ctrl-c to close the script and go back to the command line. 
