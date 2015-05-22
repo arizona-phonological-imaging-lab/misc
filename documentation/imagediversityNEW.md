@@ -8,6 +8,7 @@ Image Diversity New Manual
 	do the measurement. If not present, it will use a hard-coded default ROI.
 
 + Open [Image Diversity](../image_diversityNEW.py) by typing `python image_diversityNEW.py`
+
 ![Image Diversity](images/image_diversityNEW.png)
 
 + Click _open_ by the Select Files field
@@ -28,6 +29,7 @@ Image Diversity New Manual
 + Save to your folder of choice
 + Click __OK__
 + From this a graph will open
+
 ![Image Diversity Graph](images/image_diversityNEWgraph.png)
  > This shows __Diversity Scores__ on the Y axis. Diversity scores will be higher if you have more diverse images and vice versa for least diverse. On the X axis it simply ranks the numbers based on their order.
 
