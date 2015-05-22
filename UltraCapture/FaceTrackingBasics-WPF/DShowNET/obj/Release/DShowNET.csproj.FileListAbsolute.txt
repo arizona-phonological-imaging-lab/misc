@@ -1,3 +1,0 @@
-C:\Users\Zooty\Downloads\DirectXCapture_demo\DShowNET\bin\Release\DShowNET.dll
-C:\Users\Zooty\Downloads\DirectXCapture_demo\DShowNET\obj\Release\ResolveAssemblyReference.cache
-C:\Users\Zooty\Downloads\DirectXCapture_demo\DShowNET\obj\Release\DShowNET.dll

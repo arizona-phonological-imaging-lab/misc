@@ -1,7 +1,0 @@
-C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\bin\x64\Debug\FaceTrackData.dll
-C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\bin\x64\Debug\FaceTrackLib.dll
-C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\bin\x64\Debug\Microsoft.Kinect.Toolkit.FaceTracking.dll
-C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\bin\x64\Debug\Microsoft.Kinect.Toolkit.FaceTracking.pdb
-C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\obj\x64\Debug\ResolveAssemblyReference.cache
-C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\obj\x64\Debug\Microsoft.Kinect.Toolkit.FaceTracking.dll
-C:\Users\robotlab\Desktop\code\face tracking 01 - FaceTrackingBasics-WPF\Microsoft.Kinect.Toolkit.FaceTracking\obj\x64\Debug\Microsoft.Kinect.Toolkit.FaceTracking.pdb
