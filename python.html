@@ -20,53 +20,50 @@
 
     <section class="main-content">
       <h1>
-<a id="apil" class="anchor" href="#apil" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome</h1>
+<a id="apil" class="anchor" href="#apil" aria-hidden="true"><span class="octicon octicon-link"></span></a>Autotres</h1>
 
-<p>Arizona Phonological Imaging Lab tools for ultrasound analysis of speech. </p>
-<p>The Autotrace project is currently going through changes, migrating from the existing MATLAB-based family of tools to a new webapp, with python backend. </p>
-<p>To learn more about how to use the pure python version of autotrace, <a href="python.html">click here.</a></p>
-<p>Or to learn about the use of the webapp, <a href="webapp.html">click here.</a></p>
-<p>Otherwise, continue on below for our tools as they presently exist based on Jeff Barry's MATLAB code.</p>
-<p>
-  <a href="documentation/StartHere.html">Click here for a page directory</a>
-</p>
-<p>
-	or...
-<p>
-  <a href="documentation/README.html">Click here for our Readme</a>
-</p>
+<p>This is the 100% python version of the Autotrace family of tools. Please be advised: it is currently in a development stage. Its performance is not as good as the MATLAB version, and it does not have the same features. At the moment, it exists only as a set of command-line tools, no graphical interface is yet available. When complete it will:</p>
+<ul>
+  <li> Use a deep-belief network trained on ultrasound images and human traces to automatically trace new images.</li>
+  <li> Integrate with the web-app for a complete experience.</li>
+  <li> Use your GPU for faster training and tracing.</li>
+</ul>
 
+<p><b>INSTALLATION</b></p><br>
+<p>First, use <code>git clone</code> to make a local copy of the directory</p>
 
+<p>Run the following sequence of commands. Note: It is highly recommended to use a VirtualENV after this stage</p>
 
+<p><b>UBUNTU</b></p>
+<code>sudo apt-get update;</code><br>
+<code>sudo apt-get install python3-pip;</code><br>
+<code>sudo apt-get install build-essential;</code><br>
+<code>sudo apt-get install gcc;</code><br>
+<code>sudo apt-get install python3-dev;</code><br>
+<code>sudo apt-get install libhdf5-dev;</code><br>
+<code>sudo apt-get install gfortran;</code><br>
+<code>sudo apt-get build-dep libopenblas-dev;</code><br>
+<code>sudo apt-get build-dep nvidia-cuda-toolkit;</code><br>
 
+<p><b>MAC</b></p>
+<code>brew update;</code><br>
+<code>brew install python3;</code><br>
+<code>brew install gfortran;</code><br>
+<code>brew tap homebrew/science;</code><br>
+<code>brew install openblas;</code><br>
+<code>brew install hdf5;</code><br>
 
-<div id="bg" style="position: relative; margin: 0 auto; background: url(images/introscreen.png); width: 1010px; height: 662px;">
+<p>Then, in the terminal, navigate to the project directory and run the following</p>
+<code>pip3 install -e .</code>
 
-<a href=documentation/analysis.html>
-<p style="position: absolute; top: 226px; right: 74px; width: 228px; height: 156px; padding: 4px; background-color: transparent; font-weight: bold; font-size: 11px;">
-</p>
-</a>
+<p>Then use pip to install each of the dependencies in install-reqs.txt</p>
 
-<a href=documentation/autotrace.html>
-<p style="position: absolute; top: 124px; right: 418px; width: 230px; height: 106px; padding: 4px; background-color: transparent; font-weight: bold; font-size: 11px;">
-</p>
-</a>
+<p>If these throw errors, try re-installing or upgrading pip</p>
 
+<hr>
 
+<p>For instructions </p>
 
-<a href=automatic.html>
-<p style="position: absolute; top: 400px; right: 418px; width: 230px; height: 106px; padding: 4px; background-color: transparent; font-weight: bold; font-size: 11px;">
-</p>
-</a>
-
-<a href=documentation/Collection.html>
-<p style="position: absolute; top: 248px; right: 764px; width: 176px; height: 110px; padding: 4px; background-color: transparent; font-weight: bold; font-size: 11px;">
-</p>
-</a>
-
-
-
-</div>
 
 
       <footer class="site-footer">
