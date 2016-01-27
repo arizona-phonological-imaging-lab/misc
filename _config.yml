@@ -1,11 +1,13 @@
-# Site settings
+
+baseurl: "/misc" 
+
 title: APIL Autotrace Sitetitle
 email: trevortds@email.arizona.edu
 description: > # this means to ignore newlines until "baseurl:"
   Write an awesome description for your new site here. You can edit this
   line in _config.yml. It will appear in your document head meta (for
   Google search results) and in your feed.xml site description.
-baseurl: "/misc" # the subpath of your site, e.g. /blog/
+baseurl: "/misc" 
 url: "http://arizona-phonological-imaging-lab.github.io/misc/" # the base hostname & protocol for your site
 twitter_username: arizona
 github_username:  trevortds
