@@ -115,11 +115,11 @@ a {
   color: #159957; }
 .main-content p {
   margin-bottom: 1em;
-  font-size: 1.5em; }
+  font-size: 1.1em; }
 .main-content code {
   padding: 2px 4px;
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
-  font-size: 0.9rem;
+  /*font-size: 0.9rem;*/
   color: #383e41;
   background-color: #f3f6fa;
   border-radius: 0.3rem; }
@@ -207,9 +207,9 @@ a {
 @media screen and (min-width: 64em) {
   .main-content {
     max-width: 64rem;
-    padding: 2rem 6rem;
-    margin: 0 auto;
-    font-size: 1.1rem; } }
+    padding: 2rem 6rem;/*
+    margin: 0 auto;*/
+    /*font-size: 1.1rem;*/ } }
 
 @media screen and (min-width: 42em) and (max-width: 64em) {
   .main-content {
