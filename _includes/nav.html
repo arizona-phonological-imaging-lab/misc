@@ -38,9 +38,42 @@
         <li {% if page.category == "matlab-version" %} class="active" {% endif %} class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Old Autotrace <span class="caret"></span></a>
           <ul class="dropdown-menu">
+            <li><a href="/misc/matlab-version/README.html">Start Here</a></li>
+            <li><a href="/misc/matlab-version/StartHere.html">Walkthrough</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="/misc/matlab-version/Collection.html">Collection</a></li>
+            <li><a href="/misc/matlab-version/TrainNetwork.html">TrainNetwork</a></li>
+            <li><a href="/misc/matlab-version/UltraPraat.html">Ultrapraat</a></li>
+            <li><a href="/misc/matlab-version/autotrace.html">Autotrace</a></li>
+            <li><a href="/misc/matlab-version/configdir.html">configdir</a></li>
+            <li><a href="/misc/matlab-version/imagediversityNEW.html">ImageDiversity</a></li>
+            <li><a href="/misc/matlab-version/selectroi.html">SelectROI</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="/misc/matlab-version/analysis.html">Analysis</a></li>
+            <li><a href="/misc/matlab-version/Analysisqt.html">Analysisqt</a></li>
+            <li><a href="/misc/matlab-version/linguaview.html">LinguaView</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="/misc/matlab-version/CommonErrors.html">Common Errors</a></li>
+           <!--  {% for page in site.pages %}
+              {% if page.categories contains "matlabversion" %}
+                <li><a href="{{ site.baseurl }}{{page.url}}">{{page.title}}</a></li>
+              {% endif %}
+            {% endfor %} -->
+            <!-- <li><a href="#" class="active">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">One more separated link</a></li> -->
+          </ul>
+        </li>
+        <li {% if page.category == "matlab-version" %} class="active" {% endif %} class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Webapp <span class="caret"></span></a>
+          <ul class="dropdown-menu">
 
             {% for page in site.pages %}
-              {% if page.categories contains "matlabversion" %}
+              {% if page.categories contains "webapp" %}
                 <li><a href="{{ site.baseurl }}{{page.url}}">{{page.title}}</a></li>
               {% endif %}
             {% endfor %}
@@ -56,9 +89,20 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li {% if page.title == "About" %}class="active"{% endif %}>
-          <a href="{{ site.baseurl }}/about/">About</a>
+        <li {% if page.category == "matlab-version" %} class="active" {% endif %} class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{{ site.baseurl }}/aboutultra/">About Ultrasound</a></li>
+            <li><a href="{{ site.baseurl }}/papers/">Papers</a></li>
+            <li><a href="{{ site.baseurl }}/presentations/">Presentations</a></li>
+            <li><a href="{{ site.baseurl }}/ultrafest/">Ultrafest</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="{{ site.baseurl }}/personell/">Personell</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="{{ site.baseurl }}/about/">About APIL</a></li>
+          </ul>
         </li>
+        
         <!-- <li><a href="#">Link</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
