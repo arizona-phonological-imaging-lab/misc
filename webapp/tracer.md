@@ -5,9 +5,9 @@ categories: webapp
 ---
 
 
-![tracer]({{site.baseurl}}/images/tracer.png)
+![tracer]({{site.baseurl}}/images/tracer .png)
 
-##Tools:
+## Tools:
 
 (Default) Pen: Draw on the central window to make your trace. 
 
@@ -21,7 +21,7 @@ Back & Next: Cycles the images left and right.
 
 Load: Opens a file dialog to open a series of images or traces to be edited from the local computer. 
 
-##Metadata Fields
+## Metadata Fields
 
 tracer: Your name. The APIL standard is three uppercase letters. 
 
