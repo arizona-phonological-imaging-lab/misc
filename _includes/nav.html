@@ -86,6 +86,30 @@
             <li><a href="#">One more separated link</a></li> -->
           </ul>
         </li>
+        
+        
+        <li {% if page.category == "matlab-version" %} class="active" {% endif %} class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Harvard Sentences <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/misc/harvard_sent/README.html">Project Overview</a></li>
+            <li><a href="/misc/harvard_sent/datapage.html">Project Data</a></li>
+            
+           <!--  {% for page in site.pages %}
+              {% if page.categories contains "matlabversion" %}
+                <li><a href="{{ site.baseurl }}{{page.url}}">{{page.title}}</a></li>
+              {% endif %}
+            {% endfor %} -->
+            <!-- <li><a href="#" class="active">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">One more separated link</a></li> -->
+          </ul>
+        </li>
+        
+        
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
