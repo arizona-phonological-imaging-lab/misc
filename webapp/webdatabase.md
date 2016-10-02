@@ -5,7 +5,9 @@ categories: webapp
 updated: May 2016
 ---
 
-To access the database, go to the APIL database website, or the website associated with your lab's database, or if running locally, go to http://localhost:8000/uat/1
+To access APIL's Database repository, go to the APIL database website (<a href=blah>here</a>), or to access your lab's Database repository, to the website associated with your lab's database (or if running locally, go to http://localhost:8000/uat/1)
+
+# UltraBase usage instructions
 
 ## Menu Items	
 
@@ -24,7 +26,7 @@ No tools present as of this writing.
 Add and remove projects and images from the database. To add images in the APIL format (see below) click `add standard project`. Enter the name of the project and the language of the data, and enter the direct path to the directory containing the video folders. 
 
 >APIL Data Format:
->One folder contains all of the data for a particular experiment. Each video has a subdirectory in this folder. The video folders are labeled `subjectnum[abc]_YYYY-MM-DD`. Inside each video folder is a folder labeled `frames` which contains each frame of the video, and the accompanying trace, if one exists. The frame images are in the form `frame-#######.png`, and the traces are in the form `frame-#######.png.TRACER.traced.txt`.
+>One folder contains all of the data for a particular experiment. Each video has a subdirectory in this folder. The video folders are labeled `subjectnum[abc]_YYYY-MM-DD`. Inside each video folder is a folder labeled `frames` which contains each frame of the video, and the accompanying trace, if one exists. The frame images are in the form `frame-#######.png`, and the traces are in the form `frame-#######.png.TRACER.traced.txt`, where ####### is the frame number in the series of images that make up the database, and 'TRACER' is the id of the person who hand-traced the images.
 
 ## Search Box
 

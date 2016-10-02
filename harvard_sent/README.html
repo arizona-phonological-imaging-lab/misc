@@ -3,10 +3,8 @@ layout: default
 title: A Repository of Modern American English
 categories: matlabversion
 ---
-
       <h1>
 <a id="apil" class="anchor" href="#apil" aria-hidden="true"><span class="octicon octicon-link"></span></a>{{page.title}}</h1>
-
 
 <p>The goal of APIL's Repository project (using Harvard Sentence stimuli) is to create a repository of acoustic and corresponding ultrasound data which is representative of the sound and articulations of Modern American English. </p>
 <br>
@@ -27,7 +25,7 @@ categories: matlabversion
 <br>
 <h4> Preparing the Data </h4>
 <br>
-<p> The ultrasound videos were demuxed into audio wavfiles and the image frames from the ultrasound video.  An in-house modified version of Praat was used to identify the sentence boundaries and the image frames corresponding to these sentences.  The audio for each sentence and the corresponding image frames were place in a separate directory. The Penn state forced aligner was used on each sentence, creating a Praat textgrid demarkating the word and phoneme boundaries in the audio. An in-house developed Database for ultrasound image/trace storage (details and download available <a href="/misc/webapp/webdatabase.html">here</a>) houses the ultrasound image files labelled with the corresponding word and phoneme. </p><br>
+<p> The ultrasound videos were demuxed into audio wavfiles and the image frames from the ultrasound video.  An in-house modified version of Praat was used to identify the sentence boundaries and the image frames corresponding to these sentences.  The audio for each sentence and the corresponding image frames were place in a separate directory. The Penn state forced aligner was used on each sentence, creating a Praat textgrid demarkating the word and phoneme boundaries in the audio. An in-house developed Database for ultrasound image/trace storage (details and download available <a href="/misc/webapp/webdatabase.html">here</a>, and <a href="https://github.com/arizona-phonological-imaging-lab/apilweb-django/tarball/master">here (tarball)</a> or <a href="https://github.com/arizona-phonological-imaging-lab/apilweb-django/zipball/master">here (zipped)</a>, respectively) houses the storage files labelled with the corresponding word and phoneme. </p><br>
 <h3> NOTICE </h3>
 <br>
 <p> At the present moment, we have left most textgrids as-is, meaning that word and phone boundaries have not been hand-adjusted. We have noticed that the vast majority of boundaries are quite accurate, however there are several in each sentence which are off by a number of milliseconds which would result in the incorrect classification of an ultrasound image. Therefore, these boundaries should not be trusted, and should be hand-verified. APIL will gladly replace existing textgrids (along with the corresponding audio wav files, available for <a href="/misc/harvard_sent/datapage.html">download</a>) with an updated version containing correct boundaries. All this said, some of the present entries in the Database are likely mislabeled. Furthermore, the ultrasound images for this study presently are not traced, despite the intent of the Database to manage both images and trace files. Similarly, APIL will gladly upload any trace files for these images to the Database. </p>
