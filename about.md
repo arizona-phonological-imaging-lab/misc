@@ -10,9 +10,9 @@ For more information, click <a href="http://apil.arizona.edu/">here</a> for our 
 Principal Investigator: Diana Archangeli
 
 Research Assistants: Gustave von Hahn Powell, Samuel Johnston, Mohsen Mahdavi Mazdeh,
-	Joshua Meyer, Benjamin Martin
+	 Benjamin Martin
 	
-Interns: Trevor Sullivan, Julie Dargus, Rebecca Lynn Sheley
+Interns: Trevor Sullivan
 
 The Arizona Phonological Imaging Lab is funded by grants from the National Science Foundation. 
 
